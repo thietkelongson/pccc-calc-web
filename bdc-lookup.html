@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="vi" data-theme="light">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Tra cứu Bảng đối chiếu — PCCC Calc</title>
+<style>
+  :root[data-theme="light"] {
+    --bg: #f5f5f7; --bg-elev: #ffffff; --bg-soft: #fbfbfd; --bg-hover: #f0f0f3;
+    --border: rgba(0,0,0,.08); --border-strong: rgba(0,0,0,.16);
+    --text: #1d1d1f; --text-secondary: #6e6e73; --text-tertiary: #86868b;
+    --brand: #c0392b; --brand-dark: #a93226; --brand-soft: rgba(192,57,43,.08);
+    --link: #06c;
+    --nav-bg: rgba(255,255,255,.85);
+    --shadow-sm: 0 1px 2px rgba(0,0,0,.04);
+    --shadow-md: 0 4px 16px rgba(0,0,0,.06);
+    --shadow-lg: 0 12px 32px rgba(0,0,0,.1);
+    --row-alt: rgba(0,0,0,.025);
+    --tag-green: #34c759; --tag-blue: #007aff; --tag-orange: #ff9500;
+    --tag-red: #ff453a; --tag-purple: #af52de;
+  }
+  :root[data-theme="dark"] {
+    --bg: #000000; --bg-elev: #1c1c1e; --bg-soft: #2c2c2e; --bg-hover: #3a3a3c;
+    --border: rgba(255,255,255,.12); --border-strong: rgba(255,255,255,.24);
+    --text: #f5f5f7; --text-secondary: #a1a1a6; --text-tertiary: #6e6e73;
+    --brand: #ff453a; --brand-dark: #ff6b60; --brand-soft: rgba(255,69,58,.15);
+    --link: #2997ff;
+    --nav-bg: rgba(28,28,30,.85);
+    --shadow-md: 0 4px 16px rgba(0,0,0,.5);
+    --row-alt: rgba(255,255,255,.03);
+    --tag-green: #30d158; --tag-blue: #0a84ff; --tag-orange: #ff9f0a;
+    --tag-red: #ff453a; --tag-purple: #bf5af2;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; -webkit-font-smoothing: antialiased; }
+  body { font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Helvetica Neue", "Segoe UI", system-ui, sans-serif; background: var(--bg); color: var(--text); font-size: 15px; line-height: 1.47; letter-spacing: -0.022em; min-height: 100vh; }
+  a { color: inherit; text-decoration: none; }
+  .ios-icon { display: inline-flex; align-items: center; justify-content: center; border-radius: 22.37%; color: white; flex-shrink: 0; }
+  .ios-icon.sm { width: 28px; height: 28px; font-size: 14px; border-radius: 7px; }
+  .ios-icon.lg { width: 64px; height: 64px; font-size: 32px; border-radius: 14px; }
+  .ios-icon.brand { background: linear-gradient(180deg, #e74c3c, #c0392b); }
+  .ios-icon.purple { background: linear-gradient(180deg, #c178e3, #af52de); }
+
+  .topbar { position: sticky; top: 0; z-index: 50; background: var(--nav-bg); backdrop-filter: saturate(180%) blur(20px); border-bottom: 1px solid var(--border); padding: 10px 24px; display: flex; align-items: center; gap: 16px; }
+  .back-btn { display: inline-flex; align-items: center; gap: 4px; padding: 6px 14px 6px 10px; border-radius: 999px; background: var(--bg-hover); color: var(--text); font-size: 13px; font-weight: 500; }
+  .back-btn:hover { background: var(--border); }
+  .page-title { display: flex; align-items: center; gap: 10px; font-size: 16px; font-weight: 600; }
+  .page-title .sub { color: var(--text-secondary); font-weight: 400; font-size: 13px; }
+  .topbar-actions { margin-left: auto; display: flex; align-items: center; gap: 8px; }
+  .icon-btn { width: 32px; height: 32px; border-radius: 50%; background: var(--bg-hover); border: none; color: var(--text); cursor: pointer; font-size: 14px; display: flex; align-items: center; justify-content: center; }
+  .credit-chip { background: linear-gradient(180deg, #ffd966, #ffcc00); color: #1d1d1f; padding: 4px 12px; border-radius: 999px; font-size: 12px; font-weight: 600; }
+
+  .container { max-width: 1400px; margin: 0 auto; padding: 24px; }
+
+  .hero { background: linear-gradient(135deg, #5856d6 0%, #ff2d55 100%); color: white; border-radius: 22px; padding: 28px 32px; margin-bottom: 18px; display: flex; align-items: center; gap: 22px; position: relative; overflow: hidden; }
+  .hero::before { content: ''; position: absolute; right: -80px; top: -80px; width: 280px; height: 280px; border-radius: 50%; background: rgba(255,255,255,.08); }
+  .hero > * { position: relative; z-index: 1; }
+  .hero h1 { font-size: 26px; font-weight: 700; line-height: 1.15; margin-bottom: 4px; }
+  .hero p { font-size: 14px; opacity: .92; max-width: 760px; }
+  .hero .badge { display: inline-flex; align-items: center; gap: 6px; background: rgba(255,255,255,.2); padding: 3px 10px; border-radius: 999px; font-size: 11px; font-weight: 600; margin-top: 8px; }
+
+  .tabs { display: flex; gap: 4px; background: var(--bg-elev); border: 1px solid var(--border); border-radius: 14px; padding: 6px; margin-bottom: 18px; overflow-x: auto; }
+  .tab { flex: 1; min-width: 200px; padding: 10px 14px; border: none; background: transparent; border-radius: 9px; cursor: pointer; font-size: 13px; font-weight: 600; color: var(--text-secondary); font-family: inherit; white-space: nowrap; transition: all .15s; }
+  .tab:hover { background: var(--bg-hover); color: var(--text); }
+  .tab.active { background: var(--brand); color: white; box-shadow: 0 2px 6px rgba(192,57,43,.25); }
+  .tab small { display: block; font-size: 10px; font-weight: 500; margin-top: 2px; opacity: .85; text-transform: uppercase; letter-spacing: .4px; }
+
+  .pane { display: none; }
+  .pane.active { display: block; }
+
+  /* PHƯƠNG ÁN A — Document viewer */
+  .va-grid { display: grid; grid-template-columns: 320px 1fr; gap: 16px; }
+  @media (max-width: 900px) { .va-grid { grid-template-columns: 1fr; } }
+  .va-sidebar { background: var(--bg-elev); border: 1px solid var(--border); border-radius: 14px; padding: 14px; max-height: 80vh; overflow-y: auto; }
+  .va-sidebar h3 { font-size: 11px; font-weight: 700; color: var(--text-tertiary); text-transform: uppercase; letter-spacing: .5px; margin: 14px 8px 8px; }
+  .va-sidebar h3:first-child { margin-top: 0; }
+  .va-item { display: flex; align-items: center; gap: 10px; padding: 9px 10px; border-radius: 9px; cursor: pointer; font-size: 13px; transition: background .15s; }
+  .va-item:hover { background: var(--bg-hover); }
+  .va-item.active { background: var(--brand-soft); color: var(--brand); font-weight: 600; }
+  .va-item .ma { font-weight: 700; font-size: 11px; background: var(--bg-soft); padding: 2px 7px; border-radius: 5px; min-width: 32px; text-align: center; }
+  .va-item.active .ma { background: var(--brand); color: white; }
+  .va-viewer { background: var(--bg-elev); border: 1px solid var(--border); border-radius: 14px; padding: 20px 28px; min-height: 80vh; }
+  .va-viewer .vw-head { display: flex; align-items: center; justify-content: space-between; padding-bottom: 14px; border-bottom: 1px solid var(--border); margin-bottom: 18px; }
+  .va-viewer .vw-head h2 { font-size: 18px; font-weight: 700; }
+  .va-viewer .vw-actions { display: flex; gap: 6px; }
+  .vw-actions button { padding: 6px 12px; border-radius: 8px; border: 1px solid var(--border); background: var(--bg-soft); cursor: pointer; font-family: inherit; font-size: 12px; color: var(--text); }
+  .vw-actions button:hover { background: var(--bg-hover); }
+  .vw-content { font-size: 13px; line-height: 1.6; }
+  .vw-content table { width: 100%; border-collapse: collapse; margin: 10px 0; font-size: 12px; }
+  .vw-content table td, .vw-content table th { border: 1px solid var(--border); padding: 6px 8px; vertical-align: top; }
+  .vw-content table th { background: var(--bg-soft); font-weight: 600; }
+  .vw-content h1 { font-size: 18px; margin: 16px 0 8px; }
+  .vw-content h2 { font-size: 16px; margin: 14px 0 6px; }
+  .vw-content h3 { font-size: 14px; margin: 12px 0 6px; }
+  .vw-content p { margin-bottom: 8px; }
+  .vw-content ul, .vw-content ol { padding-left: 24px; margin-bottom: 8px; }
+
+  .empty-state { text-align: center; padding: 60px 30px; color: var(--text-secondary); }
+  .empty-state .em { font-size: 50px; margin-bottom: 14px; }
+  .empty-state h3 { font-size: 17px; color: var(--text); margin-bottom: 6px; font-weight: 600; }
+  .loading-state { padding: 60px 30px; text-align: center; color: var(--text-secondary); }
+  .spinner { width: 32px; height: 32px; border: 3px solid var(--border); border-top-color: var(--brand); border-radius: 50%; animation: spin 1s linear infinite; margin: 0 auto 12px; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  /* PHƯƠNG ÁN B — Checklist */
+  .vb-panel { background: var(--bg-elev); border: 1px solid var(--border); border-radius: 14px; padding: 22px 26px; }
+  .vb-info { background: rgba(0,102,204,.06); border-left: 3px solid var(--link); padding: 10px 14px; border-radius: 8px; margin-bottom: 18px; font-size: 13px; }
+  .vb-actions { display: flex; gap: 8px; margin-bottom: 16px; flex-wrap: wrap; }
+  .vb-actions button { padding: 8px 14px; border-radius: 9px; border: 1px solid var(--border); background: var(--bg-soft); cursor: pointer; font-family: inherit; font-size: 13px; font-weight: 500; color: var(--text); }
+  .vb-actions button:hover { background: var(--bg-hover); }
+  .vb-actions button.primary { background: var(--brand); color: white; border-color: var(--brand); }
+  .vb-stats { background: var(--bg-soft); border-radius: 10px; padding: 10px 16px; margin-bottom: 14px; display: flex; gap: 24px; font-size: 13px; flex-wrap: wrap; }
+  .vb-stats .stat strong { color: var(--text); }
+  .vb-stats .pass { color: var(--tag-green); }
+  .vb-stats .kn { color: var(--tag-orange); }
+  .vb-stats .pending { color: var(--text-tertiary); }
+  .vb-row { display: grid; grid-template-columns: 36px 1fr 1fr 1fr 100px; gap: 12px; padding: 12px 8px; border-bottom: 1px solid var(--border); font-size: 13px; align-items: start; }
+  .vb-row.header { font-weight: 700; font-size: 11px; text-transform: uppercase; letter-spacing: .4px; color: var(--text-secondary); background: var(--bg-soft); border-radius: 8px; position: sticky; top: 0; }
+  .vb-row.tieu-de { background: var(--brand-soft); font-weight: 600; color: var(--brand); }
+  .vb-row.tieu-de .so-stt { color: var(--brand); }
+  .vb-row .so-stt { font-weight: 600; }
+  .vb-row .nd-thiet-ke textarea { width: 100%; min-height: 60px; padding: 6px 8px; border: 1px solid var(--border); border-radius: 6px; font-family: inherit; font-size: 12px; background: var(--bg-soft); color: var(--text); resize: vertical; }
+  .vb-row .nd-thiet-ke textarea:focus { outline: none; border-color: var(--link); background: var(--bg-elev); }
+  .vb-row .nd-quy-dinh { color: var(--text-secondary); }
+  .vb-row .vien-dan { font-size: 11px; color: var(--link); font-weight: 500; }
+  .vb-row .ket-luan select { width: 100%; padding: 6px; border-radius: 6px; border: 1px solid var(--border); background: var(--bg-soft); font-family: inherit; font-size: 12px; color: var(--text); }
+  .vb-row .ket-luan.pass select { border-color: var(--tag-green); background: rgba(52,199,89,.08); color: var(--tag-green); }
+  .vb-row .ket-luan.kn select { border-color: var(--tag-orange); background: rgba(255,149,0,.08); color: var(--tag-orange); }
+
+  /* PHƯƠNG ÁN C — Tra cứu theo công trình */
+  .vc-input { background: var(--bg-elev); border: 1px solid var(--border); border-radius: 14px; padding: 22px 26px; margin-bottom: 16px; }
+  .vc-input h2 { font-size: 16px; font-weight: 700; margin-bottom: 4px; }
+  .vc-input .sub { font-size: 12px; color: var(--text-secondary); margin-bottom: 16px; }
+  .vc-input select { width: 100%; max-width: 480px; padding: 11px 14px; background: var(--bg-soft); border: 1px solid transparent; border-radius: 12px; color: var(--text); font-size: 15px; font-family: inherit; }
+  .vc-input select:focus { outline: none; border-color: var(--link); background: var(--bg-elev); }
+  .vc-result { background: var(--bg-elev); border: 1px solid var(--border); border-radius: 14px; padding: 22px 26px; }
+  .vc-result h3 { font-size: 14px; font-weight: 700; margin-bottom: 4px; color: var(--text-secondary); text-transform: uppercase; letter-spacing: .4px; }
+  .vc-list { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 12px; margin-top: 12px; }
+  .vc-card { display: flex; align-items: center; gap: 12px; padding: 14px 16px; border: 1px solid var(--border); border-radius: 12px; cursor: pointer; transition: all .15s; background: var(--bg-soft); }
+  .vc-card:hover { box-shadow: var(--shadow-md); border-color: var(--brand); transform: translateY(-1px); }
+  .vc-card .ic { font-size: 22px; }
+  .vc-card .info { flex: 1; }
+  .vc-card .info .nm { font-size: 11px; font-weight: 700; color: var(--brand); text-transform: uppercase; letter-spacing: .3px; }
+  .vc-card .info .tn { font-size: 13px; font-weight: 600; line-height: 1.35; margin-top: 2px; }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <a href="dashboard.html" class="back-btn">‹ Dashboard</a>
+  <div class="page-title">
+    <span class="ios-icon sm purple">📋</span>
+    Tra cứu Bảng đối chiếu <span class="sub">— QCVN 10:2025/BCA · TCVN 7336:2021 · QCVN 06:2022</span>
+  </div>
+  <div class="topbar-actions">
+    <div class="credit-chip">💎 247</div>
+    <button class="icon-btn" id="themeToggle"><span id="themeIcon">🌙</span></button>
+  </div>
+</div>
+
+<div class="container">
+
+  <div class="hero">
+    <span class="ios-icon lg" style="background: rgba(255,255,255,.25)">📋</span>
+    <div>
+      <h1>Demo 3 phương án Bảng đối chiếu</h1>
+      <p>Mỗi tab là 1 phương án khác nhau để truy cập bộ 42 Bảng đối chiếu thẩm định PCCC. Demo MVP với 10 BDC thường dùng (5 công trình + 5 hệ thống). Chọn phương án bạn thấy hợp lý nhất → tôi sẽ scale lên 42 BDC đầy đủ.</p>
+      <div class="badge">🧪 Demo Mode — Pick your favorite</div>
+    </div>
+  </div>
+
+  <div class="tabs">
+    <button class="tab active" data-tab="va">PA-A — Document Viewer<small>Xem nguyên bản .docx</small></button>
+    <button class="tab" data-tab="vb">PA-B — Checklist tương tác<small>Điền + xuất hồ sơ</small></button>
+    <button class="tab" data-tab="vc">PA-C — Tra cứu theo công trình<small>Pick → ra danh mục BDC</small></button>
+  </div>
+
+  <!-- PA-A: Document Viewer -->
+  <div class="pane active" id="pane-va">
+    <div class="va-grid">
+      <div class="va-sidebar" id="vaSidebar"></div>
+      <div class="va-viewer">
+        <div id="vaContent">
+          <div class="empty-state">
+            <div class="em">📄</div>
+            <h3>Chọn 1 Bảng đối chiếu</h3>
+            <p>Sidebar bên trái — click vào bất kỳ BDC để xem nội dung được render từ file .docx gốc.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PA-B: Checklist tương tác -->
+  <div class="pane" id="pane-vb">
+    <div class="vb-panel">
+      <div class="vb-info">
+        🧪 <b>Demo Phương án B</b> — Hiển thị 12 mục đầu của BDC A4 (Nhà văn phòng) đã được parse. Bản đầy đủ sẽ có ~80–100 mục, đầu tư parse nhiều ngày cho cả 42 BDC.<br>
+        <b>Tính năng demo:</b> điền cột "Nội dung thiết kế", chọn kết luận Đạt/KN/Chưa rõ → bên dưới tự đếm tỷ lệ đạt. Bấm "Xuất Word" để demo export.
+      </div>
+      <h2 id="vbTitle" style="font-size:17px;font-weight:700;margin-bottom:4px"></h2>
+      <div class="source" id="vbSubtitle" style="font-size:12px;color:var(--text-secondary);margin-bottom:14px"></div>
+      <div class="vb-actions">
+        <button class="primary">📥 Xuất Word hồ sơ thẩm định (demo)</button>
+        <button>📥 Xuất PDF</button>
+        <button>💾 Lưu nháp</button>
+        <button>🧹 Xóa tất cả</button>
+      </div>
+      <div class="vb-stats" id="vbStats"></div>
+      <div class="vb-row header">
+        <div>TT</div>
+        <div>Nội dung đối chiếu</div>
+        <div>Nội dung thiết kế</div>
+        <div>Quy định tiêu chuẩn</div>
+        <div>Kết luận</div>
+      </div>
+      <div id="vbList"></div>
+    </div>
+  </div>
+
+  <!-- PA-C: Tra cứu theo công trình -->
+  <div class="pane" id="pane-vc">
+    <div class="vc-input">
+      <h2>🎯 Chọn loại công trình</h2>
+      <p class="sub">Hệ thống tự liệt kê các Bảng đối chiếu cần kèm theo hồ sơ thẩm định.</p>
+      <select id="vcSelect">
+        <option value="">— Chọn loại công trình —</option>
+      </select>
+    </div>
+    <div class="vc-result" id="vcResult">
+      <div class="empty-state">
+        <div class="em">🎯</div>
+        <h3>Chọn công trình ở trên</h3>
+        <p>Vd: chọn "Nhà văn phòng" → trả về BDC A4 + B1 + B5 + B6 + B12.</p>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- mammoth.js for .docx → HTML rendering -->
+<script src="https://cdn.jsdelivr.net/npm/mammoth@1.6.0/mammoth.browser.min.js"></script>
+<script src="modules/bdc/data/index.js"></script>
+<script src="modules/bdc/data/checklist_a4_demo.js"></script>
+<script>
+// Theme toggle
+const root = document.documentElement;
+const saved = localStorage.getItem('pccc-theme') || 'light';
+root.setAttribute('data-theme', saved);
+document.getElementById('themeIcon').textContent = saved === 'dark' ? '☀️' : '🌙';
+document.getElementById('themeToggle').addEventListener('click', () => {
+  const cur = root.getAttribute('data-theme');
+  const next = cur === 'dark' ? 'light' : 'dark';
+  root.setAttribute('data-theme', next);
+  localStorage.setItem('pccc-theme', next);
+  document.getElementById('themeIcon').textContent = next === 'dark' ? '☀️' : '🌙';
+});
+
+// Tabs
+document.querySelectorAll('.tab').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+    document.querySelectorAll('.pane').forEach(p => p.classList.remove('active'));
+    btn.classList.add('active');
+    document.getElementById('pane-' + btn.dataset.tab).classList.add('active');
+  });
+});
+
+const BDC = window.BDC_INDEX;
+
+// =================== PHƯƠNG ÁN A — Document viewer ===================
+function renderVaSidebar() {
+  const sb = document.getElementById('vaSidebar');
+  const renderGroup = (title, items) => `
+    <h3>${title}</h3>
+    ${items.map(it => `
+      <div class="va-item" data-id="${it.id}">
+        <span class="ma">${it.ma}</span>
+        <span>${it.icon} ${it.ten}</span>
+      </div>
+    `).join('')}
+  `;
+  sb.innerHTML = renderGroup('Theo công trình', BDC.congTrinh) + renderGroup('Theo hệ thống', BDC.heThong);
+  sb.querySelectorAll('.va-item').forEach(el => {
+    el.addEventListener('click', () => {
+      sb.querySelectorAll('.va-item').forEach(x => x.classList.remove('active'));
+      el.classList.add('active');
+      loadDocx(el.dataset.id);
+    });
+  });
+}
+
+function findItemById(id) {
+  return BDC.congTrinh.concat(BDC.heThong).find(x => x.id === id);
+}
+
+async function loadDocx(id) {
+  const item = findItemById(id);
+  const cont = document.getElementById('vaContent');
+  cont.innerHTML = `
+    <div class="vw-head">
+      <h2>${item.ma} — ${item.ten}</h2>
+      <div class="vw-actions">
+        <button onclick="window.open('modules/bdc/source/${item.file}', '_blank')">⬇️ Tải .docx</button>
+        <button onclick="window.print()">🖨️ In</button>
+      </div>
+    </div>
+    <div class="loading-state"><div class="spinner"></div>Đang render từ file .docx...</div>
+  `;
+  try {
+    const resp = await fetch('modules/bdc/source/' + item.file);
+    if (!resp.ok) throw new Error('Không tải được file ' + item.file);
+    const buf = await resp.arrayBuffer();
+    const res = await mammoth.convertToHtml({ arrayBuffer: buf });
+    cont.querySelector('.loading-state').outerHTML = `<div class="vw-content">${res.value}</div>`;
+  } catch (err) {
+    cont.querySelector('.loading-state').innerHTML = `
+      <div style="color:var(--tag-red)">⚠️ Lỗi: ${err.message}</div>
+      <p style="margin-top:8px;font-size:12px">Nếu mở bằng file:// có thể bị chặn CORS. Cần chạy qua web server hoặc deploy lên GitHub Pages để dùng.</p>
+    `;
+  }
+}
+
+renderVaSidebar();
+
+// =================== PHƯƠNG ÁN B — Checklist tương tác ===================
+const stateB = { ketLuan: {}, thietKe: {} };
+
+function renderVB() {
+  const data = window.BDC_CHECKLIST_A4;
+  document.getElementById('vbTitle').textContent = data.ten;
+  document.getElementById('vbSubtitle').textContent = `Công trình: ${data.congTrinh} · ${data.muc.filter(m => !m.la_tieu_de).length} mục kiểm tra (rút gọn để demo)`;
+  const list = document.getElementById('vbList');
+  list.innerHTML = data.muc.map(m => {
+    if (m.la_tieu_de) {
+      return `<div class="vb-row tieu-de">
+        <div class="so-stt">${m.so}</div>
+        <div style="grid-column: span 4">${m.ten}</div>
+      </div>`;
+    }
+    return `<div class="vb-row" data-stt="${m.so}">
+      <div class="so-stt">${m.so}</div>
+      <div>${m.noi_dung_doi_chieu || ''}</div>
+      <div class="nd-thiet-ke">
+        <textarea data-stt="${m.so}" placeholder="Nhập nội dung thiết kế...">${stateB.thietKe[m.so] || ''}</textarea>
+      </div>
+      <div>
+        <div class="nd-quy-dinh">${m.quy_dinh || ''}</div>
+        ${m.vien_dan ? `<div class="vien-dan" style="margin-top:4px">📘 ${m.vien_dan}</div>` : ''}
+      </div>
+      <div class="ket-luan" data-stt="${m.so}">
+        <select data-stt="${m.so}">
+          <option value="">— Chưa rõ —</option>
+          <option value="pass" ${stateB.ketLuan[m.so]==='pass'?'selected':''}>+ Đạt</option>
+          <option value="kn" ${stateB.ketLuan[m.so]==='kn'?'selected':''}>KN Kiến nghị</option>
+        </select>
+      </div>
+    </div>`;
+  }).join('');
+  list.querySelectorAll('select[data-stt]').forEach(s => {
+    s.addEventListener('change', e => { stateB.ketLuan[e.target.dataset.stt] = e.target.value; updateClass(); updateStats(); });
+  });
+  list.querySelectorAll('textarea[data-stt]').forEach(t => {
+    t.addEventListener('input', e => { stateB.thietKe[e.target.dataset.stt] = e.target.value; });
+  });
+  updateClass();
+  updateStats();
+}
+function updateClass() {
+  document.querySelectorAll('.ket-luan[data-stt]').forEach(el => {
+    el.classList.remove('pass', 'kn');
+    const v = stateB.ketLuan[el.dataset.stt];
+    if (v === 'pass') el.classList.add('pass');
+    else if (v === 'kn') el.classList.add('kn');
+  });
+}
+function updateStats() {
+  const data = window.BDC_CHECKLIST_A4;
+  const total = data.muc.filter(m => !m.la_tieu_de).length;
+  let pass = 0, kn = 0;
+  Object.values(stateB.ketLuan).forEach(v => {
+    if (v === 'pass') pass++; else if (v === 'kn') kn++;
+  });
+  const pending = total - pass - kn;
+  document.getElementById('vbStats').innerHTML = `
+    <div class="stat">Tổng mục: <strong>${total}</strong></div>
+    <div class="stat pass">✅ Đạt: <strong>${pass}</strong> (${Math.round(pass/total*100)}%)</div>
+    <div class="stat kn">⚠️ Kiến nghị: <strong>${kn}</strong></div>
+    <div class="stat pending">⏳ Chưa rõ: <strong>${pending}</strong></div>
+  `;
+}
+renderVB();
+
+// =================== PHƯƠNG ÁN C — Tra cứu theo công trình ===================
+const sel = document.getElementById('vcSelect');
+BDC.congTrinh.forEach(c => {
+  const opt = document.createElement('option');
+  opt.value = c.id;
+  opt.textContent = `${c.ma} — ${c.icon} ${c.ten}`;
+  sel.appendChild(opt);
+});
+sel.addEventListener('change', () => {
+  const id = sel.value;
+  const result = document.getElementById('vcResult');
+  if (!id) { result.innerHTML = `<div class="empty-state"><div class="em">🎯</div><h3>Chọn công trình ở trên</h3></div>`; return; }
+  const item = findItemById(id);
+  const heThongIds = BDC.mapping[id] || [];
+  const heThongs = heThongIds.map(hId => BDC.heThong.find(h => h.id === hId)).filter(Boolean);
+
+  const linkBdc = (bdcItem) => `
+    <div class="vc-card" onclick="document.querySelector('[data-tab=va]').click(); setTimeout(() => document.querySelector('.va-item[data-id=${bdcItem.id}]')?.click(), 100);">
+      <div class="ic">${bdcItem.icon}</div>
+      <div class="info">
+        <div class="nm">${bdcItem.ma}</div>
+        <div class="tn">${bdcItem.ten}</div>
+      </div>
+    </div>
+  `;
+
+  result.innerHTML = `
+    <h3>📋 Bảng đối chiếu công trình</h3>
+    <div class="vc-list">${linkBdc(item)}</div>
+    <h3 style="margin-top:20px">⚙️ Bảng đối chiếu hệ thống PCCC cần kèm (${heThongs.length})</h3>
+    <div class="vc-list">${heThongs.map(linkBdc).join('')}</div>
+    <div style="margin-top:18px;padding:12px 14px;background:rgba(0,102,204,.06);border-left:3px solid var(--link);border-radius:8px;font-size:12px;color:var(--text-secondary)">
+      💡 <b>Mẹo:</b> Click vào card bất kỳ để mở BDC đó trong tab Document Viewer.
+      Mapping này dùng quy tắc rút gọn — bản đầy đủ sẽ link sang module Tra cứu QC10 để xác định chính xác hệ thống bắt buộc theo quy mô (chiều cao, diện tích...).
+    </div>
+  `;
+});
+</script>
+
+</body>
+</html>
