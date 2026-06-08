@@ -1,0 +1,1025 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8" />
+<title>PCCC Calc - Sơ đồ Isometric mạng Sprinkler</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Segoe UI', Tahoma, sans-serif; background: #e5e7eb; color: #1f2937; height: 100vh; overflow: hidden; }
+
+  header {
+    background: linear-gradient(135deg, #c0392b, #e74c3c);
+    padding: 10px 20px; display: flex; align-items: center; justify-content: space-between;
+    box-shadow: 0 2px 6px rgba(0,0,0,.4);
+  }
+  header h1 { font-size: 16px; }
+  header h1 small { font-weight: 400; opacity: .9; font-size: 12px; }
+  header .right { display: flex; gap: 8px; }
+
+  .btn {
+    padding: 6px 14px; border: none; border-radius: 4px;
+    font-size: 13px; cursor: pointer; font-weight: 600;
+  }
+  .btn-primary { background: #fff; color: #c0392b; }
+  .btn-ghost { background: rgba(255,255,255,.15); color: white; }
+  .btn-ghost:hover { background: rgba(255,255,255,.25); }
+
+  .layout { display: flex; height: calc(100vh - 50px); }
+
+  .toolbar {
+    width: 76px;
+    background: #0f172a;
+    border-right: 1px solid #334155;
+    padding: 10px 6px; display: flex; flex-direction: column; gap: 6px;
+    overflow-y: auto;
+  }
+  .tool {
+    aspect-ratio: 1;
+    background: #1e293b; border: 1px solid #334155;
+    border-radius: 6px; display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    cursor: pointer; color: #cbd5e1; font-size: 10px; gap: 2px;
+    padding: 4px;
+  }
+  .tool .ic { font-size: 18px; }
+  .tool:hover { background: #334155; }
+  .tool.active { background: #c0392b; color: white; border-color: #e74c3c; }
+  .tool-sep { height: 1px; background: #334155; margin: 4px 2px; }
+
+  .floor-sel {
+    background: #1e293b; border: 1px solid #334155;
+    border-radius: 6px; padding: 6px; text-align: center;
+    font-size: 10px; color: #cbd5e1;
+  }
+  .floor-sel select {
+    width: 100%; background: #0b1220; color: #fbbf24;
+    border: 1px solid #334155; border-radius: 4px; padding: 4px;
+    font-size: 12px; font-weight: 600;
+  }
+
+  .canvas-wrap {
+    flex: 1; position: relative;
+    background: #fafafa;
+    overflow: hidden;
+  }
+  svg.canvas { width: 100%; height: 100%; cursor: crosshair; display: block; }
+
+  .status-bar {
+    position: absolute; bottom: 0; left: 0; right: 0;
+    background: rgba(255,255,255,.95); border-top: 1px solid #cbd5e1;
+    padding: 6px 14px; font-size: 12px; color: #475569;
+    display: flex; justify-content: space-between;
+  }
+  .status-bar b { color: #1f2937; }
+  .legend {
+    position: absolute; top: 12px; left: 12px;
+    background: rgba(255,255,255,.96); border: 1px solid #cbd5e1;
+    border-radius: 4px; padding: 8px 12px; font-size: 11px;
+    min-width: 170px; box-shadow: 0 1px 3px rgba(0,0,0,.08);
+    color: #1f2937;
+  }
+  .legend h4 { font-size: 10px; color: #475569; margin-bottom: 5px; text-transform: uppercase; font-weight: 700; }
+  .legend-row { display: flex; align-items: center; gap: 8px; padding: 2px 0; }
+  .legend-row .swatch { width: 26px; height: 3px; border-radius: 1px; }
+  .legend-row .ico { width: 20px; text-align: center; }
+
+  .titleblock {
+    position: absolute; bottom: 40px; left: 12px;
+    background: white; border: 1.5px solid #1f2937;
+    font-size: 10px; color: #1f2937;
+    box-shadow: 0 1px 4px rgba(0,0,0,.1);
+    font-family: 'Consolas', monospace;
+  }
+  .titleblock table { border-collapse: collapse; }
+  .titleblock td { border: 1px solid #1f2937; padding: 4px 8px; }
+  .titleblock td.title { font-weight: 700; font-size: 12px; background: #f3f4f6; }
+  .titleblock td.label { background: #f9fafb; color: #475569; font-size: 9px; }
+
+  .hint {
+    position: absolute; top: 12px; right: 12px;
+    background: rgba(255,251,235,.96); border: 1px solid #f59e0b;
+    color: #78350f; border-radius: 4px; padding: 8px 14px; font-size: 12px;
+    max-width: 320px;
+  }
+
+  .view-controls {
+    position: absolute; bottom: 40px; right: 12px;
+    background: rgba(255,255,255,.95); border: 1px solid #cbd5e1;
+    border-radius: 4px; padding: 6px; display: flex; gap: 4px;
+    box-shadow: 0 1px 3px rgba(0,0,0,.08);
+  }
+  .view-controls button {
+    background: #f8fafc; border: 1px solid #cbd5e1; color: #475569;
+    width: 28px; height: 28px; border-radius: 3px; cursor: pointer; font-size: 14px;
+  }
+  .view-controls button:hover { background: #e2e8f0; }
+
+  .props {
+    width: 320px; background: #0f172a; border-left: 1px solid #334155;
+    padding: 16px; overflow-y: auto;
+  }
+  .props h3 {
+    font-size: 12px; color: #94a3b8; text-transform: uppercase;
+    margin-bottom: 10px; letter-spacing: .5px;
+  }
+  .props .empty { color: #64748b; font-size: 13px; font-style: italic; padding: 20px 0; text-align: center; }
+  .field { margin-bottom: 12px; }
+  .field label { display: block; font-size: 12px; color: #cbd5e1; margin-bottom: 4px; }
+  .field label .unit { color: #64748b; }
+  .field input, .field select {
+    width: 100%; padding: 7px 10px;
+    background: #1e293b; border: 1px solid #334155;
+    border-radius: 4px; color: #f1f5f9; font-size: 13px;
+  }
+  .field-row { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 6px; }
+  .props .result {
+    background: rgba(192,57,43,.1); border: 1px solid #c0392b;
+    border-radius: 6px; padding: 12px; margin-top: 14px;
+  }
+  .props .result h4 { font-size: 12px; color: #fca5a5; margin-bottom: 8px; }
+  .props .result .row {
+    display: flex; justify-content: space-between; padding: 4px 0;
+    font-size: 13px; border-bottom: 1px dashed rgba(192,57,43,.3);
+  }
+  .props .result .row:last-child { border-bottom: none; }
+  .props .result .row b { color: #fbbf24; }
+  .props-section { margin-top: 16px; padding-top: 14px; border-top: 1px solid #334155; }
+
+  /* SVG style - Pipenet schematic look */
+  .floor-plane { fill: rgba(148,163,184,.04); stroke: rgba(148,163,184,.35); stroke-width: 0.7; pointer-events: none; }
+  .floor-plane.active { fill: rgba(251,191,36,.06); stroke: rgba(217,119,6,.6); stroke-dasharray: 4,3; }
+  .grid-line { stroke: rgba(148,163,184,.18); stroke-width: 0.4; pointer-events: none; }
+  .grid-line.active { stroke: rgba(100,116,139,.45); stroke-width: 0.5; }
+  .grid-dot { fill: #94a3b8; pointer-events: none; }
+  .grid-dot.active { fill: #64748b; }
+  .grid-pick { fill: transparent; cursor: crosshair; }
+  .grid-pick:hover ~ .grid-dot-visual,
+  .grid-pick:hover { }
+  .snap-marker { fill: #f59e0b; stroke: #b45309; stroke-width: 1; pointer-events: none; }
+  .snap-ring { fill: none; stroke: #f59e0b; stroke-width: 1.5; stroke-dasharray: 2,2; pointer-events: none; }
+  .floor-label { fill: #64748b; font-size: 10px; pointer-events: none; user-select: none; font-family: 'Consolas', monospace; }
+
+  .axis-x { stroke: #dc2626; stroke-width: 1.5; }
+  .axis-y { stroke: #16a34a; stroke-width: 1.5; }
+  .axis-z { stroke: #2563eb; stroke-width: 1.5; }
+  .axis-label { font-size: 10px; font-weight: bold; pointer-events: none; user-select: none; }
+
+  .node-shadow { fill: rgba(0,0,0,.08); }
+  .node-body { stroke-width: 1.2; cursor: pointer; transition: filter .15s; }
+  .node-body:hover { filter: brightness(0.9); }
+  .node-body.selected { stroke: #f59e0b !important; stroke-width: 2.5 !important; }
+  .node-label {
+    fill: #1f2937; font-size: 9px; text-anchor: middle;
+    pointer-events: none; user-select: none; font-weight: 600;
+    font-family: 'Consolas', monospace;
+    paint-order: stroke; stroke: white; stroke-width: 2.5;
+  }
+  .node-icon { font-size: 12px; text-anchor: middle; pointer-events: none; user-select: none; }
+
+  /* Sprinkler tick — small upward arrow on branch */
+  .sprinkler-tick { stroke-width: 1.2; fill: none; pointer-events: none; }
+
+  /* Pipes colored by DN (Pipenet style) */
+  .pipe { stroke-width: 1.8; fill: none; cursor: pointer; transition: stroke-width .1s; stroke-linecap: round; }
+  .pipe:hover { stroke-width: 3; }
+  .pipe.selected { stroke: #f59e0b !important; stroke-width: 3.2 !important; }
+  .pipe.riser-line { stroke-dasharray: 6,3; }
+
+  /* DN color palette (Pipenet convention) */
+  .pipe.dn-25  { stroke: #c084fc; }
+  .pipe.dn-32  { stroke: #ec4899; }
+  .pipe.dn-40  { stroke: #f43f5e; }
+  .pipe.dn-50  { stroke: #dc2626; }  /* red */
+  .pipe.dn-65  { stroke: #ea580c; }
+  .pipe.dn-80  { stroke: #f59e0b; }  /* orange */
+  .pipe.dn-100 { stroke: #16a34a; }  /* green */
+  .pipe.dn-125 { stroke: #06b6d4; }  /* cyan */
+  .pipe.dn-150 { stroke: #2563eb; }  /* blue */
+  .pipe.dn-200 { stroke: #1e1b4b; }  /* navy */
+
+  .pipe-label {
+    fill: #1e3a8a; font-size: 9px; text-anchor: middle;
+    paint-order: stroke; stroke: white; stroke-width: 2.5;
+    pointer-events: none; user-select: none; font-family: 'Consolas', monospace;
+  }
+
+  .ghost-line { stroke: #f59e0b; stroke-width: 1.5; stroke-dasharray: 5,3; fill: none; pointer-events: none; }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>🔥 PCCC Calc <small>— Sơ đồ Isometric mạng Sprinkler (3D Riser Diagram)</small></h1>
+  <div class="right">
+    <button class="btn btn-ghost" onclick="loadDemo()">📂 Sơ đồ mẫu</button>
+    <button class="btn btn-ghost" onclick="clearAll()">🗑️ Xóa hết</button>
+    <button class="btn btn-primary" onclick="runCalc()">⚡ Tính toán mạng</button>
+  </div>
+</header>
+
+<div class="layout">
+
+  <div class="toolbar">
+    <div class="floor-sel" title="Tầng đang vẽ">
+      <div style="margin-bottom:3px">Tầng</div>
+      <select id="floorSel">
+        <option value="0">Tầng 1 (z=0)</option>
+        <option value="80">Tầng 2 (z=80)</option>
+        <option value="160">Tầng 3 (z=160)</option>
+        <option value="240">Mái (z=240)</option>
+      </select>
+    </div>
+    <div class="tool-sep"></div>
+    <div class="tool active" data-tool="select"><div class="ic">↖</div><div>Chọn</div></div>
+    <div class="tool-sep"></div>
+    <div class="tool" data-tool="tank"><div class="ic">🛢️</div><div>Bể</div></div>
+    <div class="tool" data-tool="pump"><div class="ic">⚙️</div><div>Bơm</div></div>
+    <div class="tool" data-tool="source"><div class="ic">🔵</div><div>Nguồn</div></div>
+    <div class="tool" data-tool="tee"><div class="ic">⊕</div><div>Nút</div></div>
+    <div class="tool" data-tool="sprinkler"><div class="ic">💧</div><div>Sprink</div></div>
+    <div class="tool-sep"></div>
+    <div class="tool" data-tool="pipe"><div class="ic">━</div><div>Ống</div></div>
+    <div class="tool" data-tool="riser"><div class="ic">⇅</div><div>Đứng</div></div>
+    <div class="floor-sel" title="Đường kính ống sẽ vẽ">
+      <div style="margin-bottom:3px">DN</div>
+      <select id="dnSel">
+        <option value="25">25</option>
+        <option value="32">32</option>
+        <option value="40">40</option>
+        <option value="50" selected>50</option>
+        <option value="65">65</option>
+        <option value="80">80</option>
+        <option value="100">100</option>
+        <option value="125">125</option>
+        <option value="150">150</option>
+        <option value="200">200</option>
+      </select>
+    </div>
+    <div class="floor-sel" title="Chiều dài mặc định (m)">
+      <div style="margin-bottom:3px">L (m)</div>
+      <input id="lenInput" type="number" step="0.1" value="3" style="width:100%; background:#0b1220; color:#fbbf24; border:1px solid #334155; border-radius:4px; padding:4px; font-size:12px; font-weight:600; text-align:center"/>
+    </div>
+    <div class="tool-sep"></div>
+    <div class="tool" data-tool="delete"><div class="ic">🗑️</div><div>Xóa</div></div>
+  </div>
+
+  <div class="canvas-wrap">
+    <svg class="canvas" id="svg" viewBox="0 0 1200 700">
+      <g id="floors-layer"></g>
+      <g id="axis-layer"></g>
+      <g id="pipes-layer"></g>
+      <g id="pipe-labels-layer"></g>
+      <g id="nodes-layer"></g>
+      <g id="overlay"></g>
+    </svg>
+
+    <div class="legend">
+      <h4>Pipe bore (mm)</h4>
+      <div class="legend-row"><div class="swatch" style="background:#dc2626"></div><span>DN 50</span></div>
+      <div class="legend-row"><div class="swatch" style="background:#f59e0b"></div><span>DN 80</span></div>
+      <div class="legend-row"><div class="swatch" style="background:#16a34a"></div><span>DN 100</span></div>
+      <div class="legend-row"><div class="swatch" style="background:#06b6d4"></div><span>DN 125</span></div>
+      <div class="legend-row"><div class="swatch" style="background:#2563eb"></div><span>DN 150</span></div>
+      <div class="legend-row"><div class="swatch" style="background:#1e1b4b"></div><span>DN 200</span></div>
+      <h4 style="margin-top:8px">Ký hiệu</h4>
+      <div class="legend-row"><div class="ico">🛢️</div><span>Bể chứa</span></div>
+      <div class="legend-row"><div class="ico">⚙️</div><span>Bơm chữa cháy</span></div>
+      <div class="legend-row"><div class="ico">↑</div><span>Đầu phun Sprinkler</span></div>
+      <div class="legend-row"><div class="ico">⊕</div><span>Nút rẽ / tê</span></div>
+    </div>
+
+    <div class="titleblock">
+      <table>
+        <tr><td class="title" colspan="2">CASE 1 - SPRINKLER SYSTEM</td></tr>
+        <tr><td class="label">Drawing</td><td>PCCC-SCH-001</td></tr>
+        <tr><td class="label">Date</td><td id="tb-date">2026-06-07</td></tr>
+        <tr><td class="label">Standard</td><td>TCVN 7336:2021</td></tr>
+        <tr><td class="label">Scale</td><td>NTS — Schematic</td></tr>
+      </table>
+    </div>
+
+    <div class="hint" id="hint">
+      💡 Chọn <b>Tầng</b> trước, sau đó chọn công cụ và click vào mặt sàn để đặt phần tử. Công cụ <b>Đứng</b> tự nối 2 nút theo phương đứng (riser).
+    </div>
+
+    <div class="view-controls">
+      <button onclick="rotateView(-15)" title="Xoay trái">↺</button>
+      <button onclick="rotateView(15)" title="Xoay phải">↻</button>
+      <button onclick="zoomView(1.2)" title="Phóng to">+</button>
+      <button onclick="zoomView(.83)" title="Thu nhỏ">−</button>
+      <button onclick="resetView()" title="Đặt lại view">⌂</button>
+    </div>
+
+    <div class="status-bar">
+      <div>Tọa độ 3D: <b id="coords">x=0, y=0, z=0</b></div>
+      <div>Phần tử: <b id="elem-count">0 nút, 0 ống</b></div>
+      <div>Góc nhìn: <b id="angle-info">α=30°</b></div>
+      <div>Công cụ: <b id="cur-tool">Chọn</b></div>
+    </div>
+  </div>
+
+  <div class="props" id="props">
+    <h3>Thuộc tính</h3>
+    <div class="empty">Chọn một phần tử trên sơ đồ để xem & chỉnh sửa thông số.</div>
+  </div>
+
+</div>
+
+<script>
+//============== Iso projection ==============//
+const view = { angle: 30, scale: 1, originX: 600, originY: 400 };
+
+function iso(x, y, z) {
+  const a = view.angle * Math.PI / 180;
+  const c = Math.cos(a), s = Math.sin(a);
+  const sx = (x - y) * c * view.scale + view.originX;
+  const sy = ((x + y) * s - z) * view.scale + view.originY;
+  return { sx, sy };
+}
+
+// Inverse projection onto plane z = z0
+function unIso(sx, sy, z0) {
+  const a = view.angle * Math.PI / 180;
+  const c = Math.cos(a), s = Math.sin(a);
+  const A = (sx - view.originX) / (c * view.scale);
+  const B = (sy - view.originY + z0 * view.scale) / (s * view.scale);
+  return { x: (A + B) / 2, y: (B - A) / 2 };
+}
+
+//============== State ==============//
+const state = {
+  tool: 'select',
+  currentFloor: 0,
+  currentDN: 50,
+  currentL: 3,
+  nodes: [],
+  pipes: [],
+  selectedId: null,
+  pendingPipeFrom: null,
+  nextId: 1,
+};
+
+const svg = document.getElementById('svg');
+const floorsLayer = document.getElementById('floors-layer');
+const axisLayer = document.getElementById('axis-layer');
+const nodesLayer = document.getElementById('nodes-layer');
+const pipesLayer = document.getElementById('pipes-layer');
+const pipeLabelsLayer = document.getElementById('pipe-labels-layer');
+const overlay = document.getElementById('overlay');
+const propsPanel = document.getElementById('props');
+
+document.querySelectorAll('.tool').forEach(t => {
+  t.addEventListener('click', () => {
+    document.querySelectorAll('.tool').forEach(x => x.classList.remove('active'));
+    t.classList.add('active');
+    state.tool = t.dataset.tool;
+    state.pendingPipeFrom = null;
+    overlay.innerHTML = '';
+    document.getElementById('cur-tool').textContent = t.querySelector('div:last-child').textContent;
+  });
+});
+
+document.getElementById('floorSel').addEventListener('change', (e) => {
+  state.currentFloor = +e.target.value;
+  render();
+});
+document.getElementById('dnSel').addEventListener('change', (e) => {
+  state.currentDN = +e.target.value;
+});
+document.getElementById('lenInput').addEventListener('change', (e) => {
+  state.currentL = +e.target.value || 1;
+});
+
+function getSvgPoint(evt) {
+  const pt = svg.createSVGPoint();
+  pt.x = evt.clientX; pt.y = evt.clientY;
+  return pt.matrixTransform(svg.getScreenCTM().inverse());
+}
+
+function snap(v, step = 40) { return Math.round(v / step) * step; }
+
+function newId(prefix) { return prefix + (state.nextId++); }
+
+function nodeDefaults(type) {
+  return {
+    tank:      { capacity: 108, level: 4 },
+    pump:      { Q: 30, H: 70, P: 30 },
+    source:    { pressure: 1.5 },
+    tee:       {},
+    sprinkler: { K: 80, pMin: 1.0, qDesign: 1.2 },
+  }[type] || {};
+}
+function nodeIcon(type) { return { tank:'🛢️', pump:'⚙️', source:'🔵', tee:'⊕', sprinkler:'💧' }[type] || '?'; }
+function nodePrefix(type) { return { tank:'BỂ', pump:'BƠM', source:'NG', tee:'N', sprinkler:'SP' }[type] || 'X'; }
+function nodeColor(type) {
+  return {
+    tank: { fill:'#064e3b', stroke:'#10b981' },
+    pump: { fill:'#92400e', stroke:'#f59e0b' },
+    source: { fill:'#1e40af', stroke:'#3b82f6' },
+    tee: { fill:'#334155', stroke:'#94a3b8' },
+    sprinkler: { fill:'#991b1b', stroke:'#ef4444' },
+  }[type] || { fill:'#1e293b', stroke:'#64748b' };
+}
+
+//============== Render ==============//
+function renderFloors() {
+  floorsLayer.innerHTML = '';
+  const floors = [0, 80, 160, 240];
+  const size = 320; // half-size of floor in world units
+  const step = 40;
+
+  floors.forEach(z => {
+    // Floor parallelogram
+    const corners = [
+      iso(-size, -size, z),
+      iso( size, -size, z),
+      iso( size,  size, z),
+      iso(-size,  size, z),
+    ];
+    const poly = document.createElementNS('http://www.w3.org/2000/svg', 'polygon');
+    poly.setAttribute('points', corners.map(p => `${p.sx},${p.sy}`).join(' '));
+    poly.setAttribute('class', 'floor-plane' + (z === state.currentFloor ? ' active' : ''));
+    floorsLayer.appendChild(poly);
+
+    const isActive = z === state.currentFloor;
+    const lineCls = isActive ? 'grid-line active' : 'grid-line';
+
+    // Grid lines
+    for (let g = -size; g <= size; g += step) {
+      const p1 = iso(g, -size, z), p2 = iso(g, size, z);
+      const ln = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+      ln.setAttribute('x1', p1.sx); ln.setAttribute('y1', p1.sy);
+      ln.setAttribute('x2', p2.sx); ln.setAttribute('y2', p2.sy);
+      ln.setAttribute('class', lineCls);
+      floorsLayer.appendChild(ln);
+
+      const p3 = iso(-size, g, z), p4 = iso(size, g, z);
+      const ln2 = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+      ln2.setAttribute('x1', p3.sx); ln2.setAttribute('y1', p3.sy);
+      ln2.setAttribute('x2', p4.sx); ln2.setAttribute('y2', p4.sy);
+      ln2.setAttribute('class', lineCls);
+      floorsLayer.appendChild(ln2);
+    }
+
+    // Grid intersection pick points — each one is its own clickable target
+    if (isActive) {
+      for (let gx = -size; gx <= size; gx += step) {
+        for (let gy = -size; gy <= size; gy += step) {
+          const p = iso(gx, gy, z);
+          // Visible dot
+          const dot = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+          dot.setAttribute('cx', p.sx); dot.setAttribute('cy', p.sy);
+          dot.setAttribute('r', 1.8);
+          dot.setAttribute('class', 'grid-dot active');
+          floorsLayer.appendChild(dot);
+
+          // Larger transparent hit target carrying the world coords
+          const pick = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+          pick.setAttribute('cx', p.sx); pick.setAttribute('cy', p.sy);
+          pick.setAttribute('r', 11);
+          pick.setAttribute('class', 'grid-pick');
+          pick.dataset.gx = gx;
+          pick.dataset.gy = gy;
+          pick.dataset.gz = z;
+          pick.addEventListener('mouseenter', (e) => {
+            // Clear previous snap markers but keep ghost line
+            overlay.querySelectorAll('.snap-ring, .snap-marker').forEach(el => el.remove());
+            const ring = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+            ring.setAttribute('cx', p.sx); ring.setAttribute('cy', p.sy);
+            ring.setAttribute('r', 8); ring.setAttribute('class', 'snap-ring');
+            overlay.appendChild(ring);
+            const m = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+            m.setAttribute('cx', p.sx); m.setAttribute('cy', p.sy);
+            m.setAttribute('r', 3.2); m.setAttribute('class', 'snap-marker');
+            overlay.appendChild(m);
+          });
+          pick.addEventListener('mouseleave', () => {
+            overlay.querySelectorAll('.snap-ring, .snap-marker').forEach(el => el.remove());
+          });
+          pick.addEventListener('click', (e) => {
+            e.stopPropagation();
+            const placeable = ['tank','pump','source','tee','sprinkler'];
+            if (placeable.includes(state.tool)) {
+              addNode(state.tool, gx, gy, z);
+            }
+          });
+          floorsLayer.appendChild(pick);
+        }
+      }
+    }
+
+    // Floor label
+    const lblPos = iso(-size - 20, -size, z);
+    const lbl = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+    lbl.setAttribute('class', 'floor-label');
+    lbl.setAttribute('x', lblPos.sx); lbl.setAttribute('y', lblPos.sy + 4);
+    const floorName = z === 0 ? 'Tầng 1' : z === 80 ? 'Tầng 2' : z === 160 ? 'Tầng 3' : 'Mái';
+    lbl.textContent = `${floorName} (z=${z})`;
+    floorsLayer.appendChild(lbl);
+  });
+}
+
+function renderAxis() {
+  axisLayer.innerHTML = '';
+  const origin = iso(-320, 320, 0);
+  const xEnd = iso(-260, 320, 0);
+  const yEnd = iso(-320, 260, 0);
+  const zEnd = iso(-320, 320, 60);
+
+  [
+    { cls: 'axis-x', end: xEnd, label: 'X', color: '#ef4444' },
+    { cls: 'axis-y', end: yEnd, label: 'Y', color: '#10b981' },
+    { cls: 'axis-z', end: zEnd, label: 'Z', color: '#3b82f6' },
+  ].forEach(a => {
+    const ln = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+    ln.setAttribute('x1', origin.sx); ln.setAttribute('y1', origin.sy);
+    ln.setAttribute('x2', a.end.sx); ln.setAttribute('y2', a.end.sy);
+    ln.setAttribute('class', a.cls);
+    axisLayer.appendChild(ln);
+
+    const txt = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+    txt.setAttribute('x', a.end.sx + 4); txt.setAttribute('y', a.end.sy + 4);
+    txt.setAttribute('class', 'axis-label');
+    txt.setAttribute('fill', a.color);
+    txt.textContent = a.label;
+    axisLayer.appendChild(txt);
+  });
+}
+
+function render() {
+  renderFloors();
+  renderAxis();
+  nodesLayer.innerHTML = '';
+  pipesLayer.innerHTML = '';
+  pipeLabelsLayer.innerHTML = '';
+
+  // Sort items by depth for proper z-order (painter's algorithm)
+  // Depth metric: along iso view axis = (x + y) - reuse sy actually
+  const renderableNodes = state.nodes.map(n => {
+    const p = iso(n.x, n.y, n.z);
+    return { n, screen: p, depth: (n.x + n.y) - n.z * 0.5 };
+  });
+  renderableNodes.sort((a, b) => a.depth - b.depth);
+
+  // Render pipes first (behind nodes)
+  state.pipes.forEach(pipe => {
+    const a = state.nodes.find(n => n.id === pipe.from);
+    const b = state.nodes.find(n => n.id === pipe.to);
+    if (!a || !b) return;
+    const pa = iso(a.x, a.y, a.z);
+    const pb = iso(b.x, b.y, b.z);
+
+    const ln = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+    ln.setAttribute('x1', pa.sx); ln.setAttribute('y1', pa.sy);
+    ln.setAttribute('x2', pb.sx); ln.setAttribute('y2', pb.sy);
+    const dnCls = 'dn-' + pipe.props.D;
+    ln.setAttribute('class', 'pipe ' + dnCls + (state.selectedId === pipe.id ? ' selected' : '') + (pipe.isRiser ? ' riser-line' : ''));
+    ln.dataset.id = pipe.id;
+    ln.addEventListener('click', (e) => { e.stopPropagation(); selectElement(pipe.id); });
+    pipesLayer.appendChild(ln);
+
+    const mx = (pa.sx + pb.sx) / 2, my = (pa.sy + pb.sy) / 2;
+    const txt = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+    txt.setAttribute('class', 'pipe-label');
+    txt.setAttribute('x', mx); txt.setAttribute('y', my - 6);
+    let label = `DN${pipe.props.D}·${pipe.props.L}m`;
+    if (pipe.result && +pipe.result.Q > 0) label += ` Q=${pipe.result.Q} v=${pipe.result.v}`;
+    txt.textContent = label;
+    pipeLabelsLayer.appendChild(txt);
+  });
+
+  // Render nodes back-to-front
+  renderableNodes.forEach(({ n, screen }) => {
+    const colors = nodeColor(n.type);
+
+    const g = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+    g.dataset.id = n.id;
+
+    if (n.type === 'sprinkler') {
+      // Pipenet style: a small upward tick / arrow above the branch line
+      const tickTop = iso(n.x, n.y, n.z + 12);
+      // vertical stem
+      const stem = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+      stem.setAttribute('x1', screen.sx); stem.setAttribute('y1', screen.sy);
+      stem.setAttribute('x2', tickTop.sx); stem.setAttribute('y2', tickTop.sy);
+      stem.setAttribute('stroke', '#dc2626'); stem.setAttribute('stroke-width', '1.2');
+      stem.setAttribute('class', 'sprinkler-tick' + (state.selectedId === n.id ? ' selected' : ''));
+      stem.style.pointerEvents = 'stroke';
+      g.appendChild(stem);
+      // arrowhead - small triangle pointing up
+      const ah = document.createElementNS('http://www.w3.org/2000/svg', 'polygon');
+      ah.setAttribute('points', `${tickTop.sx - 3},${tickTop.sy + 3} ${tickTop.sx + 3},${tickTop.sy + 3} ${tickTop.sx},${tickTop.sy - 3}`);
+      ah.setAttribute('fill', '#dc2626'); ah.setAttribute('stroke', '#dc2626');
+      g.appendChild(ah);
+      // hit area
+      const hit = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+      hit.setAttribute('cx', screen.sx); hit.setAttribute('cy', (screen.sy + tickTop.sy)/2);
+      hit.setAttribute('r', 8); hit.setAttribute('fill', 'transparent');
+      hit.style.cursor = 'pointer';
+      g.appendChild(hit);
+      if (state.selectedId === n.id) {
+        const sel = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+        sel.setAttribute('cx', screen.sx); sel.setAttribute('cy', (screen.sy + tickTop.sy)/2);
+        sel.setAttribute('r', 9); sel.setAttribute('fill', 'none');
+        sel.setAttribute('stroke', '#f59e0b'); sel.setAttribute('stroke-width', '1.5');
+        g.appendChild(sel);
+      }
+    } else if (n.type === 'tank') {
+      const top = iso(n.x, n.y, n.z + 18);
+      const bot = iso(n.x, n.y, n.z - 18);
+      const r = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+      r.setAttribute('x', screen.sx - 14); r.setAttribute('y', top.sy);
+      r.setAttribute('width', 28); r.setAttribute('height', bot.sy - top.sy);
+      r.setAttribute('fill', 'white'); r.setAttribute('stroke', '#1e3a8a');
+      r.setAttribute('class', 'node-body' + (state.selectedId === n.id ? ' selected' : ''));
+      g.appendChild(r);
+      const e1 = document.createElementNS('http://www.w3.org/2000/svg', 'ellipse');
+      e1.setAttribute('cx', screen.sx); e1.setAttribute('cy', top.sy);
+      e1.setAttribute('rx', 14); e1.setAttribute('ry', 5);
+      e1.setAttribute('fill', 'white'); e1.setAttribute('stroke', '#1e3a8a');
+      e1.setAttribute('class', 'node-body' + (state.selectedId === n.id ? ' selected' : ''));
+      g.appendChild(e1);
+    } else if (n.type === 'pump') {
+      const c = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+      c.setAttribute('cx', screen.sx); c.setAttribute('cy', screen.sy);
+      c.setAttribute('r', 13);
+      c.setAttribute('fill', 'white'); c.setAttribute('stroke', '#1e3a8a');
+      c.setAttribute('stroke-width', '1.5');
+      c.setAttribute('class', 'node-body' + (state.selectedId === n.id ? ' selected' : ''));
+      g.appendChild(c);
+      // pump impeller cross
+      const cr = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+      cr.setAttribute('d', `M ${screen.sx - 8} ${screen.sy} L ${screen.sx + 8} ${screen.sy} M ${screen.sx} ${screen.sy - 8} L ${screen.sx} ${screen.sy + 8}`);
+      cr.setAttribute('stroke', '#1e3a8a'); cr.setAttribute('stroke-width', '1.2'); cr.setAttribute('fill', 'none');
+      g.appendChild(cr);
+    } else {
+      // tee/source: small white circle with cross
+      const c = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+      c.setAttribute('cx', screen.sx); c.setAttribute('cy', screen.sy);
+      c.setAttribute('r', 4);
+      c.setAttribute('fill', 'white'); c.setAttribute('stroke', '#475569');
+      c.setAttribute('stroke-width', '1');
+      c.setAttribute('class', 'node-body' + (state.selectedId === n.id ? ' selected' : ''));
+      g.appendChild(c);
+    }
+
+    // Only show icon/label for non-sprinkler
+    if (n.type !== 'sprinkler' && n.type !== 'tee') {
+      const ic = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+      ic.setAttribute('class', 'node-icon');
+      ic.setAttribute('x', screen.sx); ic.setAttribute('y', screen.sy + 4);
+      ic.textContent = nodeIcon(n.type);
+      g.appendChild(ic);
+    }
+
+    if (n.type !== 'tee') {
+      const lbl = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+      lbl.setAttribute('class', 'node-label');
+      const lblOffset = n.type === 'sprinkler' ? -20 : 28;
+      lbl.setAttribute('x', screen.sx); lbl.setAttribute('y', screen.sy + lblOffset);
+      lbl.textContent = n.label;
+      g.appendChild(lbl);
+    }
+
+    g.style.cursor = 'pointer';
+    g.addEventListener('click', (e) => {
+      e.stopPropagation();
+      if (state.tool === 'pipe') {
+        if (!state.pendingPipeFrom) {
+          state.pendingPipeFrom = n.id;
+          showHint(`Đã chọn ${n.label}. Click vào nút thứ 2 để nối ống ngang/chéo.`);
+        } else if (state.pendingPipeFrom !== n.id) {
+          addPipe(state.pendingPipeFrom, n.id, false);
+          state.pendingPipeFrom = null;
+          overlay.innerHTML = '';
+        }
+      } else if (state.tool === 'riser') {
+        if (!state.pendingPipeFrom) {
+          state.pendingPipeFrom = n.id;
+          showHint(`Đã chọn ${n.label}. Click vào nút ở tầng khác để tạo riser (ống đứng).`);
+        } else if (state.pendingPipeFrom !== n.id) {
+          addPipe(state.pendingPipeFrom, n.id, true);
+          state.pendingPipeFrom = null;
+          overlay.innerHTML = '';
+        }
+      } else if (state.tool === 'delete') {
+        deleteNode(n.id);
+      } else {
+        selectElement(n.id);
+      }
+    });
+
+    nodesLayer.appendChild(g);
+  });
+
+  document.getElementById('elem-count').textContent = `${state.nodes.length} nút, ${state.pipes.length} ống`;
+  document.getElementById('angle-info').textContent = `α=${view.angle}°`;
+}
+
+function showHint(msg) { document.getElementById('hint').innerHTML = msg; }
+
+//============== Canvas click ==============//
+svg.addEventListener('click', (e) => {
+  if (e.target.closest('g[data-id]') || e.target.dataset.id) return;
+  const pt = getSvgPoint(e);
+  const world = unIso(pt.sx, pt.sy, state.currentFloor);
+  const x = snap(world.x), y = snap(world.y);
+  if (Math.abs(x) > 320 || Math.abs(y) > 320) return;
+
+  const placeable = ['tank','pump','source','tee','sprinkler'];
+  if (placeable.includes(state.tool)) {
+    addNode(state.tool, x, y, state.currentFloor);
+  } else if (state.tool === 'select') {
+    selectElement(null);
+  }
+});
+
+svg.addEventListener('mousemove', (e) => {
+  const pt = getSvgPoint(e);
+  const world = unIso(pt.sx, pt.sy, state.currentFloor);
+  const sx = snap(world.x), sy = snap(world.y);
+  document.getElementById('coords').textContent = `x=${sx}, y=${sy}, z=${state.currentFloor}`;
+
+  // Ghost line for pipe drawing — also redraw snap marker beneath cursor
+  if ((state.tool === 'pipe' || state.tool === 'riser') && state.pendingPipeFrom) {
+    const a = state.nodes.find(n => n.id === state.pendingPipeFrom);
+    const pa = iso(a.x, a.y, a.z);
+    // Don't clear the snap marker added by pick hover — only re-add ghost line
+    const existingGhost = overlay.querySelector('.ghost-line');
+    if (existingGhost) existingGhost.remove();
+    const ln = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+    ln.setAttribute('x1', pa.sx); ln.setAttribute('y1', pa.sy);
+    ln.setAttribute('x2', pt.sx); ln.setAttribute('y2', pt.sy);
+    ln.setAttribute('class', 'ghost-line');
+    overlay.appendChild(ln);
+  }
+});
+
+svg.addEventListener('mouseleave', () => { overlay.innerHTML = ''; });
+
+//============== CRUD ==============//
+function addNode(type, x, y, z) {
+  const id = newId('n');
+  const same = state.nodes.filter(n => n.type === type).length + 1;
+  state.nodes.push({ id, type, x, y, z, label: `${nodePrefix(type)}-${same}`, props: nodeDefaults(type) });
+  render();
+}
+
+function addPipe(fromId, toId, isRiser) {
+  if (state.pipes.some(p => (p.from === fromId && p.to === toId) || (p.from === toId && p.to === fromId))) return;
+  const id = newId('p');
+  state.pipes.push({
+    id,
+    from: fromId, to: toId,
+    props: { D: state.currentDN, L: state.currentL, material: 'Thép đen' },
+    result: null,
+    isRiser,
+  });
+  // Auto-select the new pipe so user can edit L immediately
+  state.selectedId = id;
+  render(); renderProps();
+  // Focus length input
+  setTimeout(() => {
+    const lenF = document.getElementById('pp-L');
+    if (lenF) { lenF.focus(); lenF.select(); }
+  }, 50);
+}
+
+function deleteNode(id) {
+  state.nodes = state.nodes.filter(n => n.id !== id);
+  state.pipes = state.pipes.filter(p => p.from !== id && p.to !== id);
+  if (state.selectedId === id) state.selectedId = null;
+  render(); renderProps();
+}
+function deletePipe(id) {
+  state.pipes = state.pipes.filter(p => p.id !== id);
+  if (state.selectedId === id) state.selectedId = null;
+  render(); renderProps();
+}
+function selectElement(id) { state.selectedId = id; render(); renderProps(); }
+
+//============== Properties panel ==============//
+function renderProps() {
+  if (!state.selectedId) {
+    propsPanel.innerHTML = '<h3>Thuộc tính</h3><div class="empty">Chọn một phần tử trên sơ đồ.</div>';
+    return;
+  }
+  const node = state.nodes.find(n => n.id === state.selectedId);
+  const pipe = state.pipes.find(p => p.id === state.selectedId);
+  if (node) renderNodeProps(node); else if (pipe) renderPipeProps(pipe);
+}
+
+function renderNodeProps(n) {
+  const names = { tank:'Bể chứa nước', pump:'Bơm chữa cháy', source:'Nguồn cấp', tee:'Nút rẽ nhánh', sprinkler:'Đầu phun Sprinkler' };
+  let html = `<h3>${names[n.type]}</h3>`;
+  html += `<div class="field"><label>Mã / nhãn</label><input id="f-label" value="${n.label}"/></div>`;
+  html += `<div class="field"><label>Tọa độ X / Y / Z <span class="unit">(world)</span></label>
+    <div class="field-row">
+      <input id="f-x" type="number" value="${n.x}"/>
+      <input id="f-y" type="number" value="${n.y}"/>
+      <input id="f-z" type="number" value="${n.z}"/>
+    </div></div>`;
+
+  if (n.type === 'tank') {
+    html += `<div class="field"><label>Dung tích <span class="unit">(m³)</span></label><input id="p-capacity" type="number" value="${n.props.capacity}"/></div>
+             <div class="field"><label>Cao trình mực nước <span class="unit">(m)</span></label><input id="p-level" type="number" step="0.1" value="${n.props.level}"/></div>`;
+  }
+  if (n.type === 'pump') {
+    html += `<div class="field"><label>Q <span class="unit">(L/s)</span></label><input id="p-Q" type="number" value="${n.props.Q}"/></div>
+             <div class="field"><label>H <span class="unit">(m)</span></label><input id="p-H" type="number" value="${n.props.H}"/></div>
+             <div class="field"><label>Công suất <span class="unit">(kW)</span></label><input id="p-P" type="number" value="${n.props.P}"/></div>`;
+  }
+  if (n.type === 'source') {
+    html += `<div class="field"><label>Áp lực cấp <span class="unit">(bar)</span></label><input id="p-pressure" type="number" step="0.1" value="${n.props.pressure}"/></div>`;
+  }
+  if (n.type === 'sprinkler') {
+    html += `<div class="field"><label>Hệ số K</label><select id="p-K">${[57,80,115].map(k=>`<option ${n.props.K==k?'selected':''}>${k}</option>`).join('')}</select></div>
+             <div class="field"><label>Áp lực tối thiểu <span class="unit">(bar)</span></label><input id="p-pMin" type="number" step="0.1" value="${n.props.pMin}"/></div>
+             <div class="field"><label>Cường độ phun <span class="unit">(L/s.m²)</span></label><input id="p-qDesign" type="number" step="0.01" value="${n.props.qDesign}"/></div>`;
+  }
+
+  html += `<div class="props-section"><button class="btn btn-ghost" style="width:100%;background:#7f1d1d;color:white" onclick="deleteNode('${n.id}')">🗑️ Xóa</button></div>`;
+  propsPanel.innerHTML = html;
+
+  propsPanel.querySelectorAll('input, select').forEach(inp => {
+    inp.addEventListener('change', () => {
+      if (inp.id === 'f-label') n.label = inp.value;
+      else if (inp.id === 'f-x') n.x = +inp.value;
+      else if (inp.id === 'f-y') n.y = +inp.value;
+      else if (inp.id === 'f-z') n.z = +inp.value;
+      else { const k = inp.id.replace('p-',''); n.props[k] = isNaN(+inp.value)?inp.value:+inp.value; }
+      render();
+    });
+  });
+}
+
+function renderPipeProps(p) {
+  const a = state.nodes.find(n => n.id === p.from);
+  const b = state.nodes.find(n => n.id === p.to);
+  let html = `<h3>${p.isRiser ? 'Ống đứng (riser)' : 'Đoạn ống ngang'}: ${a.label} → ${b.label}</h3>`;
+  html += `<div class="field"><label>DN <span class="unit">(mm)</span></label>
+    <select id="pp-D">${[25,32,40,50,65,80,100,125,150,200].map(d=>`<option ${p.props.D===d?'selected':''}>${d}</option>`).join('')}</select></div>
+    <div class="field"><label>Chiều dài <span class="unit">(m)</span></label><input id="pp-L" type="number" step="0.1" value="${p.props.L}"/></div>
+    <div class="field"><label>Vật liệu</label>
+      <select id="pp-material">${['Thép đen','Thép tráng kẽm','HDPE','Đồng'].map(m=>`<option ${p.props.material===m?'selected':''}>${m}</option>`).join('')}</select></div>`;
+
+  if (p.result) {
+    html += `<div class="result"><h4>📊 Kết quả</h4>
+      <div class="row"><span>Lưu lượng Q</span><b>${p.result.Q} L/s</b></div>
+      <div class="row"><span>Vận tốc v</span><b>${p.result.v} m/s</b></div>
+      <div class="row"><span>Tổn thất i</span><b>${p.result.i} m/m</b></div>
+      <div class="row"><span>ΔH đoạn</span><b>${p.result.dH} m</b></div></div>`;
+  }
+  html += `<div class="props-section"><button class="btn btn-ghost" style="width:100%;background:#7f1d1d;color:white" onclick="deletePipe('${p.id}')">🗑️ Xóa</button></div>`;
+  propsPanel.innerHTML = html;
+
+  propsPanel.querySelectorAll('input, select').forEach(inp => {
+    inp.addEventListener('change', () => {
+      const k = inp.id.replace('pp-',''); p.props[k] = isNaN(+inp.value)?inp.value:+inp.value;
+      render();
+    });
+  });
+}
+
+//============== Calculation ==============//
+function runCalc() {
+  if (!state.nodes.some(n => n.type === 'sprinkler')) {
+    alert('⚠️ Chưa có sprinkler.'); return;
+  }
+  const adj = {};
+  state.nodes.forEach(n => adj[n.id] = []);
+  state.pipes.forEach(p => {
+    adj[p.from].push({ pipe: p, other: p.to });
+    adj[p.to].push({ pipe: p, other: p.from });
+  });
+  const root = state.nodes.find(n => n.type === 'pump') || state.nodes.find(n => n.type === 'tank') || state.nodes.find(n => n.type === 'source');
+  if (!root) { alert('⚠️ Cần bể/bơm/nguồn.'); return; }
+
+  const visited = new Set([root.id]);
+  const parent = { [root.id]: null };
+  const queue = [root.id];
+  while (queue.length) {
+    const cur = queue.shift();
+    for (const e of adj[cur]) {
+      if (!visited.has(e.other)) {
+        visited.add(e.other);
+        parent[e.other] = { node: cur, pipe: e.pipe };
+        queue.push(e.other);
+      }
+    }
+  }
+
+  const pipeFlow = {};
+  state.pipes.forEach(p => pipeFlow[p.id] = 0);
+  const qPerSp = 1.0;
+  state.nodes.filter(n => n.type === 'sprinkler').forEach(sp => {
+    let cur = sp.id;
+    while (parent[cur]) {
+      pipeFlow[parent[cur].pipe.id] += qPerSp;
+      cur = parent[cur].node;
+    }
+  });
+
+  state.pipes.forEach(p => {
+    const Q = pipeFlow[p.id];
+    const D_m = p.props.D / 1000;
+    const A = Math.PI * D_m * D_m / 4;
+    const v = Q > 0 ? (Q/1000) / A : 0;
+    const C = 120;
+    const i = Q > 0 ? 10.67 * Math.pow(Q/1000, 1.852) / (Math.pow(C, 1.852) * Math.pow(D_m, 4.87)) : 0;
+    const dH = i * p.props.L;
+    p.result = { Q: Q.toFixed(2), v: v.toFixed(2), i: i.toFixed(4), dH: dH.toFixed(2) };
+    if (Q === 0) p.flowClass = 'no-flow';
+    else if (v < 3) p.flowClass = 'flow-low';
+    else if (v < 5) p.flowClass = 'flow-med';
+    else p.flowClass = 'flow-high';
+  });
+
+  const totalQ = state.nodes.filter(n => n.type === 'sprinkler').length * qPerSp;
+  const totalDH = state.pipes.reduce((s, p) => s + parseFloat(p.result.dH), 0);
+  render(); renderProps();
+  showHint(`✓ <b>Đã tính.</b> Q tổng = ${totalQ.toFixed(2)} L/s, ΣΔH = ${totalDH.toFixed(2)} m. Click ống để xem chi tiết.`);
+}
+
+//============== View controls ==============//
+function rotateView(delta) { view.angle = Math.max(10, Math.min(60, view.angle + delta)); render(); }
+function zoomView(factor) { view.scale *= factor; render(); }
+function resetView() { view.angle = 30; view.scale = 1; render(); }
+
+//============== Demo ==============//
+function loadDemo() {
+  state.nodes = []; state.pipes = []; state.nextId = 1;
+
+  // Tank + pump at ground (z=0)
+  const tank = { id:newId('n'), type:'tank', x:-200, y:200, z:0, label:'BỂ-1', props:nodeDefaults('tank') };
+  const pump = { id:newId('n'), type:'pump', x:-120, y:200, z:0, label:'BƠM-1', props:nodeDefaults('pump') };
+  const riserBot = { id:newId('n'), type:'tee', x:0, y:200, z:0, label:'RS-0', props:{} };
+
+  // Floor 1 (z=0) branch
+  const t1a = { id:newId('n'), type:'tee', x:80, y:200, z:0, label:'T1-A', props:{} };
+  const t1b = { id:newId('n'), type:'tee', x:80, y:80, z:0, label:'T1-B', props:{} };
+  const sp1a = { id:newId('n'), type:'sprinkler', x:160, y:200, z:0, label:'SP-1A', props:nodeDefaults('sprinkler') };
+  const sp1b = { id:newId('n'), type:'sprinkler', x:160, y:80, z:0, label:'SP-1B', props:nodeDefaults('sprinkler') };
+  const sp1c = { id:newId('n'), type:'sprinkler', x:160, y:-40, z:0, label:'SP-1C', props:nodeDefaults('sprinkler') };
+
+  // Floor 2 (z=80)
+  const riserMid = { id:newId('n'), type:'tee', x:0, y:200, z:80, label:'RS-1', props:{} };
+  const t2a = { id:newId('n'), type:'tee', x:80, y:200, z:80, label:'T2-A', props:{} };
+  const sp2a = { id:newId('n'), type:'sprinkler', x:160, y:200, z:80, label:'SP-2A', props:nodeDefaults('sprinkler') };
+  const sp2b = { id:newId('n'), type:'sprinkler', x:160, y:80, z:80, label:'SP-2B', props:nodeDefaults('sprinkler') };
+  const sp2c = { id:newId('n'), type:'sprinkler', x:160, y:-40, z:80, label:'SP-2C', props:nodeDefaults('sprinkler') };
+
+  // Floor 3 (z=160)
+  const riserTop = { id:newId('n'), type:'tee', x:0, y:200, z:160, label:'RS-2', props:{} };
+  const sp3a = { id:newId('n'), type:'sprinkler', x:160, y:200, z:160, label:'SP-3A', props:nodeDefaults('sprinkler') };
+  const sp3b = { id:newId('n'), type:'sprinkler', x:160, y:80, z:160, label:'SP-3B', props:nodeDefaults('sprinkler') };
+  const sp3c = { id:newId('n'), type:'sprinkler', x:160, y:-40, z:160, label:'SP-3C', props:nodeDefaults('sprinkler') };
+
+  state.nodes = [tank, pump, riserBot, t1a, t1b, sp1a, sp1b, sp1c,
+                 riserMid, t2a, sp2a, sp2b, sp2c,
+                 riserTop, sp3a, sp3b, sp3c];
+
+  const mkP = (a, b, D, isRiser = false) => {
+    const dx = b.x - a.x, dy = b.y - a.y, dz = b.z - a.z;
+    const L = +(Math.sqrt(dx*dx + dy*dy + dz*dz) / 20).toFixed(1);
+    return { id:newId('p'), from:a.id, to:b.id, props:{D, L, material:'Thép đen'}, result:null, isRiser };
+  };
+
+  state.pipes = [
+    mkP(tank, pump, 150),
+    mkP(pump, riserBot, 125),
+    // Riser (đứng)
+    mkP(riserBot, riserMid, 100, true),
+    mkP(riserMid, riserTop, 80, true),
+    // F1
+    mkP(riserBot, t1a, 80),
+    mkP(t1a, t1b, 65),
+    mkP(t1a, sp1a, 50),
+    mkP(t1b, sp1b, 50),
+    mkP(t1b, sp1c, 50),
+    // F2
+    mkP(riserMid, t2a, 80),
+    mkP(t2a, sp2a, 50),
+    mkP(t2a, sp2b, 50),
+    mkP(t2a, sp2c, 50),
+    // F3
+    mkP(riserTop, sp3a, 65),
+    mkP(riserTop, sp3b, 50),
+    mkP(riserTop, sp3c, 50),
+  ];
+
+  state.selectedId = null;
+  render(); renderProps();
+  showHint('✓ Đã tải sơ đồ 3 tầng. Riser (ống đứng) xuyên 3 sàn. Bấm <b>⚡ Tính toán mạng</b>.');
+}
+
+function clearAll() {
+  if (!confirm('Xóa toàn bộ?')) return;
+  state.nodes = []; state.pipes = []; state.nextId = 1; state.selectedId = null;
+  render(); renderProps();
+}
+
+loadDemo();
+</script>
+</body>
+</html>

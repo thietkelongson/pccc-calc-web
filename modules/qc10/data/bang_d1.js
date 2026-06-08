@@ -1,0 +1,184 @@
+window.BANG_D1_DATA = {
+  "metadata": {
+    "source": "QCVN 10:2025/BCA",
+    "table": "Bảng D.1 - Quy định về trang bị phương tiện chữa cháy cơ giới",
+    "effectiveDate": "2025-12-30",
+    "description": "Phụ lục D - Trang bị phương tiện chữa cháy cơ giới (xe CC, tàu CC, máy bơm khiêng tay)",
+    "notes": [
+      "Output là SỐ LƯỢNG thiết bị, không phải yes/no",
+      "Mỗi entry có quantities: { xeCC, tauCC, bomKhieng }",
+      "Phần lớn entries là cơ sở chuyên ngành (standalone) — chỉ một số map vào A.1"
+    ]
+  },
+  "footnotes": {
+    "1": "Áp dụng đối với các kho được trang bị hệ thống chữa cháy tự động, hệ thống chữa cháy và làm mát được lắp đặt cố định cho bồn chứa, trạm bơm dầu mỏ và sản phẩm dầu mỏ. Đối với các kho không được trang bị các hệ thống trên thì phải trang bị phương tiện chữa cháy cơ giới bằng HAI LẦN định mức tại Bảng này.",
+    "2": "Máy bơm chữa cháy khiêng tay phải bảo đảm lưu lượng và áp suất phun tối thiểu theo loại bơm B-1, Bảng 1 TCVN 12110.",
+    "CHU_THICH_1": "Các dự án công trình liền kề hoặc có bán kính phục vụ chữa cháy không quá 03 km do cùng một cơ quan, tổ chức được chỉ định quản lý vận hành thì cho phép xem xét trang bị phương tiện chữa cháy cơ giới theo một dự án công trình có yêu cầu lớn hơn. Dự án công trình còn lại yêu cầu trang bị 01 máy bơm chữa cháy khiêng tay.",
+    "CHU_THICH_2": "Cho phép thay thế máy bơm chữa cháy loại khiêng tay bằng xe ô tô chữa cháy.",
+    "CHU_THICH_3": "Các khu khi được phân kỳ đầu tư theo quy định pháp luật về xây dựng thì cho phép trang bị phương tiện chữa cháy cơ giới theo quy mô của từng phân kỳ đầu tư.",
+    "CHU_THICH_4": "Cho phép thay thế tàu chữa cháy bằng tàu lai dắt có chức năng chữa cháy."
+  },
+  "entries": [
+    {
+      "stt": "1.1",
+      "loaiNha": "Kho dầu mỏ và các sản phẩm dầu mỏ — tổng dung tích trên 500 000 m³",
+      "apA1Stt": [],
+      "standalone": true,
+      "footnotes": ["1"],
+      "criteria": {"type": "khongPhuThuocDienTich", "description": "Tổng dung tích trên 500 000 m³"},
+      "quantities": {"xeCC": 2, "tauCC": 0, "bomKhieng": 0}
+    },
+    {
+      "stt": "1.2",
+      "loaiNha": "Kho dầu mỏ và các sản phẩm dầu mỏ — dung tích 100 000 đến 500 000 m³",
+      "apA1Stt": [],
+      "standalone": true,
+      "footnotes": ["1"],
+      "criteria": {"type": "khongPhuThuocDienTich", "description": "Tổng dung tích từ 100 000 m³ đến 500 000 m³"},
+      "quantities": {"xeCC": 1, "tauCC": 0, "bomKhieng": 0}
+    },
+    {
+      "stt": "1.3",
+      "loaiNha": "Kho dầu mỏ và các sản phẩm dầu mỏ — dung tích nhỏ hơn 100 000 m³",
+      "apA1Stt": [],
+      "standalone": true,
+      "footnotes": ["1"],
+      "criteria": {"type": "khongPhuThuocDienTich", "description": "Tổng dung tích nhỏ hơn 100 000 m³"},
+      "quantities": {"xeCC": 0, "tauCC": 0, "bomKhieng": 1}
+    },
+    {
+      "stt": "2.1.1",
+      "loaiNha": "Cảng hàng không quốc tế — Cấp 1, 2, 3, 4, 5 (theo ICAO Doc 9137-AN/898)",
+      "apA1Stt": ["22"],
+      "criteria": {"type": "khongPhuThuocDienTich", "description": "Cấp 1, 2, 3, 4, 5"},
+      "quantities": {"xeCC": 1, "tauCC": 0, "bomKhieng": 0}
+    },
+    {
+      "stt": "2.1.2",
+      "loaiNha": "Cảng hàng không quốc tế — Cấp 6, 7 (theo ICAO)",
+      "apA1Stt": ["22"],
+      "criteria": {"type": "khongPhuThuocDienTich", "description": "Cấp 6, 7"},
+      "quantities": {"xeCC": 2, "tauCC": 0, "bomKhieng": 0}
+    },
+    {
+      "stt": "2.1.3",
+      "loaiNha": "Cảng hàng không quốc tế — Cấp 8, 9, 10 (theo ICAO)",
+      "apA1Stt": ["22"],
+      "criteria": {"type": "khongPhuThuocDienTich", "description": "Cấp 8, 9, 10"},
+      "quantities": {"xeCC": 3, "tauCC": 0, "bomKhieng": 0}
+    },
+    {
+      "stt": "2.2.1",
+      "loaiNha": "Bến cảng biển có xuất, nhập chất nổ/khí/lỏng/rắn nguy hiểm — Cấp đặc biệt",
+      "apA1Stt": [],
+      "standalone": true,
+      "criteria": {"type": "khongPhuThuocDienTich", "description": "Cấp đặc biệt"},
+      "quantities": {"xeCC": 0, "tauCC": 2, "bomKhieng": 0}
+    },
+    {
+      "stt": "2.2.2",
+      "loaiNha": "Bến cảng biển có xuất, nhập chất nguy hiểm — Cấp I",
+      "apA1Stt": [],
+      "standalone": true,
+      "criteria": {"type": "khongPhuThuocDienTich", "description": "Cấp I"},
+      "quantities": {"xeCC": 0, "tauCC": 1, "bomKhieng": 0}
+    },
+    {
+      "stt": "2.2.3",
+      "loaiNha": "Bến cảng biển có xuất, nhập chất nguy hiểm — Cấp II, Cấp III",
+      "apA1Stt": [],
+      "standalone": true,
+      "criteria": {"type": "khongPhuThuocDienTich", "description": "Cấp II, Cấp III"},
+      "quantities": {"xeCC": 0, "tauCC": 1, "bomKhieng": 0}
+    },
+    {
+      "stt": "2.2.4",
+      "loaiNha": "Bến cảng chuyên dùng LNG (tiếp nhận tàu/thiết bị dung tích chứa ≥8 000 m³)",
+      "apA1Stt": [],
+      "standalone": true,
+      "criteria": {"type": "khongPhuThuocDienTich", "description": "Tiếp nhận tàu hoặc thiết bị có dung tích chứa từ 8 000 m³ trở lên"},
+      "quantities": {"xeCC": 0, "tauCC": 1, "bomKhieng": 0}
+    },
+    {
+      "stt": "3.1.1",
+      "loaiNha": "Nhà máy nhiệt điện — công suất 600 đến dưới 1 200 MW",
+      "apA1Stt": [],
+      "standalone": true,
+      "criteria": {"type": "khongPhuThuocDienTich", "description": "Tổng công suất từ 600 MW đến dưới 1 200 MW"},
+      "quantities": {"xeCC": 1, "tauCC": 0, "bomKhieng": 0}
+    },
+    {
+      "stt": "3.1.2",
+      "loaiNha": "Nhà máy nhiệt điện — công suất ≥1 200 MW",
+      "apA1Stt": [],
+      "standalone": true,
+      "criteria": {"type": "khongPhuThuocDienTich", "description": "Tổng công suất từ 1 200 MW trở lên"},
+      "quantities": {"xeCC": 2, "tauCC": 0, "bomKhieng": 0}
+    },
+    {
+      "stt": "3.2",
+      "loaiNha": "Nhà máy thủy điện — công suất ≥1 000 MW",
+      "apA1Stt": [],
+      "standalone": true,
+      "criteria": {"type": "khongPhuThuocDienTich", "description": "Tổng công suất từ 1 000 MW trở lên"},
+      "quantities": {"xeCC": 1, "tauCC": 0, "bomKhieng": 0}
+    },
+    {
+      "stt": "3.3",
+      "loaiNha": "Nhà máy thủy điện <1 000 MW; nhà máy nhiệt điện <600 MW",
+      "apA1Stt": [],
+      "standalone": true,
+      "criteria": {"type": "khongPhuThuocDienTich", "description": "Thủy điện <1 000 MW; nhiệt điện <600 MW"},
+      "quantities": {"xeCC": 0, "tauCC": 0, "bomKhieng": 1}
+    },
+    {
+      "stt": "3.4",
+      "loaiNha": "Nhà máy dệt — công suất từ 25 triệu m²/năm trở lên",
+      "apA1Stt": [],
+      "standalone": true,
+      "criteria": {"type": "khongPhuThuocDienTich", "description": "Công suất từ 25 triệu m²/năm trở lên"},
+      "quantities": {"xeCC": 1, "tauCC": 0, "bomKhieng": 0}
+    },
+    {
+      "stt": "3.5",
+      "loaiNha": "Nhà máy lọc dầu; nhà máy lọc, hóa dầu",
+      "apA1Stt": [],
+      "standalone": true,
+      "criteria": {"type": "khongPhuThuocDienTich", "description": "Không phụ thuộc vào công suất"},
+      "quantities": {"xeCC": 2, "tauCC": 0, "bomKhieng": 0}
+    },
+    {
+      "stt": "3.6",
+      "loaiNha": "Cơ sở chế biến khí đốt — công suất ≥10 triệu m³ khí/ngày đêm",
+      "apA1Stt": [],
+      "standalone": true,
+      "criteria": {"type": "khongPhuThuocDienTich", "description": "Công suất từ 10 triệu m³ khí/ngày đêm trở lên"},
+      "quantities": {"xeCC": 1, "tauCC": 0, "bomKhieng": 0}
+    },
+    {
+      "stt": "4.1",
+      "loaiNha": "Khu công nghiệp — diện tích trên 300 ha",
+      "apA1Stt": [],
+      "standalone": true,
+      "criteria": {"type": "khongPhuThuocDienTich", "description": "Tổng diện tích trên 300 ha"},
+      "quantities": {"xeCC": 2, "tauCC": 0, "bomKhieng": 0}
+    },
+    {
+      "stt": "4.2",
+      "loaiNha": "Khu công nghiệp, cụm công nghiệp — diện tích 75 đến 300 ha",
+      "apA1Stt": [],
+      "standalone": true,
+      "criteria": {"type": "khongPhuThuocDienTich", "description": "Tổng diện tích từ 75 ha đến 300 ha"},
+      "quantities": {"xeCC": 1, "tauCC": 0, "bomKhieng": 0}
+    },
+    {
+      "stt": "4.3",
+      "loaiNha": "Khu công nghiệp, cụm công nghiệp — diện tích dưới 75 ha",
+      "apA1Stt": [],
+      "standalone": true,
+      "criteria": {"type": "khongPhuThuocDienTich", "description": "Tổng diện tích dưới 75 ha"},
+      "quantities": {"xeCC": 0, "tauCC": 0, "bomKhieng": 1}
+    }
+  ]
+}
+;

@@ -1,0 +1,41 @@
+{
+  "ten": "Bảng 3 — Các thông số của hệ thống chữa cháy tự động (phòng cao 10 m đến 20 m)",
+  "nguon": "TCVN 7336:2021, Bảng 3",
+  "cot_chieu_cao": ["Từ 10 đến 12 m", "Trên 12 đến 14 m", "Trên 14 đến 16 m", "Trên 16 đến 18 m", "Trên 18 đến 20 m"],
+  "cuong_do": {
+    "tieu_de": "Cường độ phun tối thiểu (l/s·m²)",
+    "hang": [
+      { "h": "Từ 10 đến 12 m",   "n1": 0.09, "n2_nuoc": 0.13, "n2_bot": 0.09, "n3_nuoc": 0.26, "n3_bot": 0.13, "n41_nuoc": 0.33, "n41_bot": 0.17, "n42_bot": 0.20 },
+      { "h": "Trên 12 đến 14 m", "n1": 0.10, "n2_nuoc": 0.14, "n2_bot": 0.10, "n3_nuoc": 0.29, "n3_bot": 0.14, "n41_nuoc": 0.36, "n41_bot": 0.18, "n42_bot": 0.22 },
+      { "h": "Trên 14 đến 16 m", "n1": 0.11, "n2_nuoc": 0.16, "n2_bot": 0.11, "n3_nuoc": 0.31, "n3_bot": 0.16, "n41_nuoc": 0.39, "n41_bot": 0.20, "n42_bot": 0.25 },
+      { "h": "Trên 16 đến 18 m", "n1": 0.12, "n2_nuoc": 0.17, "n2_bot": 0.12, "n3_nuoc": 0.34, "n3_bot": 0.17, "n41_nuoc": 0.42, "n41_bot": 0.21, "n42_bot": 0.27 },
+      { "h": "Trên 18 đến 20 m", "n1": 0.13, "n2_nuoc": 0.18, "n2_bot": 0.13, "n3_nuoc": 0.36, "n3_bot": 0.18, "n41_nuoc": 0.45, "n41_bot": 0.23, "n42_bot": 0.30 }
+    ]
+  },
+  "luu_luong": {
+    "tieu_de": "Lưu lượng tối thiểu (l/s)",
+    "hang": [
+      { "h": "Từ 10 đến 12 m",   "n1": 12, "n2_nuoc": 35, "n2_bot": 25, "n3_nuoc": 70,  "n3_bot": 35, "n41_nuoc": 130, "n41_bot": 65,  "n42_bot": 95 },
+      { "h": "Trên 12 đến 14 m", "n1": 14, "n2_nuoc": 40, "n2_bot": 30, "n3_nuoc": 85,  "n3_bot": 45, "n41_nuoc": 155, "n41_bot": 80,  "n42_bot": 115 },
+      { "h": "Trên 14 đến 16 m", "n1": 17, "n2_nuoc": 50, "n2_bot": 35, "n3_nuoc": 95,  "n3_bot": 50, "n41_nuoc": 180, "n41_bot": 90,  "n42_bot": 140 },
+      { "h": "Trên 16 đến 18 m", "n1": 20, "n2_nuoc": 57, "n2_bot": 40, "n3_nuoc": 115, "n3_bot": 60, "n41_nuoc": 215, "n41_bot": 105, "n42_bot": 165 },
+      { "h": "Trên 18 đến 20 m", "n1": 24, "n2_nuoc": 65, "n2_bot": 50, "n3_nuoc": 130, "n3_bot": 65, "n41_nuoc": 240, "n41_bot": 120, "n42_bot": 195 }
+    ]
+  },
+  "dien_tich": {
+    "tieu_de": "Diện tích tính toán tối thiểu (m²)",
+    "hang": [
+      { "h": "Từ 10 đến 12 m",   "n1": 66, "n2": 132, "n3": 132, "n41": 198, "n42": 238 },
+      { "h": "Trên 12 đến 14 m", "n1": 72, "n2": 144, "n3": 144, "n41": 216, "n42": 259 },
+      { "h": "Trên 14 đến 16 m", "n1": 78, "n2": 156, "n3": 156, "n41": 230, "n42": 276 },
+      { "h": "Trên 16 đến 18 m", "n1": 84, "n2": 168, "n3": 168, "n41": 252, "n42": 303 },
+      { "h": "Trên 18 đến 20 m", "n1": 90, "n2": 180, "n3": 180, "n41": 270, "n42": 325 }
+    ]
+  },
+  "chu_thich": [
+    "CT1: Nhóm nguy cơ phát sinh cháy được nêu trong Phụ lục A.",
+    "CT2: Thông số áp dụng cho đầu phun nước và bọt có cấu tạo thông thường.",
+    "CT3: Bảng thể hiện cường độ phun của dung dịch chất tạo bọt thông thường.",
+    "CT4: Nếu Stt < S theo Bảng 3 — lưu lượng thực tế có thể giảm theo K = Stt / S."
+  ]
+}

@@ -1,0 +1,215 @@
+window.BANG_A2_DATA = {
+  "metadata": {
+    "source": "QCVN 10:2025/BCA",
+    "table": "Bảng A.2 - Đối với hạng mục/khu vực",
+    "effectiveDate": "2025-12-30",
+    "description": "Phụ lục A - Trang bị báo cháy/chữa cháy tự động cho hạng mục cáp, băng tải, hầm cáp, khoảng không gian trần giả/sàn nâng",
+    "notes": [
+      "Áp dụng song song với Bảng A.1 và A.3 — theo 1.5.9 PDF: xét cho từng hạng mục/khu vực trong nhà",
+      "Footnote (1): tuy nen, giếng, sàn nâng, tầng cáp, hành lang cáp"
+    ]
+  },
+  "footnotes": {
+    "1": "Hạng mục cáp trong Quy chuẩn này bao gồm tuy nen, giếng, sàn nâng (sàn kép), tầng cáp, hành lang cáp dùng để đặt cáp (bao gồm cả kết hợp với các phương tiện liên lạc khác).",
+    "2": "Cho phép không trang bị hệ thống báo cháy tự động, hệ thống chữa cháy tự động trong các trường hợp sau: (a) Cáp được luồn trong ống hoặc được bọc bằng vật liệu không cháy hoặc có tính cháy Ch1; (b) Là cáp, dây dẫn điện của hệ thống chiếu sáng, hệ thống thông tin.",
+    "3": "Các khu vực áp dụng yêu cầu tại mục 7.1, 7.2: (a) Hành lang thoát nạn, hội trường, tiền sảnh; (b) Gian phòng có từ 50 người trở lên; (c) Gian phòng cấp nguy hiểm cháy theo công năng nhóm F1.1 và F4.1 và kinh doanh dịch vụ karaoke, vũ trường. Cho phép chỉ bố trí đầu báo cháy tại các vị trí các đường ống kỹ thuật và/hoặc đường máng cáp tại không gian phía trên trần treo và dưới sàn nâng."
+  },
+  "items": [
+    {
+      "stt": "1",
+      "tenHangMuc": "Hạng mục cáp của nhà máy điện (không bao gồm phần cáp đặt ở ngoài nhà, công trình)",
+      "shortName": "Cáp nhà máy điện",
+      "footnotes": [
+        "1",
+        "2"
+      ],
+      "baoChayCriteria": {
+        "type": "khongPhuThuocDienTich",
+        "description": "Không phụ thuộc vào quy mô"
+      },
+      "chuaChayCriteria": {
+        "type": "khongPhuThuocDienTich",
+        "description": "Không phụ thuộc vào quy mô"
+      }
+    },
+    {
+      "stt": "2",
+      "tenHangMuc": "Hạng mục cáp của trạm biến áp điện áp ≥500 kV (không bao gồm phần cáp đặt ở ngoài nhà, công trình)",
+      "shortName": "Cáp trạm BA ≥500 kV",
+      "footnotes": [
+        "1",
+        "2"
+      ],
+      "baoChayCriteria": {
+        "type": "khongPhuThuocDienTich",
+        "description": "Không phụ thuộc vào quy mô"
+      },
+      "chuaChayCriteria": {
+        "type": "khongPhuThuocDienTich",
+        "description": "Không phụ thuộc vào quy mô"
+      }
+    },
+    {
+      "stt": "3",
+      "tenHangMuc": "Hạng mục cáp của trạm biến áp 110-220 kV (không bao gồm cáp ngoài nhà) phân theo công suất máy biến áp",
+      "shortName": "Cáp trạm BA 110-220 kV",
+      "footnotes": [
+        "1",
+        "2"
+      ],
+      "subTypes": [
+        {
+          "subStt": "3.1",
+          "description": "Máy biến áp công suất dưới 63 MVA",
+          "baoChayCriteria": {
+            "type": "khongPhuThuocDienTich",
+            "description": "Không phụ thuộc vào quy mô"
+          },
+          "chuaChayCriteria": {
+            "type": "khong",
+            "description": "-"
+          }
+        },
+        {
+          "subStt": "3.2",
+          "description": "Máy biến áp công suất từ 63 MVA trở lên",
+          "baoChayCriteria": {
+            "type": "khongPhuThuocDienTich",
+            "description": "Không phụ thuộc vào quy mô"
+          },
+          "chuaChayCriteria": {
+            "type": "khongPhuThuocDienTich",
+            "description": "Không phụ thuộc vào quy mô"
+          }
+        }
+      ]
+    },
+    {
+      "stt": "4",
+      "tenHangMuc": "Hạng mục cáp của trạm biến áp không người trực (không bao gồm phần cáp ngoài nhà)",
+      "shortName": "Cáp trạm BA không người trực",
+      "footnotes": [
+        "1",
+        "2"
+      ],
+      "baoChayCriteria": {
+        "type": "khongPhuThuocDienTich",
+        "description": "Không phụ thuộc vào quy mô"
+      },
+      "chuaChayCriteria": {
+        "type": "khongPhuThuocDienTich",
+        "description": "Không phụ thuộc vào quy mô"
+      }
+    },
+    {
+      "stt": "5",
+      "tenHangMuc": "Hầm cáp (mương cáp) trong nhà sản xuất và nhà dân dụng đặt cáp hoặc dây dẫn có điện áp từ 220V trở lên — phân theo khối tích",
+      "shortName": "Hầm cáp/mương cáp ≥220V",
+      "footnotes": [
+        "2"
+      ],
+      "subTypes": [
+        {
+          "subStt": "5.1",
+          "description": "Khối tích từ 10 m³ đến 100 m³",
+          "baoChayCriteria": {
+            "type": "soSoiTroLen",
+            "value": 5,
+            "unit": "sợi",
+            "description": "Từ 5 sợi trở lên"
+          },
+          "chuaChayCriteria": {
+            "type": "khong",
+            "description": "-"
+          }
+        },
+        {
+          "subStt": "5.2",
+          "description": "Khối tích trên 100 m³",
+          "baoChayCriteria": {
+            "type": "soSoiTroLen",
+            "value": 5,
+            "unit": "sợi",
+            "description": "Từ 5 sợi trở lên"
+          },
+          "chuaChayCriteria": {
+            "type": "soSoiTroLen",
+            "value": 12,
+            "unit": "sợi",
+            "description": "Từ 12 sợi trở lên"
+          }
+        }
+      ]
+    },
+    {
+      "stt": "6",
+      "tenHangMuc": "Băng tải kín vận chuyển nguyên vật liệu dễ cháy",
+      "shortName": "Băng tải kín NVL dễ cháy",
+      "baoChayCriteria": {
+        "type": "chieuDaiTroLen",
+        "value": 25,
+        "unit": "m",
+        "description": "Chiều dài từ 25 m trở lên"
+      },
+      "chuaChayCriteria": {
+        "type": "chieuDaiTroLen",
+        "value": 25,
+        "unit": "m",
+        "description": "Chiều dài từ 25 m trở lên"
+      }
+    },
+    {
+      "stt": "7",
+      "tenHangMuc": "Khoảng không gian phía trên trần giả hoặc dưới sàn nâng có chiều cao ≥0.35m của các khu vực thuộc diện trang bị HTCC/HTBC tự động",
+      "shortName": "Khoảng KG trên trần giả / dưới sàn nâng",
+      "footnotes": [
+        "3"
+      ],
+      "subTypes": [
+        {
+          "subStt": "7.1",
+          "description": "Đường ống kỹ thuật được bọc bằng vật liệu có tính cháy Ch2-Ch4, không phụ thuộc khối lượng",
+          "baoChayCriteria": {
+            "type": "khongPhuThuocDienTich",
+            "description": "Không phụ thuộc vào quy mô"
+          },
+          "chuaChayCriteria": {
+            "type": "khong",
+            "description": "-"
+          }
+        },
+        {
+          "subStt": "7.2",
+          "description": "Máng cáp (bó cáp) ≥220V và tổng thể tích chất cháy nhóm Ch2-Ch4 từ 0,0015 m³/chiều dài trở lên",
+          "footnotes": [
+            "2"
+          ],
+          "baoChayCriteria": {
+            "type": "khongPhuThuocDienTich",
+            "description": "Không phụ thuộc vào quy mô"
+          },
+          "chuaChayCriteria": {
+            "type": "khong",
+            "description": "-"
+          }
+        }
+      ]
+    },
+    {
+      "stt": "8",
+      "tenHangMuc": "Hầm cáp (mương cáp) của hầm giao thông đường bộ có chiều dài từ 500 m trở lên",
+      "shortName": "Hầm cáp hầm giao thông ≥500 m",
+      "footnotes": [
+        "2"
+      ],
+      "baoChayCriteria": {
+        "type": "khongPhuThuocDienTich",
+        "description": "Không phụ thuộc vào quy mô"
+      },
+      "chuaChayCriteria": {
+        "type": "khong",
+        "description": "-"
+      }
+    }
+  ]
+};

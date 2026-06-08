@@ -1,0 +1,32 @@
+{
+  "ten": "Bảng 2 — Cường độ phun, lưu lượng cho phòng kho thuộc nhóm nguy cơ 5, 6, 7",
+  "nguon": "TCVN 7336:2021, Bảng 2",
+  "cot_chieu_cao": ["Đến 1 m", "Trên 1 đến 2 m", "Trên 2 đến 3 m", "Trên 3 đến 4 m", "Trên 4 đến 5,5 m"],
+  "cuong_do": {
+    "tieu_de": "Cường độ phun tối thiểu (l/s·m²)",
+    "hang": [
+      { "h": "Đến 1 m",         "n5_nuoc": 0.08, "n5_bot": 0.04, "n6_nuoc": 0.16, "n6_bot": 0.08, "n7_nuoc": null, "n7_bot": 0.1 },
+      { "h": "Trên 1 đến 2 m",  "n5_nuoc": 0.16, "n5_bot": 0.08, "n6_nuoc": 0.32, "n6_bot": 0.20, "n7_nuoc": null, "n7_bot": 0.2 },
+      { "h": "Trên 2 đến 3 m",  "n5_nuoc": 0.24, "n5_bot": 0.12, "n6_nuoc": 0.40, "n6_bot": 0.24, "n7_nuoc": null, "n7_bot": 0.3 },
+      { "h": "Trên 3 đến 4 m",  "n5_nuoc": 0.32, "n5_bot": 0.16, "n6_nuoc": 0.40, "n6_bot": 0.32, "n7_nuoc": null, "n7_bot": 0.4 },
+      { "h": "Trên 4 đến 5,5 m","n5_nuoc": 0.40, "n5_bot": 0.32, "n6_nuoc": 0.50, "n6_bot": 0.40, "n7_nuoc": null, "n7_bot": 0.4 }
+    ]
+  },
+  "luu_luong": {
+    "tieu_de": "Lưu lượng tối thiểu (l/s)",
+    "hang": [
+      { "h": "Đến 1 m",         "n5_nuoc": 15,   "n5_bot": 7.5,  "n6_nuoc": 30, "n6_bot": 15, "n7_nuoc": null, "n7_bot": 18 },
+      { "h": "Trên 1 đến 2 m",  "n5_nuoc": 30,   "n5_bot": 15,   "n6_nuoc": 60, "n6_bot": 36, "n7_nuoc": null, "n7_bot": 36 },
+      { "h": "Trên 2 đến 3 m",  "n5_nuoc": 45,   "n5_bot": 22.5, "n6_nuoc": 75, "n6_bot": 45, "n7_nuoc": null, "n7_bot": 54 },
+      { "h": "Trên 3 đến 4 m",  "n5_nuoc": 60,   "n5_bot": 30,   "n6_nuoc": 75, "n6_bot": 60, "n7_nuoc": null, "n7_bot": 75 },
+      { "h": "Trên 4 đến 5,5 m","n5_nuoc": 75,   "n5_bot": 37.5, "n6_nuoc": 90, "n6_bot": 75, "n7_nuoc": null, "n7_bot": 75 }
+    ]
+  },
+  "chu_thich": [
+    "CT1: Nhóm nguy cơ phát sinh cháy theo Phụ lục A.",
+    "CT2: Nhóm 6 khi chữa cao su, vật liệu cao su và nhựa — cần dùng nước có phụ gia thẩm thấu hoặc bọt bội số nở thấp.",
+    "CT3: Kho có chiều cao xếp hàng ≤ 5,5 m và chiều cao phòng > 10 m — lưu lượng và cường độ phun nhóm 5, 6, 7 phải TĂNG 10% cho mỗi 2 m chiều cao tăng thêm của phòng.",
+    "CT4: Bảng thể hiện cường độ phun của dung dịch chất tạo bọt thông thường.",
+    "CT5: Chiều cao xếp hàng > 5,5 m — cần thử nghiệm xác nhận thông số, áp dụng theo điều kiện kỹ thuật đặc biệt được cơ quan thẩm quyền chấp thuận."
+  ]
+}

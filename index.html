@@ -1,0 +1,542 @@
+<!DOCTYPE html>
+<html lang="vi" data-theme="light">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>PCCC Calc — Tính toán PCCC chuyên nghiệp</title>
+<style>
+  :root[data-theme="light"] {
+    --bg: #ffffff; --bg-soft: #f5f5f7; --bg-card: #fbfbfd;
+    --border: rgba(0,0,0,.08); --border-strong: rgba(0,0,0,.16);
+    --text: #1d1d1f; --text-secondary: #6e6e73; --text-tertiary: #86868b;
+    --brand: #c0392b; --brand-dark: #a93226;
+    --link: #06c;
+    --nav-bg: rgba(255,255,255,.72);
+    --shadow-sm: 0 1px 2px rgba(0,0,0,.04);
+    --shadow-md: 0 4px 20px rgba(0,0,0,.06);
+    --shadow-lg: 0 20px 60px rgba(0,0,0,.12);
+  }
+  :root[data-theme="dark"] {
+    --bg: #000000; --bg-soft: #1d1d1f; --bg-card: #1c1c1e;
+    --border: rgba(255,255,255,.12); --border-strong: rgba(255,255,255,.24);
+    --text: #f5f5f7; --text-secondary: #a1a1a6; --text-tertiary: #6e6e73;
+    --brand: #ff453a; --brand-dark: #ff6b60;
+    --link: #2997ff;
+    --nav-bg: rgba(0,0,0,.72);
+    --shadow-sm: 0 1px 2px rgba(0,0,0,.4);
+    --shadow-md: 0 4px 20px rgba(0,0,0,.5);
+    --shadow-lg: 0 20px 60px rgba(0,0,0,.7);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Helvetica Neue", "Segoe UI", system-ui, sans-serif;
+    background: var(--bg); color: var(--text);
+    font-size: 17px; line-height: 1.47059; font-weight: 400;
+    letter-spacing: -0.022em;
+    transition: background .3s ease, color .3s ease;
+  }
+  a { color: var(--link); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+
+  /* ============ TYPOGRAPHY (Apple HIG) ============ */
+  .display { font-size: 80px; line-height: 1.05; font-weight: 700; letter-spacing: -0.025em; }
+  .h1 { font-size: 56px; line-height: 1.07143; font-weight: 700; letter-spacing: -0.005em; }
+  .h2 { font-size: 40px; line-height: 1.1; font-weight: 700; }
+  .h3 { font-size: 28px; line-height: 1.14286; font-weight: 600; letter-spacing: 0.007em; }
+  .h4 { font-size: 21px; line-height: 1.19048; font-weight: 600; letter-spacing: 0.011em; }
+  .body-lg { font-size: 21px; line-height: 1.381; font-weight: 400; letter-spacing: 0.011em; }
+  .body { font-size: 17px; line-height: 1.47059; font-weight: 400; letter-spacing: -0.022em; }
+  .caption { font-size: 14px; line-height: 1.42857; font-weight: 400; letter-spacing: -0.016em; color: var(--text-secondary); }
+  @media (max-width: 720px) {
+    .display { font-size: 48px; }
+    .h1 { font-size: 36px; }
+    .h2 { font-size: 28px; }
+    .body-lg { font-size: 19px; }
+  }
+
+  .container { max-width: 1200px; margin: 0 auto; padding: 0 22px; }
+  .narrow { max-width: 980px; margin: 0 auto; padding: 0 22px; }
+  .text-center { text-align: center; }
+  .gradient-text {
+    background: linear-gradient(180deg, #c0392b 0%, #e74c3c 50%, #f59e0b 100%);
+    -webkit-background-clip: text; background-clip: text;
+    -webkit-text-fill-color: transparent;
+    display: inline-block;
+  }
+
+  /* ============ iOS-STYLE ICONS ============ */
+  .ios-icon {
+    display: inline-flex; align-items: center; justify-content: center;
+    border-radius: 22.37%; /* iOS squircle ratio */
+    font-size: 28px;
+    color: white;
+    width: 56px; height: 56px;
+    box-shadow:
+      inset 0 1px 0 rgba(255,255,255,.25),
+      inset 0 -2px 4px rgba(0,0,0,.08),
+      0 4px 12px rgba(0,0,0,.08);
+    flex-shrink: 0;
+    position: relative;
+  }
+  .ios-icon::after {
+    content: ''; position: absolute; inset: 0;
+    border-radius: inherit;
+    background: linear-gradient(180deg, rgba(255,255,255,.18) 0%, transparent 50%);
+    pointer-events: none;
+  }
+  .ios-icon.sm { width: 36px; height: 36px; font-size: 18px; border-radius: 9px; }
+  .ios-icon.lg { width: 72px; height: 72px; font-size: 36px; border-radius: 17px; }
+  .ios-icon.xl { width: 96px; height: 96px; font-size: 48px; border-radius: 22px; }
+  /* iOS system colors */
+  .ios-icon.red    { background: linear-gradient(180deg, #ff6961 0%, #ff453a 100%); }
+  .ios-icon.orange { background: linear-gradient(180deg, #ffb340 0%, #ff9500 100%); }
+  .ios-icon.yellow { background: linear-gradient(180deg, #ffd966 0%, #ffcc00 100%); }
+  .ios-icon.green  { background: linear-gradient(180deg, #5bd778 0%, #34c759 100%); }
+  .ios-icon.mint   { background: linear-gradient(180deg, #5dd5cc 0%, #00c7be 100%); }
+  .ios-icon.teal   { background: linear-gradient(180deg, #5fc1d3 0%, #30b0c7 100%); }
+  .ios-icon.cyan   { background: linear-gradient(180deg, #5fc1f0 0%, #32ade6 100%); }
+  .ios-icon.blue   { background: linear-gradient(180deg, #4da3ff 0%, #007aff 100%); }
+  .ios-icon.indigo { background: linear-gradient(180deg, #7d7be0 0%, #5856d6 100%); }
+  .ios-icon.purple { background: linear-gradient(180deg, #c178e3 0%, #af52de 100%); }
+  .ios-icon.pink   { background: linear-gradient(180deg, #ff5b7a 0%, #ff2d55 100%); }
+  .ios-icon.brown  { background: linear-gradient(180deg, #b8997a 0%, #a2845e 100%); }
+  .ios-icon.gray   { background: linear-gradient(180deg, #aeaeb2 0%, #8e8e93 100%); }
+  .ios-icon.brand  { background: linear-gradient(180deg, #e74c3c 0%, #c0392b 100%); }
+
+  /* ============ NAV (Apple frosted) ============ */
+  nav.top {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 9999;
+    background: var(--nav-bg);
+    backdrop-filter: saturate(180%) blur(20px);
+    -webkit-backdrop-filter: saturate(180%) blur(20px);
+    border-bottom: 1px solid var(--border);
+    height: 48px;
+  }
+  nav.top .inner {
+    max-width: 1024px; margin: 0 auto; padding: 0 22px;
+    height: 48px; display: flex; align-items: center; gap: 32px;
+  }
+  nav.top .logo { font-size: 17px; font-weight: 600; color: var(--text); display: flex; align-items: center; gap: 8px; }
+  nav.top ul { list-style: none; display: flex; gap: 26px; }
+  nav.top ul a {
+    color: var(--text); font-size: 12px; font-weight: 400;
+    opacity: .8; transition: opacity .15s; letter-spacing: -0.01em;
+  }
+  nav.top ul a:hover { opacity: 1; text-decoration: none; }
+  nav.top .right { margin-left: auto; display: flex; align-items: center; gap: 14px; }
+  nav.top .right a { font-size: 12px; color: var(--text); opacity: .8; }
+  nav.top .right a:hover { opacity: 1; text-decoration: none; }
+
+  .pill {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 8px 18px; border-radius: 980px;
+    font-size: 14px; font-weight: 400; letter-spacing: -0.01em;
+    transition: all .2s; cursor: pointer;
+    border: 1px solid transparent; text-decoration: none;
+  }
+  .pill-primary { background: var(--brand); color: white; }
+  .pill-primary:hover { background: var(--brand-dark); text-decoration: none; }
+  .pill-link { background: transparent; color: var(--link); padding: 8px 0; }
+  .pill-link:hover { text-decoration: underline; }
+  .pill-lg { padding: 12px 26px; font-size: 17px; font-weight: 400; }
+  .pill-ghost { background: transparent; color: var(--text); border-color: var(--text); }
+  .pill-ghost:hover { background: var(--text); color: var(--bg); text-decoration: none; }
+
+  .theme-btn {
+    width: 28px; height: 28px; border-radius: 50%;
+    background: transparent; border: none; color: var(--text);
+    cursor: pointer; font-size: 14px; opacity: .7;
+  }
+  .theme-btn:hover { opacity: 1; }
+
+  /* ============ HERO ============ */
+  .hero { padding: 120px 0 60px; text-align: center; background: var(--bg); }
+  .hero .badge {
+    display: inline-flex; align-items: center; gap: 8px;
+    font-size: 17px; color: var(--link); margin-bottom: 20px;
+  }
+  .hero h1 { margin-bottom: 16px; }
+  .hero .sub { color: var(--text-secondary); max-width: 700px; margin: 0 auto 32px; }
+  .hero .ctas { display: flex; gap: 28px; justify-content: center; align-items: center; margin-bottom: 60px; flex-wrap: wrap; }
+  .hero .arrow { font-size: 11px; margin-left: 2px; }
+
+  .hero-img {
+    max-width: 1024px; margin: 0 auto;
+    border-radius: 22px; overflow: hidden;
+    box-shadow: var(--shadow-lg);
+    background: var(--bg-soft); border: 1px solid var(--border);
+    padding: 30px;
+  }
+  .hero-img svg { width: 100%; height: auto; display: block; }
+
+  /* ============ SECTIONS ============ */
+  .section { padding: 100px 0; }
+  .section.soft { background: var(--bg-soft); }
+  .section .eyebrow { font-size: 17px; color: var(--brand); margin-bottom: 8px; font-weight: 600; }
+  .section .stitle { margin-bottom: 14px; }
+  .section .ssub { color: var(--text-secondary); max-width: 700px; margin-bottom: 60px; }
+
+  /* Tiles */
+  .tile-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; }
+  @media (max-width: 720px) { .tile-grid { grid-template-columns: 1fr; } }
+  .tile {
+    background: var(--bg-card); border-radius: 22px; padding: 42px;
+    border: 1px solid var(--border);
+    transition: all .3s ease;
+    position: relative; overflow: hidden; cursor: pointer;
+  }
+  .tile:hover { transform: translateY(-2px); box-shadow: var(--shadow-md); }
+  .tile .tile-label {
+    font-size: 12px; font-weight: 600; color: var(--brand);
+    margin-bottom: 8px; letter-spacing: 0.05em; text-transform: uppercase;
+  }
+  .tile h3 { margin-bottom: 12px; }
+  .tile p { color: var(--text-secondary); font-size: 17px; line-height: 1.47; }
+  .tile .ios-icon { margin-bottom: 22px; }
+  .tile.featured {
+    grid-column: 1 / -1; padding: 60px;
+    background: linear-gradient(135deg, #1d1d1f 0%, #2d2d2f 100%);
+    color: #f5f5f7;
+  }
+  .tile.featured p { color: rgba(245,245,247,.8); }
+  .tile.featured .tile-label { color: #ff6b60; }
+
+  /* 9-feature grid */
+  .feat-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
+  @media (max-width: 980px) { .feat-grid { grid-template-columns: repeat(2, 1fr); } }
+  @media (max-width: 560px) { .feat-grid { grid-template-columns: 1fr; } }
+  .feat-card {
+    background: var(--bg-card); border: 1px solid var(--border);
+    border-radius: 18px; padding: 28px;
+    transition: all .25s; cursor: pointer;
+  }
+  .feat-card:hover { transform: translateY(-2px); box-shadow: var(--shadow-md); }
+  .feat-card .ios-icon { margin-bottom: 14px; }
+  .feat-card h4 { margin-bottom: 6px; font-size: 19px; line-height: 1.25; font-weight: 600; letter-spacing: 0; }
+  .feat-card p { color: var(--text-secondary); font-size: 14px; line-height: 1.45; }
+
+  /* Steps */
+  .steps { display: grid; grid-template-columns: repeat(3, 1fr); gap: 40px; }
+  @media (max-width: 800px) { .steps { grid-template-columns: 1fr; } }
+  .step .ios-icon { margin-bottom: 16px; }
+  .step h3 { margin-bottom: 8px; }
+  .step p { color: var(--text-secondary); }
+
+  /* CTA */
+  .cta-section { background: var(--bg-soft); padding: 100px 0; text-align: center; }
+  .cta-section h2 { margin-bottom: 16px; }
+  .cta-section .sub { color: var(--text-secondary); max-width: 600px; margin: 0 auto 32px; }
+  .cta-section .ctas { display: flex; gap: 28px; justify-content: center; align-items: center; flex-wrap: wrap; }
+
+  /* Footer */
+  footer { background: var(--bg-soft); padding: 22px 0 18px; border-top: 1px solid var(--border); font-size: 12px; color: var(--text-secondary); line-height: 1.33337; }
+  footer .grid-links { display: grid; grid-template-columns: repeat(4, 1fr); gap: 30px; padding: 32px 0; }
+  @media (max-width: 720px) { footer .grid-links { grid-template-columns: 1fr 1fr; } }
+  footer .grid-links h5 { color: var(--text); font-size: 12px; font-weight: 600; margin-bottom: 10px; }
+  footer .grid-links ul { list-style: none; }
+  footer .grid-links li { margin-bottom: 7px; }
+  footer .grid-links a { color: var(--text-secondary); font-size: 12px; }
+  footer .grid-links a:hover { color: var(--text); text-decoration: underline; }
+  footer .top-row { padding-bottom: 14px; border-bottom: 1px solid var(--border); margin-bottom: 14px; }
+  footer .legal { display: flex; flex-wrap: wrap; }
+  footer .legal > span { padding-right: 12px; margin-right: 12px; border-right: 1px solid var(--border); }
+  footer .legal > span:last-child { border-right: none; }
+  footer .legal a { color: var(--text-secondary); }
+  footer .legal a:hover { text-decoration: underline; }
+</style>
+</head>
+<body>
+
+<nav class="top">
+  <div class="inner">
+    <a href="index.html" class="logo">
+      <span class="ios-icon sm brand" style="font-size:14px">🔥</span> PCCC Calc
+    </a>
+    <ul>
+      <li><a href="#features">Tính năng</a></li>
+      <li><a href="#how">Cách dùng</a></li>
+      <li><a href="#">Bảng giá</a></li>
+      <li><a href="#">Tiêu chuẩn</a></li>
+      <li><a href="#">Hỗ trợ</a></li>
+    </ul>
+    <div class="right">
+      <button class="theme-btn" id="themeToggle"><span id="themeIcon">🌙</span></button>
+      <a href="login.html">Đăng nhập</a>
+      <a href="signup.html" class="pill pill-primary" style="padding: 4px 14px; font-size: 12px;">Dùng thử miễn phí</a>
+    </div>
+  </div>
+</nav>
+
+<section class="hero">
+  <div class="container">
+    <div class="badge">Mới · Bản tính Sprinkler Isometric 3D đã ra mắt</div>
+    <h1 class="display">PCCC Calc.</h1>
+    <h2 class="h1" style="font-weight: 500; margin-top: -4px; margin-bottom: 22px;">Tính toán <span class="gradient-text">PCCC</span> chưa bao giờ dễ đến thế.</h2>
+    <p class="body-lg sub">Nền tảng tính toán Phòng cháy chữa cháy trực tuyến chuyên nghiệp. Bám sát TCVN, NFPA, QCVN — xuất hồ sơ chỉ trong vài phút.</p>
+
+    <div class="ctas">
+      <a href="signup.html" class="pill pill-primary pill-lg">Bắt đầu miễn phí</a>
+      <a href="sprinkler-network.html" class="pill-link" style="font-size: 17px;">Xem demo Sprinkler <span class="arrow">›</span></a>
+    </div>
+
+    <div class="hero-img">
+      <svg viewBox="0 0 900 480" xmlns="http://www.w3.org/2000/svg">
+        <rect width="900" height="36" fill="#f5f5f7"/>
+        <circle cx="20" cy="18" r="5" fill="#ff5f57"/>
+        <circle cx="38" cy="18" r="5" fill="#febc2e"/>
+        <circle cx="56" cy="18" r="5" fill="#28c840"/>
+        <rect x="280" y="9" width="340" height="18" fill="#ebebef" rx="4"/>
+        <text x="450" y="22" text-anchor="middle" font-size="11" font-family="-apple-system, sans-serif" fill="#86868b">pccc-calc.vn/sprinkler-network</text>
+
+        <g stroke="#d2d2d7" stroke-width=".6">
+          <line x1="120" y1="280" x2="380" y2="140"/><line x1="120" y1="320" x2="380" y2="180"/>
+          <line x1="120" y1="360" x2="380" y2="220"/><line x1="120" y1="400" x2="380" y2="260"/>
+          <line x1="380" y1="140" x2="640" y2="280"/><line x1="380" y1="180" x2="640" y2="320"/>
+          <line x1="380" y1="220" x2="640" y2="360"/><line x1="380" y1="260" x2="640" y2="400"/>
+          <line x1="120" y1="280" x2="120" y2="400"/><line x1="250" y1="210" x2="250" y2="330"/>
+          <line x1="380" y1="140" x2="380" y2="260"/><line x1="510" y1="210" x2="510" y2="330"/>
+          <line x1="640" y1="280" x2="640" y2="400"/>
+        </g>
+        <line x1="150" y1="385" x2="380" y2="265" stroke="#06c" stroke-width="3.5" stroke-linecap="round"/>
+        <line x1="380" y1="265" x2="610" y2="385" stroke="#06c" stroke-width="3.5" stroke-linecap="round"/>
+        <line x1="380" y1="265" x2="380" y2="155" stroke="#f59e0b" stroke-width="2.8" stroke-linecap="round"/>
+        <line x1="250" y1="320" x2="250" y2="225" stroke="#dc2626" stroke-width="2.2" stroke-linecap="round"/>
+        <line x1="510" y1="320" x2="510" y2="225" stroke="#dc2626" stroke-width="2.2" stroke-linecap="round"/>
+        <g stroke="#dc2626" stroke-width="1.4" fill="#dc2626">
+          <line x1="215" y1="305" x2="215" y2="285"/><polygon points="211,287 219,287 215,279"/>
+          <line x1="250" y1="295" x2="250" y2="275"/><polygon points="246,277 254,277 250,269"/>
+          <line x1="285" y1="285" x2="285" y2="265"/><polygon points="281,267 289,267 285,259"/>
+          <line x1="350" y1="240" x2="350" y2="220"/><polygon points="346,222 354,222 350,214"/>
+          <line x1="380" y1="235" x2="380" y2="215"/><polygon points="376,217 384,217 380,209"/>
+          <line x1="410" y1="240" x2="410" y2="220"/><polygon points="406,222 414,222 410,214"/>
+          <line x1="475" y1="285" x2="475" y2="265"/><polygon points="471,267 479,267 475,259"/>
+          <line x1="510" y1="295" x2="510" y2="275"/><polygon points="506,277 514,277 510,269"/>
+          <line x1="545" y1="305" x2="545" y2="285"/><polygon points="541,287 549,287 545,279"/>
+        </g>
+        <rect x="100" y="365" width="26" height="34" fill="white" stroke="#1d1d1f" stroke-width="1.5"/>
+        <ellipse cx="113" cy="365" rx="13" ry="5" fill="white" stroke="#1d1d1f" stroke-width="1.5"/>
+        <circle cx="148" cy="385" r="12" fill="white" stroke="#1d1d1f" stroke-width="1.5"/>
+        <path d="M 140 385 L 156 385 M 148 377 L 148 393" stroke="#1d1d1f" stroke-width="1.5"/>
+
+        <g transform="translate(700, 80)">
+          <rect width="160" height="60" rx="14" fill="white" stroke="#e5e5e7"/>
+          <text x="16" y="22" font-size="10" font-family="-apple-system" fill="#86868b">LƯU LƯỢNG TÍNH</text>
+          <text x="16" y="46" font-size="22" font-weight="700" font-family="-apple-system" fill="#1d1d1f">28.8 L/s</text>
+          <circle cx="138" cy="35" r="10" fill="#34c759"/>
+          <text x="138" y="40" text-anchor="middle" font-size="12" fill="white" font-weight="700">✓</text>
+        </g>
+        <g transform="translate(60, 60)">
+          <rect width="160" height="60" rx="14" fill="white" stroke="#e5e5e7"/>
+          <text x="16" y="22" font-size="10" font-family="-apple-system" fill="#86868b">ÁP LỰC BƠM</text>
+          <text x="16" y="46" font-size="22" font-weight="700" font-family="-apple-system" fill="#1d1d1f">6.95 bar</text>
+          <text x="120" y="42" font-size="11" font-family="-apple-system" fill="#34c759" font-weight="600">▲ ĐẠT</text>
+        </g>
+        <text x="450" y="440" text-anchor="middle" font-size="11" font-family="-apple-system" fill="#86868b">Module Sprinkler · Isometric 3D · TCVN 7336:2021</text>
+      </svg>
+    </div>
+  </div>
+</section>
+
+<section class="section soft" id="features">
+  <div class="container">
+    <div class="eyebrow">9 tính năng cốt lõi</div>
+    <h2 class="h1 stitle">Mọi bài toán PCCC, trong một nền tảng.</h2>
+    <p class="body-lg ssub">2 công cụ tra cứu, 7 mô-đun tính toán chuyên sâu — bám sát TCVN và QCVN hiện hành.</p>
+
+    <div class="tile-grid">
+      <div class="tile featured">
+        <div class="tile-label">Mới</div>
+        <span class="ios-icon xl blue">💧</span>
+        <h3 class="h3" style="margin-top: 22px">Thủy lực Sprinkler TCVN 7336</h3>
+        <p>Sơ đồ Isometric 3D nhiều tầng. Vẽ Pipenet style, pick chính xác trên grid, tính Q/H/v theo Hazen-Williams. Xuất PDF có tem, Excel chỉnh sửa và DXF mở trong AutoCAD.</p>
+      </div>
+    </div>
+
+    <div class="feat-grid" style="margin-top: 16px;">
+      <div class="feat-card">
+        <span class="ios-icon indigo">📖</span>
+        <h4>Tra cứu QC10</h4>
+        <p>Tra cứu nhanh các điều khoản, bảng biểu của Quy chuẩn QC10.</p>
+      </div>
+      <div class="feat-card">
+        <span class="ios-icon mint">📊</span>
+        <h4>Tra cứu bảng đối chiếu</h4>
+        <p>Cường độ phun, diện tích bảo vệ, áp lực, K-factor sprinkler.</p>
+      </div>
+      <div class="feat-card">
+        <span class="ios-icon orange">🏬</span>
+        <h4>Giá hàng cao &gt; 5.5m</h4>
+        <p>ESFR, in-rack sprinkler theo TCVN/NFPA 13 cho nhà kho cao.</p>
+      </div>
+      <div class="feat-card">
+        <span class="ios-icon green">🧪</span>
+        <h4>FM-200</h4>
+        <p>Khối lượng, số bình, đường kính ống — NFPA 2001 / TCVN 7161-9.</p>
+      </div>
+      <div class="feat-card">
+        <span class="ios-icon teal">🫧</span>
+        <h4>FOAM</h4>
+        <p>Dung dịch bọt, foam concentrate cho bể xăng dầu, hóa chất.</p>
+      </div>
+      <div class="feat-card">
+        <span class="ios-icon cyan">💦</span>
+        <h4>Phụ gia thẩm thấu</h4>
+        <p>Wetting agent cho cháy class A vật liệu thấm.</p>
+      </div>
+      <div class="feat-card">
+        <span class="ios-icon red">🔥</span>
+        <h4>Tải trọng cháy</h4>
+        <p>Mật độ q (MJ/m²), phân hạng nguy hiểm theo QCVN 06:2022.</p>
+      </div>
+      <div class="feat-card">
+        <span class="ios-icon gray">💨</span>
+        <h4>Hút khói &amp; bù khí</h4>
+        <p>Lưu lượng quạt hút khói + quạt cấp khí tươi theo QCVN 06.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="how">
+  <div class="container">
+    <div class="text-center">
+      <div class="eyebrow">Đơn giản như mở trình duyệt</div>
+      <h2 class="h1 stitle">3 bước có ngay bản tính.</h2>
+      <p class="body-lg ssub" style="margin-left: auto; margin-right: auto;">Không cần cài đặt phần mềm, không cần học AutoCAD hay Revit. Mọi thứ hoạt động trong trình duyệt.</p>
+    </div>
+
+    <div class="steps">
+      <div class="step">
+        <span class="ios-icon lg purple">①</span>
+        <h3 class="h3">Đăng ký</h3>
+        <p class="body">Tạo tài khoản trong 30 giây. Tặng 5 credit miễn phí khi đăng ký lần đầu.</p>
+      </div>
+      <div class="step">
+        <span class="ios-icon lg orange">②</span>
+        <h3 class="h3">Vẽ &amp; nhập số liệu</h3>
+        <p class="body">Pick các nút trên grid Isometric, chọn cỡ ống, nhập chiều dài. Hệ thống tự tính.</p>
+      </div>
+      <div class="step">
+        <span class="ios-icon lg green">③</span>
+        <h3 class="h3">Xuất hồ sơ</h3>
+        <p class="body">PDF có tem công ty, Excel chỉnh sửa, DXF nhập vào AutoCAD — sẵn sàng nộp thẩm tra.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section soft">
+  <div class="container">
+    <div class="eyebrow">Vì sao chọn PCCC Calc</div>
+    <h2 class="h1 stitle">Thiết kế để bạn làm việc nhanh hơn.<br/>Và chính xác hơn.</h2>
+
+    <div class="tile-grid" style="margin-top: 50px;">
+      <div class="tile">
+        <span class="ios-icon lg blue">📋</span>
+        <div class="tile-label" style="margin-top: 22px">Bảo mật &amp; Tin cậy</div>
+        <h3 class="h3">Đúng tiêu chuẩn ngay từ đầu.</h3>
+        <p>Mọi công thức viện dẫn TCVN, NFPA, QCVN — giảm rủi ro bị thẩm tra trả hồ sơ. Bản tính có thể truy vết nguồn quy định trong từng dòng.</p>
+      </div>
+      <div class="tile">
+        <span class="ios-icon lg yellow">⚡</span>
+        <div class="tile-label" style="margin-top: 22px">Tiết kiệm thời gian</div>
+        <h3 class="h3">Nhanh hơn 10× bản tính Excel.</h3>
+        <p>Sơ đồ Isometric tự động cập nhật theo thông số. Không phải vẽ lại CAD mỗi khi đổi kích cỡ ống hay vị trí đầu phun.</p>
+      </div>
+      <div class="tile">
+        <span class="ios-icon lg green">💎</span>
+        <div class="tile-label" style="margin-top: 22px">Linh hoạt</div>
+        <h3 class="h3">Trả phí theo nhu cầu thật.</h3>
+        <p>Không bắt subscription dài hạn. Demo miễn phí. Chỉ trừ credit khi bạn lưu hoặc xuất file thật. Có gói riêng cho sinh viên.</p>
+      </div>
+      <div class="tile">
+        <span class="ios-icon lg indigo">🌐</span>
+        <div class="tile-label" style="margin-top: 22px">Mọi lúc, mọi nơi</div>
+        <h3 class="h3">Chạy trên trình duyệt.</h3>
+        <p>Windows, macOS, Linux, máy tính bảng. Mọi máy có internet đều dùng được. Lưu dự án trên cloud, mở lại ở máy khác chỉ với login.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="cta-section">
+  <div class="narrow">
+    <h2 class="h1">Bắt đầu trong vài giây.</h2>
+    <p class="body-lg sub">Tặng 5 credit miễn phí. Không cần thẻ tín dụng.</p>
+    <div class="ctas">
+      <a href="signup.html" class="pill pill-primary pill-lg">Tạo tài khoản</a>
+      <a href="#" class="pill-link" style="font-size: 17px;">Xem bảng giá <span class="arrow">›</span></a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="container">
+    <div class="grid-links">
+      <div>
+        <h5>Sản phẩm</h5>
+        <ul>
+          <li><a href="#features">Tính năng</a></li>
+          <li><a href="#">Bảng giá</a></li>
+          <li><a href="sprinkler-network.html">Demo Sprinkler</a></li>
+          <li><a href="dashboard.html">Đăng nhập</a></li>
+        </ul>
+      </div>
+      <div>
+        <h5>Tài nguyên</h5>
+        <ul>
+          <li><a href="#">Hướng dẫn</a></li>
+          <li><a href="#">Tiêu chuẩn</a></li>
+          <li><a href="#">Blog kỹ thuật</a></li>
+          <li><a href="#">API</a></li>
+        </ul>
+      </div>
+      <div>
+        <h5>Công ty</h5>
+        <ul>
+          <li><a href="#">Về chúng tôi</a></li>
+          <li><a href="#">Liên hệ</a></li>
+          <li><a href="#">Tuyển dụng</a></li>
+          <li><a href="#">Đối tác</a></li>
+        </ul>
+      </div>
+      <div>
+        <h5>Pháp lý</h5>
+        <ul>
+          <li><a href="#">Điều khoản</a></li>
+          <li><a href="#">Bảo mật</a></li>
+          <li><a href="#">Hoàn tiền</a></li>
+          <li><a href="#">Cookies</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="top-row">
+      <p>Phát triển bởi Long Sơn Design. Made in Vietnam 🇻🇳</p>
+    </div>
+    <div class="legal">
+      <span>Copyright © 2026 PCCC Calc. All rights reserved.</span>
+      <span><a href="#">Điều khoản dịch vụ</a></span>
+      <span><a href="#">Chính sách bảo mật</a></span>
+      <span><a href="#">Sơ đồ trang</a></span>
+    </div>
+  </div>
+</footer>
+
+<script>
+  const root = document.documentElement;
+  const themeIcon = document.getElementById('themeIcon');
+  const savedTheme = localStorage.getItem('pccc-theme') || 'light';
+  root.setAttribute('data-theme', savedTheme);
+  themeIcon.textContent = savedTheme === 'light' ? '🌙' : '☀️';
+  document.getElementById('themeToggle').addEventListener('click', () => {
+    const cur = root.getAttribute('data-theme');
+    const next = cur === 'light' ? 'dark' : 'light';
+    root.setAttribute('data-theme', next);
+    themeIcon.textContent = next === 'light' ? '🌙' : '☀️';
+    localStorage.setItem('pccc-theme', next);
+  });
+</script>
+</body>
+</html>

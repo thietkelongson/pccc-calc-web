@@ -1,0 +1,138 @@
+window.BANG_G1_DATA = {
+  "metadata": {
+    "source": "QCVN 10:2025/BCA",
+    "table": "Bảng G.1 - Quy định về trang bị hệ thống loa thông báo và hướng dẫn thoát nạn",
+    "effectiveDate": "2025-12-30",
+    "description": "Phụ lục G - Trang bị hệ thống loa thông báo và hướng dẫn thoát nạn",
+    "notes": [
+      "Mục 1 áp dụng cho 'nhà và công trình công cộng thuộc diện quản lý PCCC' — rất rộng, không chỉ chung cư/hỗn hợp",
+      "Mục 6 chỉ áp dụng cho NHÀ GA HÀNH KHÁCH (không phải ga hàng hóa, bến xe, cảng cạn)"
+    ]
+  },
+  "entries": [
+    {
+      "stt": "1",
+      "loaiNha": "Chung cư, nhà và công trình công cộng thuộc diện quản lý về phòng cháy, chữa cháy",
+      "apA1Stt": [
+        "3",
+        "5",
+        "6",
+        "8",
+        "9",
+        "10",
+        "11",
+        "12",
+        "14",
+        "16",
+        "18",
+        "19",
+        "20",
+        "21"
+      ],
+      "criteria": {
+        "type": "multi",
+        "conditions": [
+          {
+            "type": "tangHonTriet",
+            "value": 10,
+            "unit": "tầng",
+            "description": "Cao trên 10 tầng"
+          },
+          {
+            "type": "soTangHamTroLen",
+            "value": 2,
+            "unit": "tầng",
+            "description": "Có từ 2 tầng hầm trở lên"
+          }
+        ],
+        "operator": "OR"
+      }
+    },
+    {
+      "stt": "2",
+      "loaiNha": "Karaoke, vũ trường (và công năng tương tự); nhà hát; rạp chiếu phim; bệnh viện; nhà dưỡng lão",
+      "apA1Stt": [
+        "6",
+        "7",
+        "9",
+        "13"
+      ],
+      "criteria": {
+        "type": "soNguoiTangTroLen",
+        "value": 50,
+        "unit": "người",
+        "description": "Từ 50 người trên 1 tầng trở lên"
+      }
+    },
+    {
+      "stt": "3",
+      "loaiNha": "Nhà để xe ô tô, xe máy dạng kín (bao gồm cả nhà để xe độc lập và trong nhà có chức năng khác)",
+      "apA1Stt": [
+        "25"
+      ],
+      "apA1SubStt": [
+        "25.1",
+        "25.2.1",
+        "25.2.2",
+        "25.2.3",
+        "25.2.4",
+        "25.2.5"
+      ],
+      "criteria": {
+        "type": "dtsTroLen",
+        "value": 18000,
+        "unit": "m²",
+        "description": "Tổng DTS từ 18 000 m² trở lên"
+      }
+    },
+    {
+      "stt": "4",
+      "loaiNha": "Nhà sản xuất",
+      "apA1Stt": [],
+      "criteria": {
+        "type": "multi",
+        "conditions": [
+          {
+            "type": "dtsTroLen",
+            "value": 18000,
+            "unit": "m²",
+            "description": "Tổng DTS từ 18 000 m² trở lên"
+          },
+          {
+            "type": "soNguoiTangTroLen",
+            "value": 300,
+            "unit": "người",
+            "description": "Có từ 300 người trên 1 tầng trở lên"
+          }
+        ],
+        "operator": "AND"
+      },
+      "note": "Không có loại tương ứng trong Bảng A.1 (A.1 thiên về nhà dân dụng + kho)"
+    },
+    {
+      "stt": "5",
+      "loaiNha": "Hầm giao thông đường bộ (hầm đường ô tô)",
+      "apA1Stt": [
+        "28"
+      ],
+      "criteria": {
+        "type": "chieuDaiTroLen",
+        "value": 500,
+        "unit": "m",
+        "description": "Chiều dài từ 500 m trở lên"
+      }
+    },
+    {
+      "stt": "6",
+      "loaiNha": "Nhà ga hành khách thuộc cảng hàng không; nhà ga hành khách, depot đường sắt; nhà ga hành khách, depot đường sắt đô thị",
+      "apA1Stt": [
+        "22"
+      ],
+      "criteria": {
+        "type": "khongPhuThuocDienTich",
+        "description": "Không phụ thuộc quy mô"
+      },
+      "note": "CHỈ áp dụng cho NHÀ GA HÀNH KHÁCH — không áp cho ga hàng hóa, bến xe khách, trạm dừng nghỉ, cảng cạn (cũng nằm trong STT 22)"
+    }
+  ]
+};

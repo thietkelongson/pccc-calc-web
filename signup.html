@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="vi" data-theme="light">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Đăng ký — PCCC Calc</title>
+<style>
+  :root[data-theme="light"] {
+    --bg: #ffffff; --bg-elev: #ffffff; --bg-soft: #f5f5f7; --bg-hover: #f0f0f3;
+    --border: rgba(0,0,0,.08); --border-strong: rgba(0,0,0,.16);
+    --text: #1d1d1f; --text-secondary: #6e6e73; --text-tertiary: #86868b;
+    --brand: #c0392b; --brand-dark: #a93226; --brand-soft: rgba(192,57,43,.08);
+    --link: #06c;
+    --brand-grad: linear-gradient(135deg, #c0392b 0%, #e74c3c 50%, #f59e0b 100%);
+  }
+  :root[data-theme="dark"] {
+    --bg: #000000; --bg-elev: #1c1c1e; --bg-soft: #2c2c2e; --bg-hover: #3a3a3c;
+    --border: rgba(255,255,255,.12); --border-strong: rgba(255,255,255,.24);
+    --text: #f5f5f7; --text-secondary: #a1a1a6; --text-tertiary: #6e6e73;
+    --brand: #ff453a; --brand-dark: #ff6b60; --brand-soft: rgba(255,69,58,.15);
+    --link: #2997ff;
+    --brand-grad: linear-gradient(135deg, #7f1d1d 0%, #c0392b 40%, #f59e0b 100%);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Helvetica Neue", "Segoe UI", system-ui, sans-serif;
+    background: var(--bg); color: var(--text); min-height: 100vh;
+    font-size: 15px; line-height: 1.47; letter-spacing: -0.022em;
+    transition: background .3s, color .3s;
+  }
+  a { color: var(--link); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+
+  .ios-icon {
+    display: inline-flex; align-items: center; justify-content: center;
+    border-radius: 22.37%; color: white;
+    box-shadow: inset 0 1px 0 rgba(255,255,255,.25), inset 0 -2px 4px rgba(0,0,0,.08), 0 2px 6px rgba(0,0,0,.06);
+    position: relative; flex-shrink: 0;
+  }
+  .ios-icon::after { content: ''; position: absolute; inset: 0; border-radius: inherit; background: linear-gradient(180deg, rgba(255,255,255,.18) 0%, transparent 50%); pointer-events: none; }
+  .ios-icon.sm { width: 28px; height: 28px; font-size: 14px; border-radius: 7px; }
+  .ios-icon.md { width: 40px; height: 40px; font-size: 20px; border-radius: 10px; }
+  .ios-icon.brand { background: linear-gradient(180deg, #e74c3c, #c0392b); }
+  .ios-icon.blue { background: linear-gradient(180deg, #4da3ff, #007aff); }
+  .ios-icon.green { background: linear-gradient(180deg, #5bd778, #34c759); }
+  .ios-icon.orange { background: linear-gradient(180deg, #ffb340, #ff9500); }
+  .ios-icon.yellow { background: linear-gradient(180deg, #ffd966, #ffcc00); }
+  .ios-icon.purple { background: linear-gradient(180deg, #c178e3, #af52de); }
+  .ios-icon.indigo { background: linear-gradient(180deg, #7d7be0, #5856d6); }
+  .ios-icon.pink { background: linear-gradient(180deg, #ff5b7a, #ff2d55); }
+
+  .auth-shell { min-height: 100vh; display: grid; grid-template-columns: 1fr 1fr; }
+  @media (max-width: 920px) { .auth-shell { grid-template-columns: 1fr; } .brand-panel { display: none !important; } }
+
+  .form-side { padding: 22px 48px; display: flex; flex-direction: column; background: var(--bg); }
+  .form-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 30px; }
+  .logo { display: flex; align-items: center; gap: 10px; font-weight: 600; font-size: 17px; color: var(--text); }
+  .theme-btn { width: 32px; height: 32px; border-radius: 50%; background: var(--bg-hover); border: none; color: var(--text); cursor: pointer; font-size: 14px; display: flex; align-items: center; justify-content: center; }
+  .theme-btn:hover { background: var(--border); }
+
+  .form-wrap { flex: 1; display: flex; flex-direction: column; justify-content: center; max-width: 440px; margin: 0 auto; width: 100%; padding: 20px 0; }
+
+  h1 { font-size: 32px; font-weight: 700; margin-bottom: 8px; letter-spacing: -0.02em; line-height: 1.15; }
+  .sub { color: var(--text-secondary); font-size: 17px; margin-bottom: 24px; }
+
+  .gift-banner {
+    background: linear-gradient(135deg, rgba(255,204,0,.18), rgba(255,149,0,.1));
+    border: 1px solid rgba(255,149,0,.3);
+    border-radius: 14px; padding: 14px 16px; margin-bottom: 24px;
+    font-size: 14px; display: flex; align-items: center; gap: 12px;
+  }
+  .gift-banner b { color: #ff9500; }
+
+  .social-row { display: flex; gap: 10px; margin-bottom: 18px; }
+  .social-btn { flex: 1; padding: 11px; border-radius: 12px; background: var(--bg-soft); border: 1px solid var(--border); color: var(--text); font-size: 14px; font-weight: 500; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; font-family: inherit; }
+  .social-btn:hover { background: var(--bg-hover); }
+
+  .divider { display: flex; align-items: center; gap: 12px; margin: 6px 0 18px; color: var(--text-tertiary); font-size: 12px; }
+  .divider::before, .divider::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+
+  .field { margin-bottom: 14px; }
+  .field label { display: block; font-size: 13px; font-weight: 600; color: var(--text); margin-bottom: 5px; letter-spacing: -0.01em; }
+  .field .input-wrap { position: relative; }
+  .field .input-wrap .ic-left { position: absolute; left: 12px; top: 50%; transform: translateY(-50%); color: var(--text-tertiary); font-size: 14px; }
+  .field .input-wrap .toggle { position: absolute; right: 10px; top: 50%; transform: translateY(-50%); background: none; border: none; color: var(--text-tertiary); cursor: pointer; font-size: 14px; }
+  .field input { width: 100%; padding: 11px 14px 11px 38px; background: var(--bg-soft); border: 1px solid transparent; border-radius: 12px; color: var(--text); font-size: 15px; font-family: inherit; transition: all .15s; }
+  .field input:focus { outline: none; border-color: var(--link); background: var(--bg-elev); box-shadow: 0 0 0 3px rgba(0,102,204,.12); }
+  .field input::placeholder { color: var(--text-tertiary); }
+  .field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+
+  .strength-bar { display: flex; gap: 4px; margin-top: 6px; }
+  .strength-bar .seg { flex: 1; height: 3px; background: var(--bg-hover); border-radius: 2px; transition: background .2s; }
+  .strength-bar .seg.weak   { background: #ff453a; }
+  .strength-bar .seg.medium { background: #ff9500; }
+  .strength-bar .seg.strong { background: #34c759; }
+  .strength-text { font-size: 12px; margin-top: 4px; color: var(--text-tertiary); }
+  .strength-text.weak   { color: #ff453a; }
+  .strength-text.medium { color: #ff9500; }
+  .strength-text.strong { color: #34c759; }
+
+  .role-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-bottom: 18px; }
+  .role-card {
+    padding: 14px 12px; border: 1.5px solid var(--border);
+    border-radius: 14px; cursor: pointer; transition: all .15s;
+    text-align: center; background: var(--bg-soft);
+    position: relative;
+  }
+  .role-card:hover { border-color: var(--border-strong); }
+  .role-card.selected { border-color: var(--brand); background: var(--brand-soft); }
+  .role-card.selected::after {
+    content: '✓'; position: absolute; top: 8px; right: 10px;
+    width: 18px; height: 18px; border-radius: 50%;
+    background: var(--brand); color: white;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 11px; font-weight: 700;
+  }
+  .role-card .ios-icon { margin: 0 auto 8px; }
+  .role-card .name { font-size: 13px; font-weight: 600; color: var(--text); }
+  .role-card .note { font-size: 11px; color: var(--text-secondary); margin-top: 2px; }
+
+  .checkbox { display: flex; align-items: flex-start; gap: 8px; cursor: pointer; user-select: none; color: var(--text); font-size: 13px; line-height: 1.5; margin-bottom: 20px; }
+  .checkbox input { width: 16px; height: 16px; accent-color: var(--brand); margin-top: 2px; flex-shrink: 0; }
+
+  .pill-btn { width: 100%; padding: 13px; border-radius: 999px; background: var(--brand); color: white; border: none; font-size: 15px; font-weight: 500; cursor: pointer; transition: all .2s; font-family: inherit; display: flex; align-items: center; justify-content: center; gap: 8px; }
+  .pill-btn:hover { background: var(--brand-dark); transform: translateY(-1px); }
+
+  .form-bottom { margin-top: 22px; text-align: center; font-size: 15px; color: var(--text-secondary); }
+  .form-bottom a { font-weight: 500; }
+
+  /* Brand panel */
+  .brand-panel { background: var(--brand-grad); color: white; padding: 60px 48px; display: flex; flex-direction: column; justify-content: space-between; position: relative; overflow: hidden; }
+  .brand-panel::before, .brand-panel::after { content: ''; position: absolute; border-radius: 50%; background: rgba(255,255,255,.08); pointer-events: none; }
+  .brand-panel::before { width: 400px; height: 400px; top: -150px; right: -120px; }
+  .brand-panel::after  { width: 300px; height: 300px; bottom: -100px; left: -80px; }
+  .brand-panel > * { position: relative; z-index: 1; }
+  .brand-top { display: flex; align-items: center; gap: 8px; font-size: 14px; opacity: .9; }
+  .brand-top .dot { width: 8px; height: 8px; border-radius: 50%; background: #fbbf24; }
+  .brand-main { max-width: 460px; }
+  .brand-main h2 { font-size: 40px; line-height: 1.1; font-weight: 700; letter-spacing: -0.015em; margin-bottom: 20px; }
+  .perks { display: flex; flex-direction: column; gap: 18px; margin-top: 24px; }
+  .perk { display: flex; gap: 14px; align-items: flex-start; }
+  .perk .ic-box { width: 44px; height: 44px; border-radius: 12px; background: rgba(255,255,255,.18); display: flex; align-items: center; justify-content: center; font-size: 22px; flex-shrink: 0; }
+  .perk h4 { font-size: 16px; margin-bottom: 4px; font-weight: 600; }
+  .perk p { font-size: 14px; opacity: .85; line-height: 1.5; }
+  .brand-stats { display: flex; gap: 36px; }
+  .brand-stats .stat .num { font-size: 32px; font-weight: 700; letter-spacing: -0.02em; }
+  .brand-stats .stat .lbl { font-size: 12px; opacity: .85; margin-top: 2px; }
+</style>
+</head>
+<body>
+
+<div class="auth-shell">
+
+  <div class="form-side">
+    <div class="form-top">
+      <a href="index.html" class="logo">
+        <span class="ios-icon sm brand">🔥</span> PCCC Calc
+      </a>
+      <button class="theme-btn" id="themeToggle"><span id="themeIcon">🌙</span></button>
+    </div>
+
+    <div class="form-wrap">
+      <h1>Tạo tài khoản mới.</h1>
+      <p class="sub">Đăng ký miễn phí, nhận ngay credit demo.</p>
+
+      <div class="gift-banner">
+        <span class="ios-icon md yellow">🎁</span>
+        <div>Tặng <b>5 credit miễn phí</b> khi đăng ký — đủ chạy ~1 bản tính Sprinkler đầy đủ kèm xuất PDF.</div>
+      </div>
+
+      <div class="social-row">
+        <button class="social-btn">🔵 Google</button>
+        <button class="social-btn">🟦 Facebook</button>
+      </div>
+
+      <div class="divider">hoặc đăng ký với email</div>
+
+      <form onsubmit="event.preventDefault(); window.location.href='dashboard.html';">
+
+        <div class="field-row">
+          <div class="field">
+            <label>Họ và tên</label>
+            <div class="input-wrap">
+              <span class="ic-left">👤</span>
+              <input type="text" placeholder="Nguyễn Văn A" required/>
+            </div>
+          </div>
+          <div class="field">
+            <label>Số điện thoại</label>
+            <div class="input-wrap">
+              <span class="ic-left">📱</span>
+              <input type="tel" placeholder="09xx xxx xxx"/>
+            </div>
+          </div>
+        </div>
+
+        <div class="field">
+          <label>Email công việc</label>
+          <div class="input-wrap">
+            <span class="ic-left">✉</span>
+            <input type="email" placeholder="ten@cong-ty.vn" required/>
+          </div>
+        </div>
+
+        <div class="field">
+          <label>Mật khẩu</label>
+          <div class="input-wrap">
+            <span class="ic-left">🔒</span>
+            <input type="password" id="pw" placeholder="Ít nhất 8 ký tự" required oninput="checkStrength(this.value)"/>
+            <button type="button" class="toggle" onclick="togglePw(this)">👁</button>
+          </div>
+          <div class="strength-bar">
+            <div class="seg" id="s1"></div><div class="seg" id="s2"></div><div class="seg" id="s3"></div><div class="seg" id="s4"></div>
+          </div>
+          <div class="strength-text" id="strengthLabel">Tối thiểu 8 ký tự, gồm chữ và số</div>
+        </div>
+
+        <label style="display:block; font-size:13px; font-weight:600; margin-bottom:10px; letter-spacing:-0.01em">Bạn là?</label>
+        <div class="role-grid">
+          <div class="role-card selected" onclick="selectRole(this)">
+            <span class="ios-icon md blue">👷</span>
+            <div class="name">Kỹ sư PCCC</div>
+            <div class="note">Cá nhân / freelance</div>
+          </div>
+          <div class="role-card" onclick="selectRole(this)">
+            <span class="ios-icon md purple">🏢</span>
+            <div class="name">Công ty MEP</div>
+            <div class="note">Đại diện công ty</div>
+          </div>
+          <div class="role-card" onclick="selectRole(this)">
+            <span class="ios-icon md orange">🔧</span>
+            <div class="name">Nhà thầu</div>
+            <div class="note">Thi công PCCC</div>
+          </div>
+          <div class="role-card" onclick="selectRole(this)">
+            <span class="ios-icon md green">🎓</span>
+            <div class="name">Sinh viên</div>
+            <div class="note">Giảm 50% sau xác minh</div>
+          </div>
+        </div>
+
+        <label class="checkbox">
+          <input type="checkbox" required />
+          <span>Tôi đồng ý với <a href="#">Điều khoản dịch vụ</a> và <a href="#">Chính sách bảo mật</a> của PCCC Calc</span>
+        </label>
+
+        <button class="pill-btn" type="submit">Tạo tài khoản miễn phí</button>
+      </form>
+
+      <div class="form-bottom">
+        Đã có tài khoản? <a href="login.html">Đăng nhập</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="brand-panel">
+    <div class="brand-top">
+      <span class="dot"></span> Gia nhập 2.400+ kỹ sư đã tin dùng
+    </div>
+
+    <div class="brand-main">
+      <h2>Bắt đầu hành trình tính toán PCCC thông minh hơn.</h2>
+      <div class="perks">
+        <div class="perk">
+          <div class="ic-box">🎁</div>
+          <div><h4>5 credit miễn phí khi đăng ký</h4><p>Đủ chạy 1 bản tính đầy đủ kèm xuất file để bạn trải nghiệm.</p></div>
+        </div>
+        <div class="perk">
+          <div class="ic-box">🚀</div>
+          <div><h4>Không cần thẻ tín dụng</h4><p>Dùng demo thoải mái, chỉ trả khi quyết định lưu hoặc xuất file.</p></div>
+        </div>
+        <div class="perk">
+          <div class="ic-box">🎓</div>
+          <div><h4>Giảm 50% cho sinh viên</h4><p>Xác minh thẻ SV hoặc email .edu.vn để nhận ưu đãi.</p></div>
+        </div>
+        <div class="perk">
+          <div class="ic-box">📤</div>
+          <div><h4>Xuất PDF / Excel / DXF</h4><p>Hồ sơ chuyên nghiệp với tem công ty, sẵn sàng nộp thẩm tra.</p></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="brand-stats">
+      <div class="stat"><div class="num">2.400+</div><div class="lbl">Kỹ sư đăng ký</div></div>
+      <div class="stat"><div class="num">18.500</div><div class="lbl">Dự án đã tính</div></div>
+      <div class="stat"><div class="num">4.8/5</div><div class="lbl">Đánh giá user</div></div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+  const root = document.documentElement;
+  const themeIcon = document.getElementById('themeIcon');
+  const savedTheme = localStorage.getItem('pccc-theme') || 'light';
+  root.setAttribute('data-theme', savedTheme);
+  themeIcon.textContent = savedTheme === 'light' ? '🌙' : '☀️';
+  document.getElementById('themeToggle').addEventListener('click', () => {
+    const cur = root.getAttribute('data-theme');
+    const next = cur === 'light' ? 'dark' : 'light';
+    root.setAttribute('data-theme', next);
+    themeIcon.textContent = next === 'light' ? '🌙' : '☀️';
+    localStorage.setItem('pccc-theme', next);
+  });
+  function togglePw(btn) {
+    const pw = document.getElementById('pw');
+    if (pw.type === 'password') { pw.type = 'text'; btn.textContent = '🙈'; }
+    else { pw.type = 'password'; btn.textContent = '👁'; }
+  }
+  function selectRole(card) {
+    document.querySelectorAll('.role-card').forEach(x => x.classList.remove('selected'));
+    card.classList.add('selected');
+  }
+  function checkStrength(pw) {
+    let score = 0;
+    if (pw.length >= 8) score++;
+    if (/[A-Z]/.test(pw) && /[a-z]/.test(pw)) score++;
+    if (/\d/.test(pw)) score++;
+    if (/[^A-Za-z0-9]/.test(pw)) score++;
+    const segs = ['s1','s2','s3','s4'].map(id => document.getElementById(id));
+    segs.forEach(s => s.className = 'seg');
+    const lbl = document.getElementById('strengthLabel');
+    lbl.className = 'strength-text';
+    if (score <= 1) { segs[0].classList.add('weak'); lbl.textContent = 'Yếu — thêm chữ hoa và ký tự đặc biệt'; lbl.classList.add('weak'); }
+    else if (score === 2) { segs[0].classList.add('medium'); segs[1].classList.add('medium'); lbl.textContent = 'Trung bình'; lbl.classList.add('medium'); }
+    else if (score === 3) { segs[0].classList.add('medium'); segs[1].classList.add('medium'); segs[2].classList.add('medium'); lbl.textContent = 'Khá'; lbl.classList.add('medium'); }
+    else if (score >= 4) { segs.forEach(s => s.classList.add('strong')); lbl.textContent = 'Mạnh ✓'; lbl.classList.add('strong'); }
+  }
+</script>
+</body>
+</html>

@@ -1,0 +1,782 @@
+<!DOCTYPE html>
+<html lang="vi" data-theme="light">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Tra cứu TCVN 7336:2021 — PCCC Calc</title>
+<style>
+  :root[data-theme="light"] {
+    --bg: #f5f5f7; --bg-elev: #ffffff; --bg-soft: #fbfbfd; --bg-hover: #f0f0f3;
+    --border: rgba(0,0,0,.08); --border-strong: rgba(0,0,0,.16);
+    --text: #1d1d1f; --text-secondary: #6e6e73; --text-tertiary: #86868b;
+    --brand: #c0392b; --brand-dark: #a93226; --brand-soft: rgba(192,57,43,.08);
+    --link: #06c;
+    --nav-bg: rgba(255,255,255,.85);
+    --shadow-sm: 0 1px 2px rgba(0,0,0,.04);
+    --shadow-md: 0 4px 16px rgba(0,0,0,.06);
+    --shadow-lg: 0 12px 32px rgba(0,0,0,.1);
+    --row-alt: rgba(0,0,0,.025);
+    --tag-green: #34c759; --tag-blue: #007aff; --tag-orange: #ff9500;
+    --tag-red: #ff453a; --tag-purple: #af52de;
+  }
+  :root[data-theme="dark"] {
+    --bg: #000000; --bg-elev: #1c1c1e; --bg-soft: #2c2c2e; --bg-hover: #3a3a3c;
+    --border: rgba(255,255,255,.12); --border-strong: rgba(255,255,255,.24);
+    --text: #f5f5f7; --text-secondary: #a1a1a6; --text-tertiary: #6e6e73;
+    --brand: #ff453a; --brand-dark: #ff6b60; --brand-soft: rgba(255,69,58,.15);
+    --link: #2997ff;
+    --nav-bg: rgba(28,28,30,.85);
+    --shadow-sm: 0 1px 2px rgba(0,0,0,.4);
+    --shadow-md: 0 4px 16px rgba(0,0,0,.5);
+    --shadow-lg: 0 12px 32px rgba(0,0,0,.7);
+    --row-alt: rgba(255,255,255,.03);
+    --tag-green: #30d158; --tag-blue: #0a84ff; --tag-orange: #ff9f0a;
+    --tag-red: #ff453a; --tag-purple: #bf5af2;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; -webkit-font-smoothing: antialiased; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Helvetica Neue", "Segoe UI", system-ui, sans-serif;
+    background: var(--bg); color: var(--text);
+    font-size: 15px; line-height: 1.47; letter-spacing: -0.022em;
+    min-height: 100vh; transition: background .3s, color .3s;
+  }
+  a { color: inherit; text-decoration: none; }
+
+  .ios-icon { display: inline-flex; align-items: center; justify-content: center; border-radius: 22.37%; color: white; box-shadow: inset 0 1px 0 rgba(255,255,255,.25), 0 2px 6px rgba(0,0,0,.06); flex-shrink: 0; }
+  .ios-icon.sm { width: 28px; height: 28px; font-size: 14px; border-radius: 7px; }
+  .ios-icon.lg { width: 64px; height: 64px; font-size: 32px; border-radius: 14px; }
+  .ios-icon.brand { background: linear-gradient(180deg, #e74c3c, #c0392b); }
+  .ios-icon.blue { background: linear-gradient(180deg, #4da3ff, #007aff); }
+  .ios-icon.teal { background: linear-gradient(180deg, #5fc1d3, #30b0c7); }
+
+  /* Top bar */
+  .topbar {
+    position: sticky; top: 0; z-index: 50;
+    background: var(--nav-bg); backdrop-filter: saturate(180%) blur(20px);
+    -webkit-backdrop-filter: saturate(180%) blur(20px);
+    border-bottom: 1px solid var(--border);
+    padding: 10px 24px; display: flex; align-items: center; gap: 16px;
+  }
+  .back-btn { display: inline-flex; align-items: center; gap: 4px; padding: 6px 14px 6px 10px; border-radius: 999px; background: var(--bg-hover); color: var(--text); font-size: 13px; font-weight: 500; }
+  .back-btn:hover { background: var(--border); }
+  .page-title { display: flex; align-items: center; gap: 10px; font-size: 16px; font-weight: 600; }
+  .page-title .sub { color: var(--text-secondary); font-weight: 400; font-size: 13px; }
+  .topbar-actions { margin-left: auto; display: flex; align-items: center; gap: 8px; }
+  .credit-chip { display: flex; align-items: center; gap: 6px; background: linear-gradient(180deg, #ffd966, #ffcc00); color: #1d1d1f; padding: 4px 12px; border-radius: 999px; font-size: 12px; font-weight: 600; box-shadow: 0 2px 8px rgba(255,204,0,.3); }
+  .icon-btn { width: 32px; height: 32px; border-radius: 50%; background: var(--bg-hover); border: none; color: var(--text); cursor: pointer; font-size: 14px; display: flex; align-items: center; justify-content: center; }
+  .icon-btn:hover { background: var(--border); }
+
+  /* Container */
+  .container { max-width: 1280px; margin: 0 auto; padding: 24px; }
+
+  /* Hero */
+  .hero {
+    background: linear-gradient(135deg, #00b4a0 0%, #0084ff 100%);
+    color: white; border-radius: 22px; padding: 28px 32px; margin-bottom: 20px;
+    display: flex; align-items: center; gap: 22px;
+    position: relative; overflow: hidden;
+  }
+  .hero::before { content: ''; position: absolute; right: -80px; top: -80px; width: 280px; height: 280px; border-radius: 50%; background: rgba(255,255,255,.08); }
+  .hero > * { position: relative; z-index: 1; }
+  .hero h1 { font-size: 26px; font-weight: 700; letter-spacing: -0.02em; line-height: 1.15; margin-bottom: 4px; }
+  .hero p { font-size: 14px; opacity: .92; max-width: 720px; }
+  .hero .badge { display: inline-flex; align-items: center; gap: 6px; background: rgba(255,255,255,.2); padding: 3px 10px; border-radius: 999px; font-size: 11px; font-weight: 600; margin-top: 8px; }
+
+  /* Tabs */
+  .tabs {
+    display: flex; gap: 4px; background: var(--bg-elev);
+    border: 1px solid var(--border); border-radius: 14px;
+    padding: 6px; margin-bottom: 18px; overflow-x: auto;
+  }
+  .tab {
+    flex: 1; min-width: 140px;
+    padding: 10px 14px; border: none; background: transparent;
+    border-radius: 9px; cursor: pointer;
+    font-size: 14px; font-weight: 600; color: var(--text-secondary);
+    font-family: inherit; transition: all .15s;
+    white-space: nowrap;
+  }
+  .tab:hover { background: var(--bg-hover); color: var(--text); }
+  .tab.active { background: var(--brand); color: white; box-shadow: 0 2px 6px rgba(192,57,43,.25); }
+
+  /* Search bar */
+  .search-bar {
+    background: var(--bg-elev); border: 1px solid var(--border);
+    border-radius: 14px; padding: 4px 4px 4px 16px;
+    display: flex; align-items: center; gap: 10px; margin-bottom: 18px;
+  }
+  .search-bar input {
+    flex: 1; border: none; background: transparent;
+    padding: 12px 0; color: var(--text); font-size: 15px;
+    font-family: inherit; outline: none;
+  }
+  .search-bar .clear { padding: 8px 14px; border-radius: 10px; background: var(--bg-hover); border: none; cursor: pointer; color: var(--text-secondary); font-size: 13px; font-family: inherit; }
+  .search-bar .clear:hover { background: var(--border); }
+
+  /* Panel */
+  .panel {
+    background: var(--bg-elev); border: 1px solid var(--border);
+    border-radius: 18px; padding: 22px 24px; margin-bottom: 18px;
+  }
+  .panel h2 { font-size: 18px; font-weight: 700; letter-spacing: -0.01em; margin-bottom: 4px; }
+  .panel .source { font-size: 12px; color: var(--text-tertiary); margin-bottom: 16px; }
+
+  .sub-title { font-size: 14px; font-weight: 600; color: var(--text); margin: 18px 0 10px; padding-left: 10px; border-left: 3px solid var(--link); }
+
+  /* Table */
+  .table-wrap { overflow-x: auto; border-radius: 12px; border: 1px solid var(--border); }
+  table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  th, td { padding: 10px 12px; text-align: center; border-bottom: 1px solid var(--border); vertical-align: middle; }
+  th { background: var(--bg-soft); font-weight: 600; font-size: 12px; color: var(--text-secondary); text-transform: uppercase; letter-spacing: .3px; position: sticky; top: 0; }
+  th:first-child, td:first-child { text-align: left; }
+  tbody tr:nth-child(even) { background: var(--row-alt); }
+  tbody tr:hover { background: var(--bg-hover); }
+  td.num { text-align: center; font-variant-numeric: tabular-nums; font-weight: 500; }
+  td .nhom-pill {
+    display: inline-block; padding: 3px 10px; border-radius: 999px;
+    font-weight: 700; font-size: 12px; color: white;
+    min-width: 38px; text-align: center;
+  }
+  .nhom-1 { background: var(--tag-green); }
+  .nhom-2 { background: var(--tag-blue); }
+  .nhom-3 { background: var(--tag-orange); }
+  .nhom-41 { background: var(--tag-red); }
+  .nhom-42 { background: var(--tag-red); opacity: .8; }
+  .nhom-5 { background: var(--tag-purple); }
+  .nhom-6 { background: var(--tag-purple); opacity: .8; }
+  .nhom-7 { background: #d63031; }
+
+  /* Footnotes */
+  .footnotes {
+    margin-top: 14px;
+    background: rgba(0,102,204,.06);
+    border-left: 3px solid var(--link);
+    padding: 12px 16px; border-radius: 10px;
+    font-size: 12px; color: var(--text-secondary); line-height: 1.6;
+  }
+  .footnotes h4 { font-size: 12px; text-transform: uppercase; letter-spacing: .5px; color: var(--text); margin-bottom: 6px; }
+  .footnotes ul { list-style: none; }
+  .footnotes li { padding: 3px 0; }
+
+  /* Phu luc A cards */
+  .nhom-card {
+    background: var(--bg-elev); border: 1px solid var(--border);
+    border-radius: 14px; padding: 18px 20px; margin-bottom: 14px;
+    border-left: 4px solid var(--link);
+    transition: box-shadow .15s;
+  }
+  .nhom-card:hover { box-shadow: var(--shadow-md); }
+  .nhom-card.color-green { border-left-color: var(--tag-green); }
+  .nhom-card.color-blue { border-left-color: var(--tag-blue); }
+  .nhom-card.color-orange { border-left-color: var(--tag-orange); }
+  .nhom-card.color-red { border-left-color: var(--tag-red); }
+  .nhom-card.color-purple { border-left-color: var(--tag-purple); }
+  .nhom-card .head { display: flex; align-items: center; gap: 12px; margin-bottom: 10px; flex-wrap: wrap; }
+  .nhom-card .head h3 { font-size: 16px; font-weight: 700; }
+  .nhom-card .tai-trong { font-size: 12px; color: var(--text-secondary); background: var(--bg-soft); padding: 4px 10px; border-radius: 999px; }
+  .nhom-card ul { list-style: none; }
+  .nhom-card ul li {
+    font-size: 13px; line-height: 1.55;
+    padding: 6px 0 6px 22px; position: relative;
+    border-bottom: 1px dashed var(--border);
+  }
+  .nhom-card ul li:last-child { border-bottom: none; }
+  .nhom-card ul li::before {
+    content: '▸'; position: absolute; left: 6px;
+    color: var(--link); font-weight: bold;
+  }
+  .nhom-card ul li mark { background: rgba(255,204,0,.4); color: var(--text); padding: 0 2px; border-radius: 3px; }
+  .nhom-card.hidden { display: none; }
+  .no-results { text-align: center; padding: 40px 20px; color: var(--text-secondary); }
+  .no-results .em { font-size: 40px; margin-bottom: 8px; }
+
+  /* Pane visibility */
+  .pane { display: none; }
+  .pane.active { display: block; }
+
+  /* Tra cứu nhanh */
+  .lk-grid { display: grid; grid-template-columns: 380px 1fr; gap: 18px; }
+  @media (max-width: 960px) { .lk-grid { grid-template-columns: 1fr; } }
+
+  .lk-field { margin-bottom: 16px; }
+  .lk-field label { display: block; font-size: 13px; font-weight: 600; margin-bottom: 6px; }
+  .lk-field .req { color: var(--brand); }
+  .lk-field input, .lk-field select {
+    width: 100%; padding: 11px 14px;
+    background: var(--bg-soft); border: 1px solid transparent;
+    border-radius: 12px; color: var(--text); font-size: 15px;
+    font-family: inherit; transition: all .15s;
+  }
+  .lk-field input:focus, .lk-field select:focus { outline: none; border-color: var(--link); background: var(--bg-elev); box-shadow: 0 0 0 3px rgba(0,102,204,.12); }
+  .lk-field .hint { font-size: 11px; color: var(--text-tertiary); margin-top: 4px; }
+  .btn-primary, .btn-secondary {
+    width: 100%; padding: 13px; border-radius: 999px; border: none;
+    font-size: 15px; font-weight: 600; cursor: pointer; font-family: inherit;
+    margin-top: 6px; transition: all .15s;
+  }
+  .btn-primary { background: var(--brand); color: white; }
+  .btn-primary:hover { background: var(--brand-dark); transform: translateY(-1px); }
+  .btn-secondary { background: var(--bg-hover); color: var(--text); }
+  .btn-secondary:hover { background: var(--border); }
+
+  .empty-state { text-align: center; padding: 50px 30px; color: var(--text-secondary); }
+  .empty-state .em { font-size: 50px; margin-bottom: 14px; }
+  .empty-state h3 { font-size: 17px; color: var(--text); margin-bottom: 6px; font-weight: 600; }
+
+  /* Result cards */
+  .result-meta {
+    background: linear-gradient(135deg, rgba(0,180,160,.12), rgba(0,132,255,.12));
+    border: 1px solid var(--border);
+    padding: 14px 16px; border-radius: 12px; margin-bottom: 14px;
+    display: flex; flex-wrap: wrap; gap: 12px; align-items: center;
+  }
+  .result-meta .badge-bang {
+    background: var(--brand); color: white; padding: 4px 12px;
+    border-radius: 999px; font-weight: 700; font-size: 13px;
+  }
+  .result-meta .braket { font-size: 14px; font-weight: 600; }
+  .result-meta .nhom-label { font-size: 13px; color: var(--text-secondary); }
+
+  .result-grid {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 12px; margin-bottom: 14px;
+  }
+  .res-card {
+    background: var(--bg-soft); border: 1px solid var(--border);
+    border-radius: 12px; padding: 14px 16px;
+  }
+  .res-card .lbl { font-size: 11px; color: var(--text-tertiary); text-transform: uppercase; letter-spacing: .4px; margin-bottom: 4px; }
+  .res-card .val { font-size: 22px; font-weight: 700; color: var(--text); font-variant-numeric: tabular-nums; }
+  .res-card .unit { font-size: 13px; font-weight: 500; color: var(--text-secondary); margin-left: 4px; }
+  .res-card .sub { font-size: 12px; color: var(--text-tertiary); margin-top: 2px; }
+  .res-card.highlight { border-color: var(--brand); background: var(--brand-soft); }
+  .res-card.dimmed .val { color: var(--text-tertiary); }
+
+  .warn-box {
+    background: rgba(255,149,0,.1); border-left: 3px solid var(--tag-orange);
+    padding: 10px 14px; border-radius: 8px; margin-bottom: 10px;
+    font-size: 13px; color: var(--text);
+  }
+  .note-box {
+    background: rgba(0,102,204,.06); border-left: 3px solid var(--link);
+    padding: 10px 14px; border-radius: 8px; margin-bottom: 10px;
+    font-size: 13px; color: var(--text-secondary); line-height: 1.55;
+  }
+  .note-box ul { list-style: disc; padding-left: 18px; margin-top: 2px; }
+  .note-box li { padding: 2px 0; }
+
+  /* Chất chữa cháy toggle */
+  .chat-toggle { display: flex; gap: 6px; background: var(--bg-soft); border-radius: 12px; padding: 4px; }
+  .chat-opt {
+    flex: 1; padding: 10px 8px; border: none; background: transparent;
+    border-radius: 9px; cursor: pointer; font-family: inherit; font-size: 13px;
+    font-weight: 600; color: var(--text-secondary); transition: all .15s;
+  }
+  .chat-opt:hover { background: var(--bg-hover); color: var(--text); }
+  .chat-opt.active { background: var(--brand); color: white; box-shadow: 0 2px 6px rgba(192,57,43,.2); }
+  .chat-opt.disabled { opacity: .35; cursor: not-allowed; }
+  .chat-opt.disabled:hover { background: transparent; color: var(--text-secondary); }
+
+  /* Result header with Stt input top-right */
+  .lk-result-head {
+    display: flex; align-items: flex-start; justify-content: space-between;
+    gap: 16px; margin-bottom: 16px; flex-wrap: wrap;
+  }
+  .stt-input-box {
+    background: var(--bg-soft); border: 1.5px dashed var(--border-strong);
+    border-radius: 12px; padding: 10px 14px;
+    min-width: 240px; max-width: 320px;
+  }
+  .stt-input-box label { display: block; font-size: 11px; font-weight: 700; color: var(--text-secondary); text-transform: uppercase; letter-spacing: .4px; margin-bottom: 4px; }
+  .stt-input-box input {
+    width: 100%; padding: 8px 10px;
+    background: var(--bg-elev); border: 1px solid transparent;
+    border-radius: 8px; color: var(--text); font-size: 14px;
+    font-family: inherit; font-weight: 600;
+  }
+  .stt-input-box input:focus { outline: none; border-color: var(--link); box-shadow: 0 0 0 3px rgba(0,102,204,.12); }
+  .stt-input-box .hint { font-size: 10px; color: var(--text-tertiary); margin-top: 4px; }
+
+  /* Adjusted value indicator */
+  .adj-tag {
+    display: inline-block; font-size: 10px; font-weight: 700;
+    background: var(--tag-orange); color: white;
+    padding: 2px 7px; border-radius: 999px;
+    margin-left: 6px; vertical-align: middle;
+    letter-spacing: .3px;
+  }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <a href="dashboard.html" class="back-btn">‹ Dashboard</a>
+  <div class="page-title">
+    <span class="ios-icon sm teal">🚰</span>
+    Tra cứu TCVN 7336:2021 <span class="sub">— Hệ thống chữa cháy tự động bằng nước, bọt</span>
+  </div>
+  <div class="topbar-actions">
+    <div class="credit-chip">💎 247</div>
+    <button class="icon-btn" id="themeToggle"><span id="themeIcon">🌙</span></button>
+  </div>
+</div>
+
+<div class="container">
+
+  <div class="hero">
+    <span class="ios-icon lg" style="background: rgba(255,255,255,.25)">🚰</span>
+    <div>
+      <h1>Tra cứu Bảng 1, 2, 3 và Phụ lục A</h1>
+      <p>Xác định nhanh cường độ phun, lưu lượng, diện tích tính toán, thời gian phun và phân loại nhóm nguy cơ phát sinh cháy theo TCVN 7336:2021 — tiêu chuẩn thiết kế hệ thống Sprinkler / Drencher.</p>
+      <div class="badge">📘 Hiệu lực: TCVN 7336:2021 (thay thế bản 2003)</div>
+    </div>
+  </div>
+
+  <div class="tabs" id="tabs">
+    <button class="tab active" data-tab="lk">⚡ Tra cứu nhanh</button>
+    <button class="tab" data-tab="b1">Bảng 1 — Phòng ≤ 10 m</button>
+    <button class="tab" data-tab="b2">Bảng 2 — Kho (Nhóm 5–7)</button>
+    <button class="tab" data-tab="b3">Bảng 3 — Phòng 10–20 m</button>
+    <button class="tab" data-tab="pa">Phụ lục A — Phân loại nhóm</button>
+  </div>
+
+  <!-- TRA CỨU NHANH -->
+  <div class="pane active" id="pane-lk">
+    <div class="lk-grid">
+      <div class="panel lk-input">
+        <h2>🎯 Thông số đầu vào</h2>
+        <div class="source">Nhập 3 thông số — hệ thống tự tra Bảng 1/2/3 và áp các chú thích</div>
+
+        <div class="lk-field">
+          <label>Nhóm nguy cơ phát sinh cháy <span class="req">*</span></label>
+          <select id="lkNhom">
+            <option value="">— Chọn nhóm —</option>
+            <option value="1">Nhóm 1 — Nhà công cộng, nhà ở</option>
+            <option value="2">Nhóm 2 — Trường học, bệnh viện, TTTM, sản xuất nhẹ</option>
+            <option value="3">Nhóm 3 — Cao su, giấy, dệt, nhựa</option>
+            <option value="4.1">Nhóm 4.1 — Sợi, sơn, vecni, keo (chất lỏng cháy)</option>
+            <option value="4.2">Nhóm 4.2 — Trạm nén khí, hydro hóa, hạng C1</option>
+            <option value="5">Nhóm 5 — Kho vật liệu không cháy / dễ cháy</option>
+            <option value="6">Nhóm 6 — Kho cao su, nhựa</option>
+            <option value="7">Nhóm 7 — Kho chất lỏng cháy (sơn, vecni, xăng…)</option>
+          </select>
+          <p class="hint">Tra cứu theo công năng → xem tab Phụ lục A</p>
+        </div>
+
+        <div class="lk-field">
+          <label>Chiều cao phòng / khu vực bảo vệ (m) <span class="req">*</span></label>
+          <input type="number" id="lkHphong" step="0.1" min="0" max="20" placeholder="vd: 4.5 hoặc 12"/>
+          <p class="hint">≤ 10 m → tra Bảng 1; 10–20 m → tra Bảng 3</p>
+        </div>
+
+        <div class="lk-field" id="lkHkhoWrap" style="display:none">
+          <label>Chiều cao xếp hàng hóa (m) <span class="req">*</span></label>
+          <input type="number" id="lkHkho" step="0.1" min="0" max="5.5" placeholder="vd: 3.5"/>
+          <p class="hint">Áp dụng cho Nhóm 5, 6, 7 — tối đa 5,5 m theo Bảng 2</p>
+        </div>
+
+        <div class="lk-field">
+          <label>Chất chữa cháy <span class="req">*</span></label>
+          <div class="chat-toggle" id="lkChat">
+            <button type="button" class="chat-opt active" data-chat="nuoc">💧 Nước</button>
+            <button type="button" class="chat-opt" data-chat="bot">🫧 Dung dịch tạo bọt</button>
+          </div>
+          <p class="hint" id="lkChatHint">Tra theo cột "Nước" của bảng tương ứng</p>
+        </div>
+
+        <button class="btn-primary" id="lkRun">⚡ Tra cứu</button>
+        <button class="btn-secondary" id="lkReset">Đặt lại</button>
+      </div>
+
+      <div class="panel lk-result" id="lkResult">
+        <div class="lk-result-head">
+          <div>
+            <h2>📊 Kết quả tra cứu</h2>
+            <div class="source" id="lkResultSource">Chưa có dữ liệu — nhập thông số bên trái và bấm Tra cứu</div>
+          </div>
+          <div class="stt-input-box">
+            <label for="lkS">Diện tích bảo vệ thực tế Stt (m²)</label>
+            <input type="number" id="lkS" step="1" min="0" placeholder="Để trống nếu ≥ S"/>
+            <p class="hint">Nhập để điều chỉnh lưu lượng theo K = Stt/S (CT5)</p>
+          </div>
+        </div>
+        <div id="lkResultBody">
+          <div class="empty-state">
+            <div class="em">🔍</div>
+            <h3>Chưa có kết quả</h3>
+            <p>Chọn nhóm, chiều cao và chất chữa cháy<br/>rồi bấm <b>Tra cứu</b>.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- BẢNG 1 -->
+  <div class="pane" id="pane-b1">
+    <div class="panel" id="panel-b1"></div>
+  </div>
+
+  <!-- BẢNG 2 -->
+  <div class="pane" id="pane-b2">
+    <div class="panel" id="panel-b2"></div>
+  </div>
+
+  <!-- BẢNG 3 -->
+  <div class="pane" id="pane-b3">
+    <div class="panel" id="panel-b3"></div>
+  </div>
+
+  <!-- PHỤ LỤC A -->
+  <div class="pane" id="pane-pa">
+    <div class="search-bar">
+      <span style="font-size:18px">🔍</span>
+      <input type="text" id="searchPa" placeholder="Tìm theo loại công trình… (vd: chung cư, kho, cao su, xăng dầu)" autocomplete="off"/>
+      <button class="clear" id="clearPa">Xóa</button>
+    </div>
+    <div id="panel-pa"></div>
+    <div class="no-results" id="noResultsPa" style="display:none">
+      <div class="em">🤷</div>
+      <p>Không tìm thấy cơ sở phù hợp. Thử từ khóa khác.</p>
+    </div>
+  </div>
+
+</div>
+
+<script src="modules/tcvn7336/data/bang1.js"></script>
+<script src="modules/tcvn7336/data/bang2.js"></script>
+<script src="modules/tcvn7336/data/bang3.js"></script>
+<script src="modules/tcvn7336/data/phu_luc_a.js"></script>
+<script src="modules/tcvn7336/engine.js"></script>
+
+<script>
+// ---------- Theme ----------
+const root = document.documentElement;
+const saved = localStorage.getItem('pccc-theme') || 'light';
+root.setAttribute('data-theme', saved);
+document.getElementById('themeIcon').textContent = saved === 'dark' ? '☀️' : '🌙';
+document.getElementById('themeToggle').addEventListener('click', () => {
+  const cur = root.getAttribute('data-theme');
+  const next = cur === 'dark' ? 'light' : 'dark';
+  root.setAttribute('data-theme', next);
+  localStorage.setItem('pccc-theme', next);
+  document.getElementById('themeIcon').textContent = next === 'dark' ? '☀️' : '🌙';
+});
+
+// ---------- Tabs ----------
+document.querySelectorAll('.tab').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+    document.querySelectorAll('.pane').forEach(p => p.classList.remove('active'));
+    btn.classList.add('active');
+    document.getElementById('pane-' + btn.dataset.tab).classList.add('active');
+  });
+});
+
+// ---------- Helpers ----------
+function pillForNhom(ma) {
+  const cls = 'nhom-' + ma.replace('.', '');
+  return `<span class="nhom-pill ${cls}">${ma}</span>`;
+}
+function renderChuThich(arr) {
+  if (!arr || !arr.length) return '';
+  return `<div class="footnotes"><h4>📌 Chú thích</h4><ul>${arr.map(c => `<li>${c}</li>`).join('')}</ul></div>`;
+}
+function tableHTML(cols, rows, opts) {
+  opts = opts || {};
+  const head = `<thead><tr>${cols.map(c => `<th>${c}</th>`).join('')}</tr></thead>`;
+  const body = `<tbody>${rows.map(r => `<tr>${r.map((cell, i) => {
+    if (i === 0 && opts.firstColPill) return `<td>${pillForNhom(cell)}</td>`;
+    if (i === 0) return `<td><b>${cell}</b></td>`;
+    return `<td class="num">${cell}</td>`;
+  }).join('')}</tr>`).join('')}</tbody>`;
+  return `<div class="table-wrap"><table>${head}${body}</table></div>`;
+}
+
+// ---------- Bảng 1 ----------
+function renderBang1() {
+  const d = window.TCVN7336_BANG1;
+  const rows = d.hang.map(r => [r.nhom, r.cd_nuoc, r.cd_bot, r.q_nuoc, r.q_bot, r.dien_tich, r.thoi_gian, r.khoang_cach]);
+  document.getElementById('panel-b1').innerHTML = `
+    <h2>${d.ten}</h2>
+    <div class="source">${d.nguon}</div>
+    ${tableHTML(d.cot, rows, { firstColPill: true })}
+    ${renderChuThich(d.chu_thich)}
+  `;
+}
+
+// ---------- Bảng 2 ----------
+function renderBang2() {
+  const d = window.TCVN7336_BANG2;
+  document.getElementById('panel-b2').innerHTML = `
+    <h2>${d.ten}</h2>
+    <div class="source">${d.nguon}</div>
+    <div class="sub-title">${d.cuong_do.tieu_de}</div>
+    ${tableHTML(d.cuong_do.cot, d.cuong_do.hang)}
+    <div class="sub-title">${d.luu_luong.tieu_de}</div>
+    ${tableHTML(d.luu_luong.cot, d.luu_luong.hang)}
+    ${renderChuThich(d.chu_thich)}
+  `;
+}
+
+// ---------- Bảng 3 ----------
+function renderBang3() {
+  const d = window.TCVN7336_BANG3;
+  document.getElementById('panel-b3').innerHTML = `
+    <h2>${d.ten}</h2>
+    <div class="source">${d.nguon}</div>
+    <div class="sub-title">${d.cuong_do.tieu_de}</div>
+    ${tableHTML(d.cuong_do.cot, d.cuong_do.hang)}
+    <div class="sub-title">${d.luu_luong.tieu_de}</div>
+    ${tableHTML(d.luu_luong.cot, d.luu_luong.hang)}
+    <div class="sub-title">${d.dien_tich.tieu_de}</div>
+    ${tableHTML(d.dien_tich.cot, d.dien_tich.hang)}
+    ${renderChuThich(d.chu_thich)}
+  `;
+}
+
+// ---------- Phụ lục A ----------
+function normalize(s) {
+  return (s || '').toLowerCase()
+    .normalize('NFD').replace(/[̀-ͯ]/g, '')
+    .replace(/đ/g, 'd');
+}
+function highlight(text, kw) {
+  if (!kw) return text;
+  const re = new RegExp('(' + kw.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + ')', 'gi');
+  // Simple highlight on the visible string — works because input may not contain diacritics
+  return text.replace(re, '<mark>$1</mark>');
+}
+function renderPhuLucA(filterKw) {
+  const d = window.TCVN7336_PHU_LUC_A;
+  const kw = (filterKw || '').trim();
+  const kwNorm = normalize(kw);
+  let visible = 0;
+  const cards = d.nhom.map(n => {
+    const items = n.co_so.map(c => ({ raw: c, norm: normalize(c) }));
+    const matches = kwNorm
+      ? items.filter(it => it.norm.includes(kwNorm) || normalize(n.ten).includes(kwNorm))
+      : items;
+    const hide = kwNorm && matches.length === 0;
+    if (!hide) visible++;
+    const list = (kwNorm ? matches : items).map(it => `<li>${highlight(it.raw, kw)}</li>`).join('');
+    return `
+      <div class="nhom-card color-${n.mau} ${hide ? 'hidden' : ''}">
+        <div class="head">
+          ${pillForNhom(n.ma)}
+          <h3>${n.ten}</h3>
+          ${n.tai_trong && n.tai_trong !== '—' ? `<span class="tai-trong">Tải trọng cháy: ${n.tai_trong}</span>` : ''}
+        </div>
+        <ul>${list}</ul>
+      </div>`;
+  }).join('');
+  document.getElementById('panel-pa').innerHTML = `
+    <div class="panel" style="margin-bottom:14px">
+      <h2>${d.ten}</h2>
+      <div class="source">${d.phu_de} · ${d.nguon}</div>
+    </div>
+    ${cards}
+    <div class="panel">${renderChuThich(d.chu_thich).replace('<div class="footnotes">','<div class="footnotes" style="margin-top:0">')}</div>
+  `;
+  document.getElementById('noResultsPa').style.display = (kwNorm && visible === 0) ? 'block' : 'none';
+}
+
+// ---------- Wire up search ----------
+const searchInput = document.getElementById('searchPa');
+searchInput.addEventListener('input', e => renderPhuLucA(e.target.value));
+document.getElementById('clearPa').addEventListener('click', () => {
+  searchInput.value = '';
+  renderPhuLucA('');
+  searchInput.focus();
+});
+
+// ---------- Tra cứu nhanh ----------
+const lkNhom = document.getElementById('lkNhom');
+const lkHphong = document.getElementById('lkHphong');
+const lkHkho = document.getElementById('lkHkho');
+const lkS = document.getElementById('lkS');
+const lkHkhoWrap = document.getElementById('lkHkhoWrap');
+const lkChat = document.getElementById('lkChat');
+const lkChatHint = document.getElementById('lkChatHint');
+let currentChat = 'nuoc';   // 'nuoc' | 'bot'
+let lastResult = null;
+
+// Nhóm 4.2, 7 chỉ áp dụng bọt; Nhóm 1 chỉ áp dụng nước (theo Bảng 1 & 3)
+const NUOC_DISALLOWED = new Set(['4.2', '7']);
+const BOT_DISALLOWED  = new Set(['1']);
+
+function refreshChatOptions() {
+  const nh = lkNhom.value;
+  const nuocOff = NUOC_DISALLOWED.has(nh);
+  const botOff  = BOT_DISALLOWED.has(nh);
+  const btns = lkChat.querySelectorAll('.chat-opt');
+  btns.forEach(b => {
+    const off = (b.dataset.chat === 'nuoc' && nuocOff) || (b.dataset.chat === 'bot' && botOff);
+    b.classList.toggle('disabled', off);
+    if (off && b.classList.contains('active')) {
+      b.classList.remove('active');
+      const other = lkChat.querySelector(`[data-chat="${b.dataset.chat === 'nuoc' ? 'bot' : 'nuoc'}"]`);
+      other.classList.add('active');
+      currentChat = other.dataset.chat;
+    }
+  });
+  if (nuocOff)      lkChatHint.textContent = `Nhóm ${nh} không áp dụng nước — chỉ dùng dung dịch tạo bọt`;
+  else if (botOff)  lkChatHint.textContent = `Nhóm ${nh} không áp dụng bọt — chỉ dùng nước`;
+  else              lkChatHint.textContent = 'Chọn loại chất chữa cháy để tra đúng cột bảng';
+}
+
+lkNhom.addEventListener('change', () => {
+  const needKho = ['5','6','7'].includes(lkNhom.value);
+  lkHkhoWrap.style.display = needKho ? '' : 'none';
+  refreshChatOptions();
+});
+
+lkChat.addEventListener('click', e => {
+  const btn = e.target.closest('.chat-opt');
+  if (!btn || btn.classList.contains('disabled')) return;
+  lkChat.querySelectorAll('.chat-opt').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  currentChat = btn.dataset.chat;
+  if (lastResult) renderLkResult(lastResult);   // re-render với chất mới? Không — yêu cầu tra lại để chuẩn
+});
+
+lkS.addEventListener('input', () => {
+  if (lastResult) renderLkResult(lastResult);
+});
+
+function fmt(x, dec) {
+  if (x == null || isNaN(x)) return '—';
+  return x.toFixed(dec).replace('.', ',');
+}
+
+function renderLkResult(r) {
+  const body = document.getElementById('lkResultBody');
+  const source = document.getElementById('lkResultSource');
+
+  if (r.canhBao && r.canhBao.length) {
+    source.textContent = 'Vui lòng kiểm tra lại đầu vào';
+    body.innerHTML = r.canhBao.map(c => `<div class="warn-box">⚠️ ${c}</div>`).join('');
+    return;
+  }
+
+  const bangLabel = { 'B1': 'Bảng 1', 'B2': 'Bảng 2', 'B3': 'Bảng 3', 'B2+CT3': 'Bảng 2 + CT3' }[r.bang] || r.bang;
+  source.textContent = `TCVN 7336:2021 — ${bangLabel}`;
+
+  // Pick column based on chất chữa cháy
+  const isNuoc = (currentChat === 'nuoc');
+  let i = isNuoc ? r.cuongDoNuoc : r.cuongDoBot;
+  let q = isNuoc ? r.luuLuongNuoc : r.luuLuongBot;
+  const chatLabel = isNuoc ? 'nước' : 'dd. tạo bọt';
+
+  if (i == null || q == null) {
+    body.innerHTML = `<div class="warn-box">⚠️ Nhóm ${r.nhom} không áp dụng ${chatLabel}. Hãy chọn ${isNuoc ? 'dung dịch tạo bọt' : 'nước'}.</div>`;
+    return;
+  }
+
+  // Áp K nếu Stt < S — điều chỉnh cả i, q và hiển thị Stt làm diện tích
+  const Stt = parseFloat(lkS.value);
+  let K = 1;
+  let adjusted = false;
+  let dienTichHienThi = r.dienTichTinhToan;
+  const i_goc = i, q_goc = q;
+  const sttGhiChu = [];
+  if (!isNaN(Stt) && Stt > 0 && r.dienTichTinhToan > 0) {
+    dienTichHienThi = Stt;
+    if (Stt < r.dienTichTinhToan) {
+      K = Stt / r.dienTichTinhToan;
+      i = i * K;
+      q = q * K;
+      adjusted = true;
+      sttGhiChu.push(`Stt = ${Stt} m² < S = ${r.dienTichTinhToan} m² → áp K = Stt/S = ${K.toFixed(3).replace('.', ',')} (CT5 Bảng 1). Cường độ phun và lưu lượng đã điều chỉnh.`);
+    } else {
+      sttGhiChu.push(`Stt = ${Stt} m² ≥ S = ${r.dienTichTinhToan} m² → giữ nguyên cường độ và lưu lượng tối thiểu (không cần giảm).`);
+    }
+  }
+
+  const Kstr = K.toFixed(3).replace('.', ',');
+  const cards = [
+    `<div class="res-card highlight">
+      <div class="lbl">Cường độ phun tối thiểu${adjusted ? '<span class="adj-tag">đã điều chỉnh</span>' : ''}</div>
+      <div class="val">${fmt(i, 3)}<span class="unit">l/s·m²</span></div>
+      <div class="sub">${chatLabel}${adjusted ? ` · gốc ${fmt(i_goc, 3)} × ${Kstr}` : ''}</div>
+    </div>`,
+    `<div class="res-card ${adjusted ? 'highlight' : ''}">
+      <div class="lbl">Lưu lượng tối thiểu${adjusted ? '<span class="adj-tag">đã điều chỉnh</span>' : ''}</div>
+      <div class="val">${fmt(q, 1)}<span class="unit">l/s</span></div>
+      <div class="sub">${chatLabel}${adjusted ? ` · gốc ${fmt(q_goc, 1)} × ${Kstr}` : ''}</div>
+    </div>`,
+    `<div class="res-card ${adjusted ? 'highlight' : ''}">
+      <div class="lbl">Diện tích ${adjusted ? 'thực tế Stt' : 'tính toán S'}${adjusted ? '<span class="adj-tag">đã điều chỉnh</span>' : ''}</div>
+      <div class="val">${dienTichHienThi}<span class="unit">m²</span></div>
+      <div class="sub">${adjusted ? `Diện tích tính toán S = ${r.dienTichTinhToan} m²` : 'theo Bảng tra'}</div>
+    </div>`,
+    `<div class="res-card">
+      <div class="lbl">Thời gian phun tối thiểu</div>
+      <div class="val">${r.thoiGianPhun}<span class="unit">phút</span></div>
+    </div>`,
+    `<div class="res-card">
+      <div class="lbl">Khoảng cách tối đa giữa đầu phun</div>
+      <div class="val">${r.khoangCach}<span class="unit">m</span></div>
+    </div>`
+  ];
+
+  body.innerHTML = `
+    <div class="result-meta">
+      <span class="badge-bang">${bangLabel}</span>
+      <span class="nhom-label">Nhóm ${r.nhom}</span>
+      <span class="braket">${r.braket || ''}</span>
+      <span class="braket" style="color:var(--link)">${isNuoc ? '💧 Nước' : '🫧 Dung dịch tạo bọt'}</span>
+      ${r.heSoTang > 1 ? `<span class="braket" style="color:var(--tag-orange)">× ${r.heSoTang} (CT3 Bảng 2)</span>` : ''}
+    </div>
+    <div class="result-grid">${cards.join('')}</div>
+    ${(r.ghiChu && r.ghiChu.length) || sttGhiChu.length ? `
+      <div class="note-box">
+        <b>📝 Ghi chú diễn giải:</b>
+        <ul>${[...r.ghiChu, ...sttGhiChu].map(g => `<li>${g}</li>`).join('')}</ul>
+      </div>
+    ` : ''}
+  `;
+}
+
+document.getElementById('lkRun').addEventListener('click', () => {
+  const r = window.TCVN7336_ENGINE.traCuu({
+    nhom: lkNhom.value,
+    chieuCaoPhong: parseFloat(lkHphong.value),
+    chieuCaoKho: parseFloat(lkHkho.value)
+    // Stt được áp ở lớp UI để Stt thay đổi không cần bấm Tra cứu lại
+  });
+  lastResult = r;
+  renderLkResult(r);
+});
+
+document.getElementById('lkReset').addEventListener('click', () => {
+  lkNhom.value = '';
+  lkHphong.value = '';
+  lkHkho.value = '';
+  lkS.value = '';
+  lkHkhoWrap.style.display = 'none';
+  lastResult = null;
+  lkChat.querySelectorAll('.chat-opt').forEach(b => {
+    b.classList.remove('disabled');
+    b.classList.toggle('active', b.dataset.chat === 'nuoc');
+  });
+  currentChat = 'nuoc';
+  document.getElementById('lkResultSource').textContent = 'Chưa có dữ liệu — nhập thông số bên trái và bấm Tra cứu';
+  document.getElementById('lkResultBody').innerHTML = `
+    <div class="empty-state">
+      <div class="em">🔍</div>
+      <h3>Chưa có kết quả</h3>
+      <p>Chọn nhóm, chiều cao và chất chữa cháy<br/>rồi bấm <b>Tra cứu</b>.</p>
+    </div>
+  `;
+});
+
+// ---------- Init ----------
+renderBang1();
+renderBang2();
+renderBang3();
+renderPhuLucA('');
+</script>
+
+</body>
+</html>

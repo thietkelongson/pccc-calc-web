@@ -1,0 +1,767 @@
+<!DOCTYPE html>
+<html lang="vi" data-theme="light">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Dashboard — PCCC Calc</title>
+<style>
+  :root[data-theme="light"] {
+    --bg: #f5f5f7; --bg-elev: #ffffff; --bg-soft: #fbfbfd; --bg-hover: #f0f0f3;
+    --border: rgba(0,0,0,.08); --border-strong: rgba(0,0,0,.16);
+    --text: #1d1d1f; --text-secondary: #6e6e73; --text-tertiary: #86868b;
+    --brand: #c0392b; --brand-dark: #a93226; --brand-soft: rgba(192,57,43,.08);
+    --link: #06c;
+    --nav-bg: rgba(255,255,255,.85);
+    --shadow-sm: 0 1px 2px rgba(0,0,0,.04);
+    --shadow-md: 0 4px 16px rgba(0,0,0,.06);
+    --shadow-lg: 0 12px 32px rgba(0,0,0,.1);
+  }
+  :root[data-theme="dark"] {
+    --bg: #000000; --bg-elev: #1c1c1e; --bg-soft: #2c2c2e; --bg-hover: #3a3a3c;
+    --border: rgba(255,255,255,.12); --border-strong: rgba(255,255,255,.24);
+    --text: #f5f5f7; --text-secondary: #a1a1a6; --text-tertiary: #6e6e73;
+    --brand: #ff453a; --brand-dark: #ff6b60; --brand-soft: rgba(255,69,58,.15);
+    --link: #2997ff;
+    --nav-bg: rgba(28,28,30,.85);
+    --shadow-sm: 0 1px 2px rgba(0,0,0,.4);
+    --shadow-md: 0 4px 16px rgba(0,0,0,.5);
+    --shadow-lg: 0 12px 32px rgba(0,0,0,.7);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Helvetica Neue", "Segoe UI", system-ui, sans-serif;
+    background: var(--bg); color: var(--text);
+    font-size: 15px; line-height: 1.47; letter-spacing: -0.022em;
+    transition: background .3s, color .3s;
+  }
+  a { color: inherit; text-decoration: none; }
+
+  /* ============ iOS ICONS ============ */
+  .ios-icon {
+    display: inline-flex; align-items: center; justify-content: center;
+    border-radius: 22.37%; font-size: 18px; color: white;
+    width: 32px; height: 32px;
+    box-shadow: inset 0 1px 0 rgba(255,255,255,.25), inset 0 -2px 4px rgba(0,0,0,.08), 0 2px 6px rgba(0,0,0,.06);
+    flex-shrink: 0; position: relative;
+  }
+  .ios-icon::after {
+    content: ''; position: absolute; inset: 0; border-radius: inherit;
+    background: linear-gradient(180deg, rgba(255,255,255,.18) 0%, transparent 50%);
+    pointer-events: none;
+  }
+  .ios-icon.xs { width: 22px; height: 22px; font-size: 12px; border-radius: 6px; }
+  .ios-icon.sm { width: 28px; height: 28px; font-size: 14px; border-radius: 7px; }
+  .ios-icon.md { width: 40px; height: 40px; font-size: 20px; border-radius: 10px; }
+  .ios-icon.lg { width: 56px; height: 56px; font-size: 28px; border-radius: 13px; }
+  .ios-icon.red    { background: linear-gradient(180deg, #ff6961, #ff453a); }
+  .ios-icon.orange { background: linear-gradient(180deg, #ffb340, #ff9500); }
+  .ios-icon.yellow { background: linear-gradient(180deg, #ffd966, #ffcc00); }
+  .ios-icon.green  { background: linear-gradient(180deg, #5bd778, #34c759); }
+  .ios-icon.mint   { background: linear-gradient(180deg, #5dd5cc, #00c7be); }
+  .ios-icon.teal   { background: linear-gradient(180deg, #5fc1d3, #30b0c7); }
+  .ios-icon.cyan   { background: linear-gradient(180deg, #5fc1f0, #32ade6); }
+  .ios-icon.blue   { background: linear-gradient(180deg, #4da3ff, #007aff); }
+  .ios-icon.indigo { background: linear-gradient(180deg, #7d7be0, #5856d6); }
+  .ios-icon.purple { background: linear-gradient(180deg, #c178e3, #af52de); }
+  .ios-icon.pink   { background: linear-gradient(180deg, #ff5b7a, #ff2d55); }
+  .ios-icon.brown  { background: linear-gradient(180deg, #b8997a, #a2845e); }
+  .ios-icon.gray   { background: linear-gradient(180deg, #aeaeb2, #8e8e93); }
+  .ios-icon.brand  { background: linear-gradient(180deg, #e74c3c, #c0392b); }
+
+  /* ============ TOPBAR (frosted) ============ */
+  .topbar {
+    position: sticky; top: 0; z-index: 100;
+    background: var(--nav-bg);
+    backdrop-filter: saturate(180%) blur(20px);
+    -webkit-backdrop-filter: saturate(180%) blur(20px);
+    border-bottom: 1px solid var(--border);
+    padding: 10px 24px;
+    display: flex; align-items: center; gap: 18px;
+  }
+  .logo { display: flex; align-items: center; gap: 10px; font-weight: 600; font-size: 15px; color: var(--text); }
+  .logo small { display: block; font-size: 11px; color: var(--text-secondary); font-weight: 400; margin-top: -2px; }
+
+  .search { flex: 1; max-width: 480px; position: relative; }
+  .search input {
+    width: 100%; padding: 8px 14px 8px 36px;
+    background: var(--bg-hover); border: 1px solid transparent;
+    border-radius: 8px; color: var(--text); font-size: 13px;
+    font-family: inherit;
+  }
+  .search input::placeholder { color: var(--text-tertiary); }
+  .search input:focus { outline: none; border-color: var(--link); background: var(--bg-elev); }
+  .search::before {
+    content: '🔍'; position: absolute; left: 11px; top: 50%; transform: translateY(-50%);
+    font-size: 12px; opacity: .6;
+  }
+  .search .shortcut {
+    position: absolute; right: 8px; top: 50%; transform: translateY(-50%);
+    background: var(--border); padding: 2px 6px; border-radius: 4px;
+    font-size: 10px; font-family: monospace; color: var(--text-secondary);
+  }
+
+  .topbar-actions { display: flex; align-items: center; gap: 8px; margin-left: auto; }
+
+  .credit-chip {
+    display: flex; align-items: center; gap: 8px;
+    background: linear-gradient(180deg, #ffd966 0%, #ffcc00 100%);
+    color: #1d1d1f;
+    padding: 4px 4px 4px 12px; border-radius: 999px;
+    cursor: pointer; font-size: 13px; font-weight: 600;
+    box-shadow: 0 2px 8px rgba(255,204,0,.3);
+  }
+  .credit-chip .topup {
+    background: rgba(255,255,255,.4); color: #1d1d1f;
+    width: 22px; height: 22px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 700; font-size: 14px;
+  }
+
+  .icon-btn {
+    width: 32px; height: 32px; border-radius: 50%;
+    background: var(--bg-hover); border: none;
+    color: var(--text); cursor: pointer; font-size: 14px;
+    display: flex; align-items: center; justify-content: center;
+    transition: all .15s; position: relative;
+  }
+  .icon-btn:hover { background: var(--border); }
+  .icon-btn .badge-dot {
+    position: absolute; top: 4px; right: 4px;
+    width: 7px; height: 7px; border-radius: 50%;
+    background: #ff453a; border: 2px solid var(--bg-elev);
+  }
+
+  .user-chip {
+    display: flex; align-items: center; gap: 8px;
+    padding: 2px 12px 2px 2px;
+    background: var(--bg-hover); border-radius: 999px;
+    cursor: pointer; position: relative;
+  }
+  .user-chip:hover { background: var(--border); }
+  .user-chip .avatar {
+    width: 28px; height: 28px; border-radius: 50%;
+    background: linear-gradient(135deg, #ffcc00, #ff9500);
+    color: white; display: flex; align-items: center; justify-content: center;
+    font-weight: 700; font-size: 12px;
+  }
+  .user-chip .name { font-size: 12px; font-weight: 600; line-height: 1.1; color: var(--text); }
+  .user-chip .role { font-size: 10px; color: var(--text-secondary); }
+
+  .dropdown {
+    position: absolute; top: calc(100% + 8px); right: 0;
+    background: var(--bg-elev); color: var(--text);
+    border: 1px solid var(--border); border-radius: 14px;
+    box-shadow: var(--shadow-lg);
+    min-width: 260px; padding: 8px;
+    display: none; z-index: 100;
+  }
+  .user-chip.open .dropdown { display: block; }
+  .dropdown .head { padding: 10px 12px; border-bottom: 1px solid var(--border); margin-bottom: 6px; }
+  .dropdown .head .n { font-weight: 700; font-size: 14px; }
+  .dropdown .head .e { font-size: 12px; color: var(--text-secondary); margin-top: 2px; }
+  .dropdown a {
+    display: flex; align-items: center; gap: 10px;
+    padding: 8px 12px; border-radius: 8px; font-size: 13px;
+    color: var(--text); cursor: pointer;
+  }
+  .dropdown a:hover { background: var(--bg-hover); }
+  .dropdown .sep { height: 1px; background: var(--border); margin: 6px 0; }
+  .dropdown a.danger { color: var(--brand); }
+  .dropdown a .right { margin-left: auto; color: #ff9500; font-weight: 700; font-size: 12px; }
+
+  /* ============ DEMO BANNER ============ */
+  .demo-banner {
+    background: linear-gradient(90deg, rgba(255,204,0,.15), rgba(255,149,0,.05));
+    border-bottom: 1px solid rgba(255,149,0,.3);
+    padding: 10px 24px;
+    display: flex; align-items: center; gap: 12px;
+    font-size: 13px;
+  }
+  .demo-banner .pill-demo {
+    background: linear-gradient(180deg, #ffd966, #ffcc00); color: #1d1d1f;
+    padding: 3px 10px; border-radius: 999px;
+    font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .5px;
+  }
+  .demo-banner b { color: #d97706; }
+  .demo-banner .upgrade {
+    margin-left: auto;
+    background: var(--brand); color: white;
+    padding: 6px 14px; border-radius: 999px;
+    font-size: 12px; font-weight: 600; cursor: pointer; border: none;
+  }
+  .demo-banner .close { background: none; border: none; color: var(--text-secondary); cursor: pointer; font-size: 16px; padding: 0 4px; }
+
+  /* ============ LAYOUT ============ */
+  .layout { display: flex; min-height: calc(100vh - 56px); }
+
+  aside {
+    width: 260px; background: var(--bg-elev);
+    border-right: 1px solid var(--border);
+    padding: 14px 0; flex-shrink: 0;
+    position: sticky; top: 56px; height: calc(100vh - 56px); overflow-y: auto;
+  }
+  aside .section { margin-bottom: 14px; }
+  aside h4 {
+    font-size: 11px; text-transform: uppercase; color: var(--text-tertiary);
+    padding: 6px 20px; letter-spacing: .5px; font-weight: 600;
+  }
+  aside ul { list-style: none; padding: 0 8px; }
+  aside li a {
+    display: flex; align-items: center; gap: 10px;
+    padding: 7px 12px; font-size: 14px; color: var(--text);
+    border-radius: 8px; cursor: pointer; margin-bottom: 1px;
+    transition: background .12s;
+  }
+  aside li a:hover { background: var(--bg-hover); }
+  aside li a.active { background: var(--brand-soft); color: var(--brand); font-weight: 600; }
+  aside li a .chip {
+    margin-left: auto; background: var(--bg-hover); color: var(--text-secondary);
+    font-size: 10px; padding: 1px 7px; border-radius: 10px; font-weight: 600;
+  }
+  aside li a.active .chip { background: var(--brand); color: white; }
+  aside li a .chip.new { background: rgba(52,199,89,.18); color: #34c759; }
+
+  .side-credit {
+    margin: 4px 14px 14px; padding: 14px;
+    background: linear-gradient(135deg, #ffd966 0%, #ff9500 100%);
+    color: white;
+    border-radius: 14px; box-shadow: 0 6px 16px rgba(255,149,0,.25);
+  }
+  .side-credit .label { font-size: 10px; opacity: .9; text-transform: uppercase; letter-spacing: .5px; font-weight: 600; }
+  .side-credit .val { font-size: 22px; font-weight: 700; margin: 4px 0; display: flex; align-items: baseline; gap: 6px; }
+  .side-credit .val small { font-size: 12px; opacity: .85; font-weight: 400; }
+  .side-credit .bar { height: 5px; background: rgba(255,255,255,.3); border-radius: 3px; margin: 6px 0 6px; overflow: hidden; }
+  .side-credit .bar .fill { height: 100%; background: white; border-radius: 3px; }
+  .side-credit .meta { font-size: 11px; opacity: .9; }
+  .side-credit .topup-btn {
+    margin-top: 10px; width: 100%;
+    background: rgba(255,255,255,.95); color: #1d1d1f;
+    border: none; border-radius: 8px; padding: 7px;
+    font-size: 12px; font-weight: 600; cursor: pointer;
+    font-family: inherit;
+  }
+
+  /* ============ MAIN ============ */
+  main { flex: 1; padding: 28px 36px; overflow-y: auto; }
+
+  .breadcrumb { font-size: 12px; color: var(--text-secondary); margin-bottom: 8px; }
+  .hero {
+    display: flex; align-items: flex-end; justify-content: space-between;
+    margin-bottom: 28px; gap: 24px; flex-wrap: wrap;
+  }
+  .hero h1 {
+    font-size: 34px; font-weight: 700; letter-spacing: -0.02em; line-height: 1.12;
+    margin-bottom: 6px;
+  }
+  .hero .wave { display: inline-block; animation: wave 2s ease-in-out infinite; }
+  @keyframes wave { 0%,60%,100% { transform: rotate(0); } 30% { transform: rotate(20deg); } 45% { transform: rotate(-10deg); } }
+  .hero .sub { color: var(--text-secondary); font-size: 15px; }
+  .hero-cta { display: flex; gap: 10px; }
+
+  .pill {
+    padding: 9px 18px; border-radius: 999px; font-size: 14px; font-weight: 500;
+    border: 1px solid transparent; cursor: pointer; transition: all .15s;
+    display: inline-flex; align-items: center; gap: 6px;
+    text-decoration: none; font-family: inherit;
+  }
+  .pill-primary { background: var(--brand); color: white; }
+  .pill-primary:hover { background: var(--brand-dark); }
+  .pill-ghost { background: var(--bg-elev); border-color: var(--border-strong); color: var(--text); }
+  .pill-ghost:hover { background: var(--bg-hover); }
+
+  /* Stats */
+  .stats-grid {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 14px; margin-bottom: 32px;
+  }
+  .stat-card {
+    background: var(--bg-elev); border: 1px solid var(--border);
+    border-radius: 16px; padding: 18px;
+    transition: all .2s;
+  }
+  .stat-card:hover { transform: translateY(-2px); box-shadow: var(--shadow-md); }
+  .stat-card.featured {
+    background: linear-gradient(135deg, #ffd966 0%, #ff9500 100%);
+    color: white; border-color: transparent;
+  }
+  .stat-card .head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; }
+  .stat-card .label { font-size: 11px; color: var(--text-secondary); text-transform: uppercase; letter-spacing: .5px; font-weight: 600; }
+  .stat-card.featured .label { color: rgba(255,255,255,.9); }
+  .stat-card .num { font-size: 30px; font-weight: 700; line-height: 1.05; letter-spacing: -0.02em; }
+  .stat-card .trend { font-size: 12px; margin-top: 4px; color: #34c759; }
+  .stat-card.featured .trend { color: rgba(255,255,255,.9); }
+  .stat-card .trend.down { color: var(--brand); }
+  .stat-card .actions { display: flex; gap: 6px; margin-top: 12px; }
+  .stat-card .actions button {
+    flex: 1; font-size: 12px; padding: 6px 8px; border-radius: 8px;
+    background: rgba(255,255,255,.2); border: none; color: white;
+    cursor: pointer; font-weight: 600; font-family: inherit;
+  }
+  .stat-card .actions button:hover { background: rgba(255,255,255,.3); }
+  .stat-card .actions button.alt { background: rgba(255,255,255,.95); color: #1d1d1f; }
+
+  /* Section head */
+  .section-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; }
+  .section-head h2 { font-size: 22px; font-weight: 700; letter-spacing: -0.01em; }
+  .section-head .link { font-size: 13px; color: var(--link); font-weight: 500; cursor: pointer; }
+  .section-head .link:hover { text-decoration: underline; }
+
+  /* Module grid */
+  .modules-grid {
+    display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: 14px; margin-bottom: 32px;
+  }
+  .module-card {
+    background: var(--bg-elev); border: 1px solid var(--border);
+    border-radius: 16px; padding: 20px;
+    cursor: pointer; transition: all .2s;
+    display: flex; flex-direction: column;
+  }
+  .module-card:hover { transform: translateY(-2px); box-shadow: var(--shadow-md); border-color: var(--border-strong); }
+  .module-card .top { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 14px; }
+  .module-card .tag {
+    font-size: 10px; padding: 3px 8px; border-radius: 999px; font-weight: 600;
+    background: var(--bg-hover); color: var(--text-secondary);
+  }
+  .module-card .tag.new { background: rgba(52,199,89,.15); color: #34c759; }
+  .module-card .tag.beta { background: rgba(255,149,0,.15); color: #ff9500; }
+  .module-card h3 { font-size: 16px; margin-bottom: 4px; font-weight: 600; letter-spacing: -0.01em; }
+  .module-card p { font-size: 13px; color: var(--text-secondary); line-height: 1.45; flex: 1; }
+  .module-card .price {
+    display: flex; align-items: center; justify-content: space-between;
+    margin-top: 14px; padding-top: 14px; border-top: 1px solid var(--border);
+    font-size: 12px;
+  }
+  .module-card .cost { color: #ff9500; font-weight: 600; }
+  .module-card .free { color: #34c759; font-weight: 600; }
+
+  /* Panel & projects */
+  .panel { background: var(--bg-elev); border: 1px solid var(--border); border-radius: 16px; padding: 22px; }
+  .panel h2 { font-size: 18px; font-weight: 700; letter-spacing: -0.01em; }
+
+  table.projects { width: 100%; border-collapse: collapse; font-size: 13px; }
+  table.projects th { text-align: left; padding: 10px 8px; font-weight: 600; font-size: 11px; text-transform: uppercase; color: var(--text-secondary); letter-spacing: .5px; border-bottom: 1px solid var(--border); }
+  table.projects td { padding: 12px 8px; border-bottom: 1px solid var(--border); }
+  table.projects tr:last-child td { border-bottom: none; }
+  table.projects tr:hover { background: var(--bg-soft); }
+  table.projects td b { font-weight: 600; }
+  table.projects td small { color: var(--text-secondary); font-size: 11px; }
+
+  .status { font-size: 10px; padding: 3px 8px; border-radius: 999px; font-weight: 600; display: inline-block; text-transform: uppercase; letter-spacing: .3px; }
+  .status.active   { background: rgba(52,199,89,.15); color: #34c759; }
+  .status.draft    { background: var(--bg-hover); color: var(--text-secondary); }
+  .status.review   { background: rgba(255,149,0,.15); color: #ff9500; }
+  .status.done     { background: rgba(0,122,255,.15); color: #007aff; }
+
+  .progress-bar { width: 70px; height: 5px; border-radius: 3px; background: var(--bg-hover); overflow: hidden; }
+  .progress-bar .fill { height: 100%; background: var(--brand); border-radius: 3px; }
+
+  .export-btn {
+    display: inline-flex; align-items: center; gap: 4px;
+    background: var(--bg-soft); border: 1px solid var(--border);
+    padding: 5px 10px; border-radius: 8px; font-size: 12px; font-weight: 500;
+    color: var(--text); cursor: pointer; position: relative;
+  }
+  .export-btn:hover { background: var(--bg-hover); }
+  .export-menu {
+    position: absolute; top: calc(100% + 4px); right: 0;
+    background: var(--bg-elev); border: 1px solid var(--border); border-radius: 12px;
+    box-shadow: var(--shadow-lg); padding: 6px; min-width: 180px;
+    display: none; z-index: 30;
+  }
+  .export-btn.open .export-menu { display: block; }
+  .export-menu a { display: flex; align-items: center; gap: 10px; padding: 7px 10px; border-radius: 8px; font-size: 13px; color: var(--text); cursor: pointer; }
+  .export-menu a:hover { background: var(--bg-hover); }
+  .export-menu a .cost-mini { margin-left: auto; font-size: 11px; color: #ff9500; font-weight: 600; }
+
+  .standards { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 10px; }
+  .standard {
+    background: var(--bg-elev); border: 1px solid var(--border);
+    border-radius: 12px; padding: 12px; display: flex; align-items: center; gap: 12px;
+  }
+  .standard .code { font-size: 13px; font-weight: 600; }
+  .standard .desc { font-size: 11px; color: var(--text-secondary); }
+</style>
+</head>
+<body>
+
+<!-- TOPBAR -->
+<div class="topbar">
+  <div class="logo">
+    <span class="ios-icon brand sm" style="font-size:14px">🔥</span>
+    <div>PCCC Calc<small>Tính toán PCCC chuyên nghiệp</small></div>
+  </div>
+  <div class="search">
+    <input placeholder="Tìm dự án, bản tính, tiêu chuẩn..." />
+    <span class="shortcut">⌘K</span>
+  </div>
+  <div class="topbar-actions">
+    <div class="credit-chip" title="Số dư credit">
+      💎 <span class="num">247</span>
+      <span style="opacity:.7; font-size:11px">credit</span>
+      <span class="topup">+</span>
+    </div>
+    <button class="icon-btn" id="themeToggle"><span id="themeIcon">🌙</span></button>
+    <button class="icon-btn">🔔<span class="badge-dot"></span></button>
+    <button class="icon-btn">?</button>
+    <div class="user-chip" id="userChip">
+      <div class="avatar">LS</div>
+      <div>
+        <div class="name">Long Sơn</div>
+        <div class="role">Kỹ sư PCCC</div>
+      </div>
+      <div class="dropdown">
+        <div class="head">
+          <div class="n">Long Sơn Design</div>
+          <div class="e">thietkelongson@gmail.com</div>
+        </div>
+        <a><span class="ios-icon xs blue">👤</span> Hồ sơ cá nhân</a>
+        <a><span class="ios-icon xs purple">🏢</span> Hồ sơ công ty</a>
+        <a><span class="ios-icon xs orange">💎</span> Số dư & Thanh toán <span class="right">247</span></a>
+        <a><span class="ios-icon xs green">📜</span> Lịch sử giao dịch</a>
+        <div class="sep"></div>
+        <a><span class="ios-icon xs gray">⚙️</span> Cài đặt</a>
+        <a><span class="ios-icon xs teal">🌐</span> Ngôn ngữ — Tiếng Việt</a>
+        <a><span class="ios-icon xs indigo">?</span> Trợ giúp & Hỗ trợ</a>
+        <div class="sep"></div>
+        <a class="danger" href="login.html"><span class="ios-icon xs red">🚪</span> Đăng xuất</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- DEMO BANNER -->
+<div class="demo-banner" id="demoBanner">
+  <span class="pill-demo">Demo Free</span>
+  <span>Bạn đang ở chế độ dùng thử. Bảng tính cho phép <b>xem kết quả tóm tắt miễn phí</b>. Để <b>lưu</b> hoặc <b>xuất file</b> cần dùng credit.</span>
+  <button class="upgrade">⚡ Nạp credit</button>
+  <button class="close" onclick="document.getElementById('demoBanner').style.display='none'">×</button>
+</div>
+
+<div class="layout">
+
+  <!-- SIDEBAR -->
+  <aside>
+    <div class="side-credit">
+      <div class="label">Số dư Credit</div>
+      <div class="val">💎 247 <small>/ 500</small></div>
+      <div class="bar"><div class="fill" style="width:49%"></div></div>
+      <div class="meta">Đã dùng 253 trong tháng</div>
+      <button class="topup-btn">+ Nạp thêm credit</button>
+    </div>
+
+    <div class="section">
+      <h4>Tổng quan</h4>
+      <ul>
+        <li><a class="active"><span class="ios-icon xs blue">📊</span> Dashboard</a></li>
+        <li><a><span class="ios-icon xs indigo">📁</span> Dự án của tôi <span class="chip">24</span></a></li>
+        <li><a><span class="ios-icon xs yellow">⭐</span> Yêu thích</a></li>
+        <li><a><span class="ios-icon xs gray">🗑️</span> Thùng rác</a></li>
+      </ul>
+    </div>
+
+    <div class="section">
+      <h4>Tra cứu</h4>
+      <ul>
+        <li><a href="qc10-lookup.html"><span class="ios-icon xs indigo">📖</span> Tra cứu QC10</a></li>
+        <li><a href="tcvn7336-lookup.html"><span class="ios-icon xs teal">🚰</span> Tra cứu TCVN 7336 <span class="chip new">Mới</span></a></li>
+        <li><a><span class="ios-icon xs mint">📊</span> Bảng đối chiếu</a></li>
+      </ul>
+    </div>
+
+    <div class="section">
+      <h4>Mô-đun tính toán</h4>
+      <ul>
+        <li><a href="sprinkler-network.html"><span class="ios-icon xs blue">💧</span> Thủy lực TCVN 7336 <span class="chip new">Mới</span></a></li>
+        <li><a><span class="ios-icon xs orange">🏬</span> Thủy lực giá hàng &gt; 5.5m</a></li>
+        <li><a><span class="ios-icon xs green">🧪</span> Hệ FM-200</a></li>
+        <li><a><span class="ios-icon xs teal">🫧</span> Hệ FOAM</a></li>
+        <li><a><span class="ios-icon xs cyan">💦</span> Phụ gia thẩm thấu</a></li>
+        <li><a><span class="ios-icon xs red">🔥</span> Tải trọng cháy</a></li>
+        <li><a><span class="ios-icon xs gray">💨</span> Hút khói &amp; bù khí</a></li>
+      </ul>
+    </div>
+
+    <div class="section">
+      <h4>Tài khoản</h4>
+      <ul>
+        <li><a><span class="ios-icon xs orange">💎</span> Nạp &amp; Thanh toán</a></li>
+        <li><a><span class="ios-icon xs purple">🏢</span> Hồ sơ công ty</a></li>
+        <li><a><span class="ios-icon xs pink">👥</span> Nhóm làm việc</a></li>
+        <li><a><span class="ios-icon xs green">📜</span> Lịch sử giao dịch</a></li>
+      </ul>
+    </div>
+
+    <div class="section">
+      <h4>Tài nguyên</h4>
+      <ul>
+        <li><a><span class="ios-icon xs blue">📘</span> Tiêu chuẩn TCVN/NFPA</a></li>
+        <li><a><span class="ios-icon xs brown">📦</span> Thư viện thiết bị</a></li>
+        <li><a><span class="ios-icon xs indigo">📄</span> Mẫu báo cáo</a></li>
+        <li><a><span class="ios-icon xs yellow">💰</span> Bảng giá</a></li>
+      </ul>
+    </div>
+  </aside>
+
+  <!-- MAIN -->
+  <main>
+    <div class="breadcrumb">Dashboard / Tổng quan</div>
+    <div class="hero">
+      <div>
+        <h1>Chào buổi sáng, Long Sơn <span class="wave">👋</span></h1>
+        <p class="sub">Chủ Nhật, 07/06/2026 — Có <b>3 dự án</b> đang chờ duyệt và <b>1 báo cáo</b> sắp đến hạn.</p>
+      </div>
+      <div class="hero-cta">
+        <button class="pill pill-ghost">📥 Import bản tính</button>
+        <button class="pill pill-primary" onclick="window.location.href='sprinkler-network.html'">+ Tạo dự án mới</button>
+      </div>
+    </div>
+
+    <!-- STATS -->
+    <div class="stats-grid">
+      <div class="stat-card featured">
+        <div class="head">
+          <span class="label">Credit khả dụng</span>
+          <span class="ios-icon md" style="background: rgba(255,255,255,.25)">💎</span>
+        </div>
+        <div class="num">247</div>
+        <div class="trend">Đủ cho ~49 lượt tính</div>
+        <div class="actions">
+          <button class="alt">+ Nạp thêm</button>
+          <button>Lịch sử</button>
+        </div>
+      </div>
+      <div class="stat-card">
+        <div class="head">
+          <span class="label">Tổng dự án</span>
+          <span class="ios-icon md red">📁</span>
+        </div>
+        <div class="num">24</div>
+        <div class="trend">▲ 12% so với tháng trước</div>
+      </div>
+      <div class="stat-card">
+        <div class="head">
+          <span class="label">Đang tính toán</span>
+          <span class="ios-icon md orange">⚡</span>
+        </div>
+        <div class="num">7</div>
+        <div class="trend">3 dự án mới tuần này</div>
+      </div>
+      <div class="stat-card">
+        <div class="head">
+          <span class="label">Bản vẽ đã xuất</span>
+          <span class="ios-icon md blue">📐</span>
+        </div>
+        <div class="num">142</div>
+        <div class="trend">PDF: 89 • Excel: 35 • DXF: 18</div>
+      </div>
+    </div>
+
+    <!-- MODULES -->
+    <div class="section-head">
+      <h2>Bắt đầu nhanh</h2>
+      <span class="link">Xem tất cả →</span>
+    </div>
+    <div class="modules-grid">
+      <div class="module-card" onclick="window.location.href='qc10-lookup.html'">
+        <div class="top"><span class="ios-icon lg indigo">📖</span><span class="tag new">Mới</span></div>
+        <h3>Tra cứu QC10</h3>
+        <p>Tra cứu Bảng A.1/B.1/G.1 QCVN 10:2025/BCA — xác định nhanh yêu cầu báo cháy, chữa cháy, họng nước, loa thông báo.</p>
+        <div class="price"><span class="cost">💎 1 credit / tra cứu</span><span class="free">Demo miễn phí</span></div>
+      </div>
+      <div class="module-card" onclick="window.location.href='sprinkler-network.html'">
+        <div class="top"><span class="ios-icon lg blue">💧</span><span class="tag new">Mới</span></div>
+        <h3>Thủy lực TCVN 7336</h3>
+        <p>Tính Q/H/v hệ Sprinkler theo TCVN 7336 với sơ đồ Isometric 3D Pipenet style.</p>
+        <div class="price"><span class="cost">💎 5 credit / lần</span><span class="free">Demo miễn phí</span></div>
+      </div>
+      <div class="module-card">
+        <div class="top"><span class="ios-icon lg orange">🏬</span><span class="tag">Chuyên sâu</span></div>
+        <h3>Thủy lực giá hàng &gt; 5.5m</h3>
+        <p>Nhà kho giá hàng cao trên 5.5m: ESFR, in-rack sprinkler theo TCVN/NFPA 13.</p>
+        <div class="price"><span class="cost">💎 6 credit / lần</span><span class="free">Demo miễn phí</span></div>
+      </div>
+      <div class="module-card">
+        <div class="top"><span class="ios-icon lg green">🧪</span><span class="tag">Pro</span></div>
+        <h3>Hệ chữa cháy khí FM-200</h3>
+        <p>Tính khối lượng FM-200, số bình, đường kính ống theo NFPA 2001 / TCVN 7161-9.</p>
+        <div class="price"><span class="cost">💎 3 credit / lần</span><span class="free">Demo miễn phí</span></div>
+      </div>
+      <div class="module-card">
+        <div class="top"><span class="ios-icon lg teal">🫧</span><span class="tag beta">Beta</span></div>
+        <h3>Hệ chữa cháy bọt FOAM</h3>
+        <p>Tính dung dịch bọt, foam concentrate, lưu lượng cho bể xăng dầu, hóa chất.</p>
+        <div class="price"><span class="cost">💎 4 credit / lần</span><span class="free">Demo miễn phí</span></div>
+      </div>
+      <div class="module-card">
+        <div class="top"><span class="ios-icon lg cyan">💦</span><span class="tag beta">Beta</span></div>
+        <h3>Phụ gia thẩm thấu</h3>
+        <p>Tính hệ có thêm chất phụ gia thẩm thấu (wetting agent) cho cháy class A.</p>
+        <div class="price"><span class="cost">💎 4 credit / lần</span><span class="free">Demo miễn phí</span></div>
+      </div>
+      <div class="module-card">
+        <div class="top"><span class="ios-icon lg red">🔥</span><span class="tag">Pro</span></div>
+        <h3>Tính toán tải trọng cháy</h3>
+        <p>Mật độ tải trọng cháy q (MJ/m²), phân hạng nguy hiểm cháy theo QCVN 06:2022.</p>
+        <div class="price"><span class="cost">💎 2 credit / lần</span><span class="free">Demo miễn phí</span></div>
+      </div>
+      <div class="module-card">
+        <div class="top"><span class="ios-icon lg gray">💨</span><span class="tag">Pro</span></div>
+        <h3>Hút khói &amp; bù khí</h3>
+        <p>Tính lưu lượng quạt hút khói + quạt bù khí cấp khí tươi theo QCVN 06.</p>
+        <div class="price"><span class="cost">💎 4 credit / lần</span><span class="free">Demo miễn phí</span></div>
+      </div>
+      <div class="module-card" onclick="window.location.href='tcvn7336-lookup.html'">
+        <div class="top"><span class="ios-icon lg teal">🚰</span><span class="tag new">Mới</span></div>
+        <h3>Tra cứu TCVN 7336</h3>
+        <p>Bảng 1/2/3 và Phụ lục A — cường độ phun, lưu lượng, diện tích, thời gian phun, phân loại nhóm nguy cơ phát sinh cháy.</p>
+        <div class="price"><span class="cost">💎 1 credit / tra cứu</span><span class="free">Demo miễn phí</span></div>
+      </div>
+      <div class="module-card">
+        <div class="top"><span class="ios-icon lg mint">📊</span><span class="tag">Tra cứu</span></div>
+        <h3>Tra cứu bảng đối chiếu</h3>
+        <p>Bảng đối chiếu thông số: cường độ phun, diện tích bảo vệ, áp lực, K-factor.</p>
+        <div class="price"><span class="cost">💎 1 credit / tra cứu</span><span class="free">Demo miễn phí</span></div>
+      </div>
+    </div>
+
+    <!-- PROJECTS -->
+    <div style="margin-bottom: 32px">
+      <div class="panel">
+        <div class="section-head" style="margin-bottom:14px">
+          <h2>Dự án gần đây</h2>
+          <span class="link">Xem tất cả →</span>
+        </div>
+        <table class="projects">
+          <thead>
+            <tr>
+              <th>Tên dự án</th>
+              <th>Module</th>
+              <th>Tiến độ</th>
+              <th>Trạng thái</th>
+              <th>Xuất file</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><b>Chung cư Riverside Garden</b><br><small>25 tầng • Hạng B</small></td>
+              <td><span class="ios-icon xs blue">💧</span> Sprinkler</td>
+              <td><div class="progress-bar"><div class="fill" style="width:85%"></div></div></td>
+              <td><span class="status review">Chờ duyệt</span></td>
+              <td>
+                <div class="export-btn" onclick="toggleExport(this, event)">📤 Xuất ▾
+                  <div class="export-menu">
+                    <a><span class="ios-icon xs red">📄</span> Báo cáo PDF <span class="cost-mini">💎 1</span></a>
+                    <a><span class="ios-icon xs green">📊</span> Excel (XLSX) <span class="cost-mini">💎 1</span></a>
+                    <a><span class="ios-icon xs blue">📐</span> Bản vẽ DXF <span class="cost-mini">💎 2</span></a>
+                    <a><span class="ios-icon xs purple">🖼️</span> SVG / PNG <span class="cost-mini">💎 1</span></a>
+                  </div>
+                </div>
+              </td>
+            </tr>
+            <tr>
+              <td><b>Data Center FPT - Phòng máy chủ A</b><br><small>Phòng 480 m³</small></td>
+              <td><span class="ios-icon xs green">🧪</span> FM-200</td>
+              <td><div class="progress-bar"><div class="fill" style="width:100%"></div></div></td>
+              <td><span class="status done">Hoàn thành</span></td>
+              <td>
+                <div class="export-btn" onclick="toggleExport(this, event)">📤 Xuất ▾
+                  <div class="export-menu">
+                    <a><span class="ios-icon xs red">📄</span> Báo cáo PDF <span class="cost-mini">💎 1</span></a>
+                    <a><span class="ios-icon xs green">📊</span> Excel (XLSX) <span class="cost-mini">💎 1</span></a>
+                  </div>
+                </div>
+              </td>
+            </tr>
+            <tr>
+              <td><b>Nhà xưởng SamSung Bắc Ninh</b><br><small>12.000 m² • Hạng C</small></td>
+              <td><span class="ios-icon xs red">🔥</span> Tải trọng</td>
+              <td><div class="progress-bar"><div class="fill" style="width:60%"></div></div></td>
+              <td><span class="status active">Đang làm</span></td>
+              <td>
+                <div class="export-btn" onclick="toggleExport(this, event)">📤 Xuất ▾
+                  <div class="export-menu">
+                    <a><span class="ios-icon xs red">📄</span> Báo cáo PDF <span class="cost-mini">💎 1</span></a>
+                    <a><span class="ios-icon xs green">📊</span> Excel (XLSX) <span class="cost-mini">💎 1</span></a>
+                  </div>
+                </div>
+              </td>
+            </tr>
+            <tr>
+              <td><b>TTTM Aeon Mall</b><br><small>5 tầng + 2 hầm</small></td>
+              <td><span class="ios-icon xs orange">🏬</span> Giá hàng cao</td>
+              <td><div class="progress-bar"><div class="fill" style="width:35%"></div></div></td>
+              <td><span class="status active">Đang làm</span></td>
+              <td>
+                <div class="export-btn" onclick="toggleExport(this, event)">📤 Xuất ▾
+                  <div class="export-menu">
+                    <a><span class="ios-icon xs red">📄</span> Báo cáo PDF <span class="cost-mini">💎 1</span></a>
+                  </div>
+                </div>
+              </td>
+            </tr>
+            <tr>
+              <td><b>Kho hóa chất Hải Phòng</b><br><small>Kho 2.400 m²</small></td>
+              <td><span class="ios-icon xs teal">🫧</span> Foam</td>
+              <td><div class="progress-bar"><div class="fill" style="width:15%"></div></div></td>
+              <td><span class="status draft">Nháp</span></td>
+              <td><span style="font-size:11px;color:var(--text-secondary)">Chưa thể xuất</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- STANDARDS -->
+    <div class="section-head">
+      <h2>Tiêu chuẩn áp dụng</h2>
+      <span class="link">Quản lý tiêu chuẩn →</span>
+    </div>
+    <div class="standards">
+      <div class="standard"><span class="ios-icon md blue">📘</span><div><div class="code">TCVN 7336:2021</div><div class="desc">Hệ thống Sprinkler</div></div></div>
+      <div class="standard"><span class="ios-icon md green">📗</span><div><div class="code">TCVN 5738:2021</div><div class="desc">Hệ thống báo cháy</div></div></div>
+      <div class="standard"><span class="ios-icon md red">📕</span><div><div class="code">QCVN 06:2022</div><div class="desc">An toàn cháy nhà</div></div></div>
+      <div class="standard"><span class="ios-icon md orange">📙</span><div><div class="code">NFPA 13 / 2001</div><div class="desc">Sprinkler & gas</div></div></div>
+      <div class="standard"><span class="ios-icon md mint">📓</span><div><div class="code">TCVN 3890</div><div class="desc">PT chữa cháy</div></div></div>
+      <div class="standard"><span class="ios-icon md indigo">📔</span><div><div class="code">TCVN 7161-9</div><div class="desc">FM-200</div></div></div>
+    </div>
+
+    <div style="text-align:center; color:var(--text-tertiary); font-size:12px; padding:30px 0 10px">
+      © 2026 PCCC Calc — Long Sơn Design — v1.0.0-beta
+    </div>
+  </main>
+</div>
+
+<script>
+  const root = document.documentElement;
+  const themeIcon = document.getElementById('themeIcon');
+  const savedTheme = localStorage.getItem('pccc-theme') || 'light';
+  root.setAttribute('data-theme', savedTheme);
+  themeIcon.textContent = savedTheme === 'light' ? '🌙' : '☀️';
+  document.getElementById('themeToggle').addEventListener('click', () => {
+    const cur = root.getAttribute('data-theme');
+    const next = cur === 'light' ? 'dark' : 'light';
+    root.setAttribute('data-theme', next);
+    themeIcon.textContent = next === 'light' ? '🌙' : '☀️';
+    localStorage.setItem('pccc-theme', next);
+  });
+
+  const userChip = document.getElementById('userChip');
+  userChip.addEventListener('click', (e) => {
+    e.stopPropagation();
+    userChip.classList.toggle('open');
+  });
+  document.addEventListener('click', () => userChip.classList.remove('open'));
+
+  function toggleExport(el, e) {
+    e.stopPropagation();
+    document.querySelectorAll('.export-btn.open').forEach(x => { if (x !== el) x.classList.remove('open'); });
+    el.classList.toggle('open');
+  }
+  document.addEventListener('click', () => {
+    document.querySelectorAll('.export-btn.open').forEach(x => x.classList.remove('open'));
+  });
+</script>
+</body>
+</html>

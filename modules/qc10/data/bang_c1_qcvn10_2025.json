@@ -1,0 +1,118 @@
+{
+  "metadata": {
+    "source": "QCVN 10:2025/BCA",
+    "table": "Bảng C.1 - Quy định về trang bị hệ thống cấp nước chữa cháy ngoài nhà",
+    "effectiveDate": "2025-12-30",
+    "description": "Phụ lục C - Trang bị hệ thống cấp nước chữa cháy ngoài nhà",
+    "notes": [
+      "Entries có apA1Stt: tự động gắn vào kết quả tab A.1",
+      "Entries có standalone=true: là cơ sở chuyên ngành, tra ở tab \"Cơ sở chuyên ngành\""
+    ]
+  },
+  "footnotes": {
+    "1": "Chỉ yêu cầu đối với các trạm dừng nghỉ được quy hoạch theo các tuyến đường cao tốc.",
+    "2": "Kho khí hóa lỏng — tham chiếu QCVN 10:2012/BCT.",
+    "3": "Áp dụng cho khu liên hợp gang thép, NM lắp ráp ô tô, sản xuất săm lốp, hóa dầu — theo các quy mô sản lượng."
+  },
+  "entries": [
+    {
+      "stt": "1",
+      "loaiNha": "Nhà khám, chữa bệnh, lưu trú bệnh nhân của bệnh viện",
+      "apA1Stt": ["6"],
+      "criteria": {
+        "type": "multi",
+        "conditions": [
+          {"type": "tangTroLen", "value": 5, "unit": "tầng", "description": "Cao từ 5 tầng trở lên"},
+          {"type": "dtsTroLen", "value": 3000, "unit": "m²", "description": "Tổng DTS từ 3 000 m² trở lên"}
+        ],
+        "operator": "OR"
+      }
+    },
+    {
+      "stt": "2",
+      "loaiNha": "Chợ hạng 1, chợ hạng 2, trung tâm thương mại",
+      "apA1Stt": ["15"],
+      "criteria": {"type": "khongPhuThuocDienTich", "description": "Không phụ thuộc vào quy mô"}
+    },
+    {
+      "stt": "3",
+      "loaiNha": "Nhà ga HK/HH cảng hàng không; nhà KT máy bay; cảng, bến thủy nội địa cấp đặc biệt/I; bến cảng biển cấp đặc biệt/I; cảng cá loại I, II; cảng cạn; ga HK/HH, depot đường sắt; ga HK, depot đường sắt đô thị; trạm dừng nghỉ",
+      "apA1Stt": ["22", "27"],
+      "footnotes": ["1"],
+      "criteria": {"type": "khongPhuThuocDienTich", "description": "Không phụ thuộc vào quy mô"}
+    },
+    {
+      "stt": "4",
+      "loaiNha": "Hầm giao thông đường bộ (hầm đường ô tô)",
+      "apA1Stt": ["28"],
+      "criteria": {"type": "chieuDaiTroLen", "value": 500, "unit": "m", "description": "Có chiều dài từ 500 m trở lên"}
+    },
+    {
+      "stt": "5",
+      "loaiNha": "Cơ sở đóng mới, sửa chữa, bảo dưỡng phương tiện thủy nội địa, tàu biển",
+      "apA1Stt": [],
+      "standalone": true,
+      "criteria": {"type": "dtsTroLen", "value": 1500, "unit": "m²", "description": "Tổng DTS từ 1 500 m² trở lên"}
+    },
+    {
+      "stt": "6",
+      "loaiNha": "Nhà máy nhiệt điện; trạm biến áp có điện áp từ 220 kV trở lên",
+      "apA1Stt": [],
+      "standalone": true,
+      "criteria": {"type": "khongPhuThuocDienTich", "description": "Không phụ thuộc vào quy mô"}
+    },
+    {
+      "stt": "7",
+      "loaiNha": "Nhà máy lọc dầu; nhà máy lọc, hóa dầu; nhà máy chế biến khí; nhà máy sản xuất nhiên liệu sinh học; kho chứa dầu mỏ, sản phẩm dầu mỏ; kho chứa khí hóa lỏng; cảng xuất, nhập dầu mỏ và sản phẩm dầu mỏ",
+      "apA1Stt": [],
+      "standalone": true,
+      "footnotes": ["2"],
+      "criteria": {"type": "khongPhuThuocDienTich", "description": "Không phụ thuộc vào quy mô"}
+    },
+    {
+      "stt": "8.1",
+      "loaiNha": "Cơ sở sản xuất vật liệu nổ, tiền chất thuốc nổ công nghiệp",
+      "apA1Stt": [],
+      "standalone": true,
+      "criteria": {"type": "khongPhuThuocDienTich", "description": "Không phụ thuộc vào quy mô"}
+    },
+    {
+      "stt": "8.2",
+      "loaiNha": "Kho cố định chứa vật liệu nổ, tiền chất thuốc nổ công nghiệp",
+      "apA1Stt": [],
+      "standalone": true,
+      "criteria": {"type": "khongPhuThuocDienTich", "description": "Từ 20 tấn thuốc nổ trở lên"}
+    },
+    {
+      "stt": "9.1",
+      "loaiNha": "Khu liên hợp gang thép; nhà máy sản xuất, lắp ráp ô tô",
+      "apA1Stt": [],
+      "standalone": true,
+      "footnotes": ["3"],
+      "criteria": {"type": "khongPhuThuocDienTich", "description": "Không phụ thuộc vào quy mô"}
+    },
+    {
+      "stt": "9.2",
+      "loaiNha": "Công trình sản xuất săm, lốp ô tô",
+      "apA1Stt": [],
+      "standalone": true,
+      "footnotes": ["3"],
+      "criteria": {"type": "khongPhuThuocDienTich", "description": "Tổng sản lượng trên 1 triệu chiếc/năm"}
+    },
+    {
+      "stt": "9.3",
+      "loaiNha": "Công trình sản xuất, kho trạm chiết nạp sản phẩm hóa dầu",
+      "apA1Stt": [],
+      "standalone": true,
+      "footnotes": ["3"],
+      "criteria": {"type": "khongPhuThuocDienTich", "description": "Tổng sản lượng trên 50 nghìn tấn sản phẩm/năm"}
+    },
+    {
+      "stt": "10",
+      "loaiNha": "Khu dân cư trong đô thị và nông thôn; khu đô thị, khu nhà ở, khu công nghiệp, cụm công nghiệp, khu du lịch, khu nghiên cứu, đào tạo, khu thể dục, thể thao",
+      "apA1Stt": [],
+      "standalone": true,
+      "criteria": {"type": "khongPhuThuocDienTich", "description": "Không phụ thuộc vào quy mô"}
+    }
+  ]
+}

@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="vi" data-theme="light">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Đăng nhập — PCCC Calc</title>
+<style>
+  :root[data-theme="light"] {
+    --bg: #ffffff; --bg-elev: #ffffff; --bg-soft: #f5f5f7; --bg-hover: #f0f0f3;
+    --border: rgba(0,0,0,.08); --border-strong: rgba(0,0,0,.16);
+    --text: #1d1d1f; --text-secondary: #6e6e73; --text-tertiary: #86868b;
+    --brand: #c0392b; --brand-dark: #a93226; --brand-soft: rgba(192,57,43,.08);
+    --link: #06c;
+    --shadow-sm: 0 1px 2px rgba(0,0,0,.04);
+    --shadow-md: 0 4px 20px rgba(0,0,0,.06);
+    --brand-grad: linear-gradient(135deg, #c0392b 0%, #e74c3c 50%, #f59e0b 100%);
+  }
+  :root[data-theme="dark"] {
+    --bg: #000000; --bg-elev: #1c1c1e; --bg-soft: #2c2c2e; --bg-hover: #3a3a3c;
+    --border: rgba(255,255,255,.12); --border-strong: rgba(255,255,255,.24);
+    --text: #f5f5f7; --text-secondary: #a1a1a6; --text-tertiary: #6e6e73;
+    --brand: #ff453a; --brand-dark: #ff6b60; --brand-soft: rgba(255,69,58,.15);
+    --link: #2997ff;
+    --shadow-sm: 0 1px 2px rgba(0,0,0,.4);
+    --shadow-md: 0 4px 20px rgba(0,0,0,.5);
+    --brand-grad: linear-gradient(135deg, #7f1d1d 0%, #c0392b 40%, #f59e0b 100%);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Helvetica Neue", "Segoe UI", system-ui, sans-serif;
+    background: var(--bg); color: var(--text);
+    min-height: 100vh; font-size: 15px; line-height: 1.47; letter-spacing: -0.022em;
+    transition: background .3s, color .3s;
+  }
+  a { color: var(--link); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+
+  /* iOS icon */
+  .ios-icon {
+    display: inline-flex; align-items: center; justify-content: center;
+    border-radius: 22.37%; color: white;
+    box-shadow: inset 0 1px 0 rgba(255,255,255,.25), inset 0 -2px 4px rgba(0,0,0,.08), 0 2px 6px rgba(0,0,0,.06);
+    position: relative; flex-shrink: 0;
+  }
+  .ios-icon::after { content: ''; position: absolute; inset: 0; border-radius: inherit; background: linear-gradient(180deg, rgba(255,255,255,.18) 0%, transparent 50%); pointer-events: none; }
+  .ios-icon.sm { width: 28px; height: 28px; font-size: 14px; border-radius: 7px; }
+  .ios-icon.md { width: 40px; height: 40px; font-size: 20px; border-radius: 10px; }
+  .ios-icon.lg { width: 64px; height: 64px; font-size: 32px; border-radius: 15px; }
+  .ios-icon.brand { background: linear-gradient(180deg, #e74c3c, #c0392b); }
+  .ios-icon.blue { background: linear-gradient(180deg, #4da3ff, #007aff); }
+
+  .auth-shell { min-height: 100vh; display: grid; grid-template-columns: 1fr 1fr; }
+  @media (max-width: 920px) { .auth-shell { grid-template-columns: 1fr; } .brand-panel { display: none !important; } }
+
+  .form-side { padding: 24px 48px; display: flex; flex-direction: column; background: var(--bg); }
+  .form-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 80px; }
+  .logo { display: flex; align-items: center; gap: 10px; font-weight: 600; font-size: 17px; color: var(--text); }
+  .theme-btn {
+    width: 32px; height: 32px; border-radius: 50%;
+    background: var(--bg-hover); border: none; color: var(--text);
+    cursor: pointer; font-size: 14px;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .theme-btn:hover { background: var(--border); }
+
+  .form-wrap {
+    flex: 1; display: flex; flex-direction: column; justify-content: center;
+    max-width: 400px; margin: 0 auto; width: 100%;
+  }
+
+  h1 { font-size: 32px; font-weight: 700; margin-bottom: 8px; letter-spacing: -0.02em; line-height: 1.15; }
+  .sub { color: var(--text-secondary); font-size: 17px; margin-bottom: 32px; }
+
+  .social-row { display: flex; gap: 10px; margin-bottom: 22px; }
+  .social-btn {
+    flex: 1; padding: 11px; border-radius: 12px;
+    background: var(--bg-soft); border: 1px solid var(--border);
+    color: var(--text); font-size: 14px; font-weight: 500;
+    cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px;
+    transition: all .15s; font-family: inherit;
+  }
+  .social-btn:hover { background: var(--bg-hover); }
+
+  .divider {
+    display: flex; align-items: center; gap: 12px; margin: 8px 0 22px;
+    color: var(--text-tertiary); font-size: 12px;
+  }
+  .divider::before, .divider::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+
+  .field { margin-bottom: 16px; }
+  .field label { display: block; font-size: 13px; font-weight: 600; color: var(--text); margin-bottom: 6px; letter-spacing: -0.01em; }
+  .field .input-wrap { position: relative; }
+  .field .input-wrap .ic-left { position: absolute; left: 12px; top: 50%; transform: translateY(-50%); color: var(--text-tertiary); font-size: 14px; }
+  .field .input-wrap .toggle { position: absolute; right: 10px; top: 50%; transform: translateY(-50%); background: none; border: none; color: var(--text-tertiary); cursor: pointer; font-size: 14px; }
+  .field input {
+    width: 100%; padding: 12px 14px 12px 38px;
+    background: var(--bg-soft); border: 1px solid transparent;
+    border-radius: 12px; color: var(--text); font-size: 15px;
+    font-family: inherit; transition: all .15s;
+  }
+  .field input:focus { outline: none; border-color: var(--link); background: var(--bg-elev); box-shadow: 0 0 0 3px rgba(0,102,204,.12); }
+  .field input::placeholder { color: var(--text-tertiary); }
+
+  .row-between { display: flex; align-items: center; justify-content: space-between; margin-bottom: 24px; font-size: 14px; }
+  .checkbox { display: flex; align-items: center; gap: 8px; cursor: pointer; user-select: none; color: var(--text); }
+  .checkbox input { width: 16px; height: 16px; accent-color: var(--brand); }
+
+  .pill-btn {
+    width: 100%; padding: 13px; border-radius: 999px;
+    background: var(--brand); color: white; border: none;
+    font-size: 15px; font-weight: 500; cursor: pointer;
+    transition: all .2s; font-family: inherit;
+    display: flex; align-items: center; justify-content: center; gap: 8px;
+  }
+  .pill-btn:hover { background: var(--brand-dark); transform: translateY(-1px); }
+
+  .form-bottom { margin-top: 28px; text-align: center; font-size: 15px; color: var(--text-secondary); }
+  .form-bottom a { font-weight: 500; }
+
+  .footer-meta { margin-top: 80px; padding-top: 20px; border-top: 1px solid var(--border); display: flex; justify-content: space-between; font-size: 12px; color: var(--text-tertiary); }
+  .footer-meta a { color: var(--text-secondary); }
+
+  /* Brand panel */
+  .brand-panel {
+    background: var(--brand-grad); color: white;
+    padding: 60px 48px;
+    display: flex; flex-direction: column; justify-content: space-between;
+    position: relative; overflow: hidden;
+  }
+  .brand-panel::before, .brand-panel::after {
+    content: ''; position: absolute; border-radius: 50%; background: rgba(255,255,255,.08); pointer-events: none;
+  }
+  .brand-panel::before { width: 400px; height: 400px; top: -150px; right: -120px; }
+  .brand-panel::after  { width: 300px; height: 300px; bottom: -100px; left: -80px; }
+  .brand-panel > * { position: relative; z-index: 1; }
+
+  .brand-top { display: flex; align-items: center; gap: 8px; font-size: 14px; opacity: .9; }
+  .brand-top .dot { width: 8px; height: 8px; border-radius: 50%; background: #fbbf24; }
+
+  .brand-main { max-width: 460px; }
+  .brand-main h2 {
+    font-size: 44px; line-height: 1.1; font-weight: 700; letter-spacing: -0.015em;
+    margin-bottom: 20px;
+  }
+  .brand-main p { font-size: 19px; opacity: .9; line-height: 1.5; }
+
+  .testimonial {
+    background: rgba(255,255,255,.12); backdrop-filter: blur(10px);
+    border: 1px solid rgba(255,255,255,.2);
+    border-radius: 18px; padding: 24px;
+    margin-top: 28px;
+  }
+  .testimonial .quote { font-size: 16px; line-height: 1.55; margin-bottom: 16px; font-style: italic; }
+  .testimonial .author { display: flex; align-items: center; gap: 12px; }
+  .testimonial .avatar {
+    width: 42px; height: 42px; border-radius: 50%;
+    background: rgba(255,255,255,.25); color: white;
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 700; font-size: 14px;
+  }
+  .testimonial .who { font-size: 14px; font-weight: 600; }
+  .testimonial .role { font-size: 12px; opacity: .8; }
+
+  .brand-stats { display: flex; gap: 36px; }
+  .brand-stats .stat .num { font-size: 32px; font-weight: 700; letter-spacing: -0.02em; }
+  .brand-stats .stat .lbl { font-size: 12px; opacity: .85; margin-top: 2px; }
+</style>
+</head>
+<body>
+
+<div class="auth-shell">
+
+  <div class="form-side">
+    <div class="form-top">
+      <a href="index.html" class="logo">
+        <span class="ios-icon sm brand">🔥</span> PCCC Calc
+      </a>
+      <button class="theme-btn" id="themeToggle"><span id="themeIcon">🌙</span></button>
+    </div>
+
+    <div class="form-wrap">
+      <h1>Chào mừng trở lại.</h1>
+      <p class="sub">Đăng nhập để tiếp tục các dự án PCCC của bạn.</p>
+
+      <div class="social-row">
+        <button class="social-btn">🔵 Google</button>
+        <button class="social-btn">🟦 Facebook</button>
+      </div>
+
+      <div class="divider">hoặc đăng nhập với email</div>
+
+      <form onsubmit="event.preventDefault(); window.location.href='dashboard.html';">
+        <div class="field">
+          <label>Email</label>
+          <div class="input-wrap">
+            <span class="ic-left">✉</span>
+            <input type="email" placeholder="ten@cong-ty.vn" required value="thietkelongson@gmail.com"/>
+          </div>
+        </div>
+
+        <div class="field">
+          <label>Mật khẩu</label>
+          <div class="input-wrap">
+            <span class="ic-left">🔒</span>
+            <input type="password" id="pw" placeholder="Nhập mật khẩu" required value="••••••••"/>
+            <button type="button" class="toggle" onclick="togglePw(this)">👁</button>
+          </div>
+        </div>
+
+        <div class="row-between">
+          <label class="checkbox"><input type="checkbox" checked /> Ghi nhớ đăng nhập</label>
+          <a href="forgot-password.html">Quên mật khẩu?</a>
+        </div>
+
+        <button class="pill-btn" type="submit">Đăng nhập</button>
+      </form>
+
+      <div class="form-bottom">
+        Chưa có tài khoản? <a href="signup.html">Đăng ký miễn phí</a>
+      </div>
+
+      <div class="footer-meta">
+        <span>© 2026 PCCC Calc</span>
+        <span><a href="#">Điều khoản</a> · <a href="#">Bảo mật</a> · <a href="#">Hỗ trợ</a></span>
+      </div>
+    </div>
+  </div>
+
+  <div class="brand-panel">
+    <div class="brand-top">
+      <span class="dot"></span> Đáng tin cậy bởi 2.400+ kỹ sư PCCC trên cả nước
+    </div>
+
+    <div class="brand-main">
+      <h2>Bản tính PCCC chuyên nghiệp.</h2>
+      <p>Sơ đồ Isometric 3D, công thức theo TCVN/NFPA, xuất PDF có tem chỉ trong vài phút.</p>
+
+      <div class="testimonial">
+        <div class="quote">"Trước phải vẽ tay trên CAD + tính trên Excel mất cả buổi. Giờ với PCCC Calc, sơ đồ Sprinkler 3 tầng làm xong trong 20 phút, lại đúng tiêu chuẩn TCVN 7336 ngay."</div>
+        <div class="author">
+          <div class="avatar">NH</div>
+          <div>
+            <div class="who">Nguyễn Hoàng Anh</div>
+            <div class="role">Trưởng phòng thiết kế MEP — Saigon Engineering</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="brand-stats">
+      <div class="stat"><div class="num">2.400+</div><div class="lbl">Kỹ sư tin dùng</div></div>
+      <div class="stat"><div class="num">18.500</div><div class="lbl">Dự án đã tính</div></div>
+      <div class="stat"><div class="num">99.2%</div><div class="lbl">Uptime</div></div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+  const root = document.documentElement;
+  const themeIcon = document.getElementById('themeIcon');
+  const savedTheme = localStorage.getItem('pccc-theme') || 'light';
+  root.setAttribute('data-theme', savedTheme);
+  themeIcon.textContent = savedTheme === 'light' ? '🌙' : '☀️';
+  document.getElementById('themeToggle').addEventListener('click', () => {
+    const cur = root.getAttribute('data-theme');
+    const next = cur === 'light' ? 'dark' : 'light';
+    root.setAttribute('data-theme', next);
+    themeIcon.textContent = next === 'light' ? '🌙' : '☀️';
+    localStorage.setItem('pccc-theme', next);
+  });
+  function togglePw(btn) {
+    const pw = document.getElementById('pw');
+    if (pw.type === 'password') { pw.type = 'text'; btn.textContent = '🙈'; }
+    else { pw.type = 'password'; btn.textContent = '👁'; }
+  }
+</script>
+</body>
+</html>

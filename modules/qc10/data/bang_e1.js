@@ -1,0 +1,59 @@
+window.BANG_E1_DATA = {
+  "metadata": {
+    "source": "QCVN 10:2025/BCA",
+    "table": "Bảng E.1 - Quy định về trang bị dụng cụ phá dỡ thô sơ",
+    "effectiveDate": "2025-12-30",
+    "description": "Phụ lục E - Trang bị dụng cụ phá dỡ thô sơ",
+    "notes": [
+      "Tất cả các đối tượng đều trang bị 01 bộ dụng cụ phá dỡ thô sơ, không phụ thuộc quy mô.",
+      "Mỗi bộ gồm: rìu (≥2 kg, thép cacbon cao), xà beng (≥100 cm, một đầu nhọn-một đầu dẹt), búa (thép cacbon cao, ≥5 kg), kìm cộng lực (tải cắt ≥60 kg)."
+    ]
+  },
+  "quantityDescription": "01 bộ dụng cụ phá dỡ thô sơ (rìu ≥2 kg • xà beng ≥100 cm • búa ≥5 kg • kìm cộng lực ≥60 kg tải cắt)",
+  "entries": [
+    {
+      "stt": "1",
+      "loaiNha": "Nhà sản xuất",
+      "apA1Stt": [],
+      "standalone": true,
+      "criteria": {"type": "khongPhuThuocDienTich", "description": "Không phụ thuộc quy mô"}
+    },
+    {
+      "stt": "2",
+      "loaiNha": "Nhà kho (độc lập)",
+      "apA1Stt": ["30", "31"],
+      "criteria": {"type": "khongPhuThuocDienTich", "description": "Không phụ thuộc quy mô"}
+    },
+    {
+      "stt": "3",
+      "loaiNha": "Nhà chung cư, nhà ở tập thể, khách sạn, nhà khách, nhà nghỉ và cơ sở dịch vụ lưu trú khác",
+      "apA1Stt": ["3", "18"],
+      "criteria": {"type": "khongPhuThuocDienTich", "description": "Không phụ thuộc quy mô"}
+    },
+    {
+      "stt": "4",
+      "loaiNha": "Nhà trụ sở, văn phòng; cơ sở nghiên cứu chuyên ngành; trường học (tiểu học → đại học, dạy nghề, công nhân kỹ thuật); bệnh viện",
+      "apA1Stt": ["5", "6", "20"],
+      "criteria": {"type": "khongPhuThuocDienTich", "description": "Không phụ thuộc quy mô"}
+    },
+    {
+      "stt": "5",
+      "loaiNha": "Nhà ga hành khách / hàng hóa (cảng hàng không, đường sắt, đường sắt đô thị, cáp treo); nhà dịch vụ thuộc cảng, bến thủy nội địa, bến cảng biển, bến xe khách, trạm dừng nghỉ",
+      "apA1Stt": ["22"],
+      "criteria": {"type": "khongPhuThuocDienTich", "description": "Không phụ thuộc quy mô"}
+    },
+    {
+      "stt": "6",
+      "loaiNha": "Nhà kinh doanh dịch vụ karaoke, vũ trường và công năng tương tự; nhà hát, rạp chiếu phim",
+      "apA1Stt": ["9", "13"],
+      "criteria": {"type": "khongPhuThuocDienTich", "description": "Không phụ thuộc quy mô"}
+    },
+    {
+      "stt": "7",
+      "loaiNha": "Chợ hạng 1, chợ hạng 2, trung tâm thương mại",
+      "apA1Stt": ["15"],
+      "criteria": {"type": "khongPhuThuocDienTich", "description": "Không phụ thuộc quy mô"}
+    }
+  ]
+}
+;

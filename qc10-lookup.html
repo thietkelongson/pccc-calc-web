@@ -1,0 +1,725 @@
+<!DOCTYPE html>
+<html lang="vi" data-theme="light">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Tra cứu QC10 — PCCC Calc</title>
+<style>
+  :root[data-theme="light"] {
+    --bg: #f5f5f7; --bg-elev: #ffffff; --bg-soft: #fbfbfd; --bg-hover: #f0f0f3;
+    --border: rgba(0,0,0,.08); --border-strong: rgba(0,0,0,.16);
+    --text: #1d1d1f; --text-secondary: #6e6e73; --text-tertiary: #86868b;
+    --brand: #c0392b; --brand-dark: #a93226; --brand-soft: rgba(192,57,43,.08);
+    --link: #06c;
+    --nav-bg: rgba(255,255,255,.85);
+    --shadow-sm: 0 1px 2px rgba(0,0,0,.04);
+    --shadow-md: 0 4px 16px rgba(0,0,0,.06);
+    --shadow-lg: 0 12px 32px rgba(0,0,0,.1);
+    --status-green: #34c759; --status-green-bg: rgba(52,199,89,.12);
+    --status-yellow: #ff9500; --status-yellow-bg: rgba(255,149,0,.12);
+    --status-gray: #8e8e93; --status-gray-bg: rgba(142,142,147,.12);
+    --status-red: #ff453a; --status-red-bg: rgba(255,69,58,.12);
+  }
+  :root[data-theme="dark"] {
+    --bg: #000000; --bg-elev: #1c1c1e; --bg-soft: #2c2c2e; --bg-hover: #3a3a3c;
+    --border: rgba(255,255,255,.12); --border-strong: rgba(255,255,255,.24);
+    --text: #f5f5f7; --text-secondary: #a1a1a6; --text-tertiary: #6e6e73;
+    --brand: #ff453a; --brand-dark: #ff6b60; --brand-soft: rgba(255,69,58,.15);
+    --link: #2997ff;
+    --nav-bg: rgba(28,28,30,.85);
+    --shadow-sm: 0 1px 2px rgba(0,0,0,.4);
+    --shadow-md: 0 4px 16px rgba(0,0,0,.5);
+    --shadow-lg: 0 12px 32px rgba(0,0,0,.7);
+    --status-green: #30d158; --status-green-bg: rgba(48,209,88,.15);
+    --status-yellow: #ff9f0a; --status-yellow-bg: rgba(255,159,10,.15);
+    --status-gray: #98989d; --status-gray-bg: rgba(152,152,157,.15);
+    --status-red: #ff453a; --status-red-bg: rgba(255,69,58,.15);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Helvetica Neue", "Segoe UI", system-ui, sans-serif;
+    background: var(--bg); color: var(--text);
+    font-size: 15px; line-height: 1.47; letter-spacing: -0.022em;
+    min-height: 100vh; transition: background .3s, color .3s;
+  }
+  a { color: inherit; text-decoration: none; }
+  a:hover { text-decoration: underline; }
+
+  /* iOS icons */
+  .ios-icon {
+    display: inline-flex; align-items: center; justify-content: center;
+    border-radius: 22.37%; color: white;
+    box-shadow: inset 0 1px 0 rgba(255,255,255,.25), inset 0 -2px 4px rgba(0,0,0,.08), 0 2px 6px rgba(0,0,0,.06);
+    position: relative; flex-shrink: 0;
+  }
+  .ios-icon::after { content: ''; position: absolute; inset: 0; border-radius: inherit; background: linear-gradient(180deg, rgba(255,255,255,.18) 0%, transparent 50%); pointer-events: none; }
+  .ios-icon.sm { width: 28px; height: 28px; font-size: 14px; border-radius: 7px; }
+  .ios-icon.md { width: 40px; height: 40px; font-size: 20px; border-radius: 10px; }
+  .ios-icon.lg { width: 56px; height: 56px; font-size: 28px; border-radius: 13px; }
+  .ios-icon.brand { background: linear-gradient(180deg, #e74c3c, #c0392b); }
+  .ios-icon.blue { background: linear-gradient(180deg, #4da3ff, #007aff); }
+  .ios-icon.indigo { background: linear-gradient(180deg, #7d7be0, #5856d6); }
+  .ios-icon.green { background: linear-gradient(180deg, #5bd778, #34c759); }
+  .ios-icon.orange { background: linear-gradient(180deg, #ffb340, #ff9500); }
+  .ios-icon.red { background: linear-gradient(180deg, #ff6961, #ff453a); }
+  .ios-icon.gray { background: linear-gradient(180deg, #aeaeb2, #8e8e93); }
+  .ios-icon.purple { background: linear-gradient(180deg, #c178e3, #af52de); }
+  .ios-icon.teal { background: linear-gradient(180deg, #5fc1d3, #30b0c7); }
+
+  /* Top bar */
+  .topbar {
+    position: sticky; top: 0; z-index: 50;
+    background: var(--nav-bg);
+    backdrop-filter: saturate(180%) blur(20px);
+    -webkit-backdrop-filter: saturate(180%) blur(20px);
+    border-bottom: 1px solid var(--border);
+    padding: 10px 24px;
+    display: flex; align-items: center; gap: 16px;
+  }
+  .back-btn {
+    display: inline-flex; align-items: center; gap: 4px;
+    padding: 6px 14px 6px 10px; border-radius: 999px;
+    background: var(--bg-hover); color: var(--text);
+    font-size: 13px; font-weight: 500; text-decoration: none;
+    transition: background .15s;
+  }
+  .back-btn:hover { background: var(--border); text-decoration: none; }
+
+  .page-title {
+    display: flex; align-items: center; gap: 10px;
+    font-size: 16px; font-weight: 600;
+  }
+  .page-title .sub { color: var(--text-secondary); font-weight: 400; font-size: 13px; }
+
+  .topbar-actions { margin-left: auto; display: flex; align-items: center; gap: 8px; }
+  .credit-chip {
+    display: flex; align-items: center; gap: 6px;
+    background: linear-gradient(180deg, #ffd966, #ffcc00); color: #1d1d1f;
+    padding: 4px 12px; border-radius: 999px;
+    font-size: 12px; font-weight: 600;
+    box-shadow: 0 2px 8px rgba(255,204,0,.3);
+  }
+  .icon-btn {
+    width: 32px; height: 32px; border-radius: 50%;
+    background: var(--bg-hover); border: none; color: var(--text);
+    cursor: pointer; font-size: 14px;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .icon-btn:hover { background: var(--border); }
+
+  /* Main layout */
+  .layout {
+    display: grid;
+    grid-template-columns: 420px 1fr;
+    gap: 24px;
+    max-width: 1440px; margin: 0 auto;
+    padding: 24px;
+  }
+  @media (max-width: 1024px) { .layout { grid-template-columns: 1fr; } }
+
+  /* Panel */
+  .panel {
+    background: var(--bg-elev); border: 1px solid var(--border);
+    border-radius: 18px; padding: 22px;
+  }
+  .panel h2 { font-size: 17px; font-weight: 600; letter-spacing: -0.01em; margin-bottom: 4px; display: flex; align-items: center; gap: 10px; }
+  .panel .panel-sub { font-size: 13px; color: var(--text-secondary); margin-bottom: 20px; }
+
+  /* Hero panel */
+  .hero {
+    grid-column: 1 / -1;
+    background: linear-gradient(135deg, #5856d6 0%, #af52de 100%);
+    color: white;
+    border-radius: 22px;
+    padding: 28px 32px;
+    margin-bottom: 4px;
+    display: flex; align-items: center; gap: 22px;
+    position: relative; overflow: hidden;
+  }
+  .hero::before {
+    content: ''; position: absolute; right: -80px; top: -80px;
+    width: 280px; height: 280px; border-radius: 50%;
+    background: rgba(255,255,255,.08);
+  }
+  .hero > * { position: relative; z-index: 1; }
+  .hero h1 { font-size: 26px; font-weight: 700; letter-spacing: -0.02em; line-height: 1.15; margin-bottom: 4px; }
+  .hero p { font-size: 14px; opacity: .9; }
+  .hero .badge {
+    display: inline-flex; align-items: center; gap: 6px;
+    background: rgba(255,255,255,.2); padding: 3px 10px;
+    border-radius: 999px; font-size: 11px; font-weight: 600;
+    margin-top: 8px;
+  }
+
+  /* Field */
+  .field { margin-bottom: 16px; }
+  .field label { display: block; font-size: 13px; font-weight: 600; color: var(--text); margin-bottom: 6px; letter-spacing: -0.01em; }
+  .field label .req { color: var(--brand); }
+  .field input, .field select {
+    width: 100%; padding: 11px 14px;
+    background: var(--bg-soft); border: 1px solid transparent;
+    border-radius: 12px; color: var(--text); font-size: 15px;
+    font-family: inherit; transition: all .15s;
+  }
+  .field input:focus, .field select:focus { outline: none; border-color: var(--link); background: var(--bg-elev); box-shadow: 0 0 0 3px rgba(0,102,204,.12); }
+  .field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .field .hint { font-size: 11px; color: var(--text-tertiary); margin-top: 4px; }
+
+  /* Searchable building selector */
+  .building-search { position: relative; }
+  .building-search .results {
+    position: absolute; top: calc(100% + 4px); left: 0; right: 0;
+    background: var(--bg-elev); border: 1px solid var(--border);
+    border-radius: 12px; box-shadow: var(--shadow-lg);
+    max-height: 360px; overflow-y: auto;
+    z-index: 100; display: none; padding: 4px;
+  }
+  .building-search.open .results { display: block; }
+  .building-search .result-item {
+    padding: 9px 12px; border-radius: 8px; cursor: pointer;
+    font-size: 14px;
+  }
+  .building-search .result-item:hover, .building-search .result-item.highlight { background: var(--bg-hover); }
+  .building-search .result-item .stt {
+    display: inline-block; min-width: 28px; font-weight: 700;
+    color: var(--link); margin-right: 8px;
+  }
+  .building-search .result-item small { display: block; color: var(--text-secondary); font-size: 11px; margin-top: 2px; padding-left: 36px; }
+
+  .selected-building {
+    background: var(--brand-soft); border: 1px solid rgba(192,57,43,.2);
+    border-radius: 12px; padding: 12px 14px; margin-bottom: 16px;
+    display: flex; gap: 12px;
+  }
+  .selected-building .stt-badge {
+    background: var(--brand); color: white;
+    width: 36px; height: 36px; border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 700; font-size: 13px; flex-shrink: 0;
+  }
+  .selected-building .info { flex: 1; }
+  .selected-building .info .name { font-weight: 600; font-size: 13px; line-height: 1.4; }
+  .selected-building .info .short { color: var(--text-secondary); font-size: 11px; margin-top: 2px; }
+
+  /* Pill button */
+  .pill-btn {
+    width: 100%; padding: 13px; border-radius: 999px;
+    background: var(--brand); color: white; border: none;
+    font-size: 15px; font-weight: 500; cursor: pointer;
+    transition: all .2s; font-family: inherit;
+    display: flex; align-items: center; justify-content: center; gap: 8px;
+  }
+  .pill-btn:hover { background: var(--brand-dark); transform: translateY(-1px); }
+  .pill-btn:disabled { background: var(--bg-hover); color: var(--text-tertiary); cursor: not-allowed; transform: none; }
+  .pill-btn.secondary { background: var(--bg-hover); color: var(--text); margin-top: 10px; }
+  .pill-btn.secondary:hover { background: var(--border); }
+
+  /* Results */
+  .results-grid {
+    display: grid; grid-template-columns: repeat(2, 1fr);
+    gap: 14px;
+  }
+  @media (max-width: 720px) { .results-grid { grid-template-columns: 1fr; } }
+
+  .result-card {
+    background: var(--bg-elev); border: 1px solid var(--border);
+    border-radius: 16px; padding: 20px;
+    transition: all .2s;
+  }
+  .result-card:hover { box-shadow: var(--shadow-md); }
+  .result-card .head { display: flex; align-items: center; gap: 12px; margin-bottom: 14px; }
+  .result-card h3 { font-size: 15px; font-weight: 600; }
+  .result-card .status-pill {
+    display: inline-flex; align-items: center; gap: 5px;
+    padding: 4px 10px; border-radius: 999px;
+    font-size: 11px; font-weight: 700;
+    text-transform: uppercase; letter-spacing: .3px;
+    margin-bottom: 10px;
+  }
+  .status-batbuoc       { background: var(--status-green-bg); color: var(--status-green); }
+  .status-choPhep       { background: var(--status-yellow-bg); color: var(--status-yellow); }
+  .status-khongBatBuoc  { background: var(--status-gray-bg); color: var(--status-gray); }
+  .status-khongApDung   { background: var(--status-red-bg); color: var(--status-red); }
+
+  .result-card .threshold {
+    font-size: 13px; color: var(--text); font-weight: 500;
+    background: var(--bg-soft); padding: 10px 12px; border-radius: 10px;
+    margin-bottom: 8px;
+    border-left: 3px solid var(--link);
+  }
+  .result-card .explanation {
+    font-size: 13px; color: var(--text-secondary); line-height: 1.55;
+    white-space: pre-wrap;
+  }
+  .result-card .note {
+    font-size: 12px; color: var(--text-tertiary); margin-top: 8px;
+    font-style: italic;
+  }
+
+  /* Reference & footnotes */
+  .ref-card {
+    background: var(--bg-soft); border: 1px solid var(--border);
+    border-radius: 12px; padding: 14px 16px;
+    margin-top: 16px;
+    font-size: 13px;
+  }
+  .ref-card .ref-label { font-size: 11px; color: var(--text-tertiary); text-transform: uppercase; letter-spacing: .5px; margin-bottom: 4px; }
+  .ref-card b { color: var(--brand); }
+
+  .footnotes {
+    margin-top: 12px;
+    background: rgba(0,102,204,.06);
+    border-left: 3px solid var(--link);
+    padding: 12px 14px; border-radius: 10px;
+    font-size: 12px; color: var(--text-secondary); line-height: 1.55;
+  }
+  .footnotes b { color: var(--text); }
+  .footnotes ul { list-style: none; margin-top: 4px; }
+  .footnotes li { padding: 3px 0; }
+  .footnotes li b { color: var(--link); }
+
+  /* Empty state */
+  .empty-state {
+    text-align: center; padding: 50px 30px;
+    color: var(--text-secondary);
+  }
+  .empty-state .em { font-size: 50px; margin-bottom: 14px; }
+  .empty-state h3 { font-size: 17px; color: var(--text); margin-bottom: 6px; font-weight: 600; }
+  .empty-state p { font-size: 14px; line-height: 1.55; }
+
+  /* Subtype selector */
+  .subtype-grid { display: grid; grid-template-columns: 1fr; gap: 8px; margin-bottom: 16px; }
+  .subtype-card {
+    padding: 10px 12px; border: 1.5px solid var(--border);
+    border-radius: 10px; cursor: pointer;
+    transition: all .15s; background: var(--bg-soft);
+    font-size: 13px;
+  }
+  .subtype-card:hover { border-color: var(--border-strong); }
+  .subtype-card.selected { border-color: var(--brand); background: var(--brand-soft); }
+  .subtype-card .subStt { font-weight: 700; color: var(--brand); margin-right: 6px; }
+
+  /* Hide field when not relevant */
+  .field.hidden { display: none; }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <a href="dashboard.html" class="back-btn">‹ Dashboard</a>
+  <div class="page-title">
+    <span class="ios-icon sm indigo">📖</span>
+    Tra cứu QC10 <span class="sub">— QCVN 10:2025/BCA</span>
+  </div>
+  <div class="topbar-actions">
+    <div class="credit-chip">💎 247</div>
+    <button class="icon-btn" id="themeToggle"><span id="themeIcon">🌙</span></button>
+  </div>
+</div>
+
+<div class="layout">
+
+  <!-- HERO -->
+  <div class="hero">
+    <span class="ios-icon lg" style="background: rgba(255,255,255,.25); width: 64px; height: 64px; font-size: 32px">📖</span>
+    <div>
+      <h1>Tra cứu Bảng A.1 / B.1 / C.1 / D.1 / E.1 / F.1 / G.1</h1>
+      <p>Xác định nhanh yêu cầu báo cháy, chữa cháy, họng nước, cấp nước ngoài nhà, phương tiện cơ giới, dụng cụ phá dỡ, mặt nạ phòng độc và loa thông báo theo QCVN 10:2025/BCA.</p>
+      <div class="badge">⚡ Hiệu lực từ 30/12/2025</div>
+    </div>
+  </div>
+
+  <!-- INPUT PANEL -->
+  <div class="panel" id="inputPanel">
+    <h2><span class="ios-icon sm blue">✏️</span> Thông số đầu vào</h2>
+    <p class="panel-sub">Chọn loại công trình rồi nhập các thông số quy mô.</p>
+
+    <div id="modeTabs" style="display:flex;gap:4px;margin-bottom:14px;border-bottom:1px solid var(--border);padding-bottom:0;flex-wrap:wrap">
+      <button type="button" class="mode-tab active" data-mode="a1" style="flex:1;min-width:120px;padding:10px 6px;border:none;background:transparent;cursor:pointer;font-size:12px;font-weight:600;border-bottom:2px solid var(--accent);color:var(--accent)">A.1 — Nhà</button>
+      <button type="button" class="mode-tab" data-mode="a2" style="flex:1;min-width:120px;padding:10px 6px;border:none;background:transparent;cursor:pointer;font-size:12px;font-weight:600;border-bottom:2px solid transparent;color:var(--text-secondary)">A.2 — Hạng mục</button>
+      <button type="button" class="mode-tab" data-mode="a3" style="flex:1;min-width:120px;padding:10px 6px;border:none;background:transparent;cursor:pointer;font-size:12px;font-weight:600;border-bottom:2px solid transparent;color:var(--text-secondary)">A.3 — Gian phòng</button>
+      <button type="button" class="mode-tab" data-mode="a4" style="flex:1;min-width:120px;padding:10px 6px;border:none;background:transparent;cursor:pointer;font-size:12px;font-weight:600;border-bottom:2px solid transparent;color:var(--text-secondary)">A.4 — Thiết bị</button>
+    </div>
+
+    <div class="field">
+      <label id="searchLabel">Loại công trình <span class="req">*</span></label>
+      <div class="building-search" id="buildingSearch">
+        <input type="text" id="buildingInput" placeholder="Gõ để tìm... (vd: chung cư, văn phòng)" autocomplete="off"/>
+        <div class="results" id="searchResults"></div>
+      </div>
+    </div>
+
+    <div id="selectedBuildingBox" style="display:none"></div>
+
+    <div id="subtypeContainer" style="display:none">
+      <label style="display:block; font-size:13px; font-weight:600; margin-bottom:8px">Phân loại chi tiết</label>
+      <div class="subtype-grid" id="subtypeGrid"></div>
+    </div>
+
+    <div id="inputFields"></div>
+
+    <button class="pill-btn" id="evaluateBtn" disabled>Tra cứu yêu cầu</button>
+    <button class="pill-btn secondary" onclick="resetForm()">Đặt lại</button>
+  </div>
+
+  <!-- RESULTS PANEL -->
+  <div class="panel" id="resultsPanel">
+    <h2><span class="ios-icon sm green">📊</span> Kết quả tra cứu</h2>
+    <p class="panel-sub">8 hệ thống PCCC theo QCVN 10:2025/BCA — đối chiếu Bảng A.1, B.1, C.1, D.1, E.1, F.1, G.1.</p>
+
+    <div id="resultsContent">
+      <div class="empty-state">
+        <div class="em">🔍</div>
+        <h3>Chưa có kết quả</h3>
+        <p>Chọn loại công trình và nhập thông số bên trái,<br/>rồi bấm <b>Tra cứu yêu cầu</b>.</p>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- Embedded data -->
+<script src="modules/qc10/data/bang_a1.js"></script>
+<script src="modules/qc10/data/bang_a2.js"></script>
+<script src="modules/qc10/data/bang_a2_chuyennganh.js"></script>
+<script src="modules/qc10/data/bang_a3.js"></script>
+<script src="modules/qc10/data/bang_a4.js"></script>
+<script src="modules/qc10/data/bang_b1.js"></script>
+<script src="modules/qc10/data/bang_c1.js"></script>
+<script src="modules/qc10/data/bang_d1.js"></script>
+<script src="modules/qc10/data/bang_e1.js"></script>
+<script src="modules/qc10/data/bang_f1.js"></script>
+<script src="modules/qc10/data/bang_g1.js"></script>
+<script src="modules/qc10/engine.js"></script>
+
+
+<script>
+// =========================================================================
+// UI Layer — chỉ chịu trách nhiệm hiển thị.
+// Mọi logic tra cứu nằm trong window.QC10Engine (data/qc10-engine.js).
+// =========================================================================
+
+//============== Theme ==============//
+const root = document.documentElement;
+const themeIcon = document.getElementById('themeIcon');
+const savedTheme = localStorage.getItem('pccc-theme') || 'light';
+root.setAttribute('data-theme', savedTheme);
+themeIcon.textContent = savedTheme === 'light' ? '🌙' : '☀️';
+document.getElementById('themeToggle').addEventListener('click', () => {
+  const cur = root.getAttribute('data-theme');
+  const next = cur === 'light' ? 'dark' : 'light';
+  root.setAttribute('data-theme', next);
+  themeIcon.textContent = next === 'light' ? '🌙' : '☀️';
+  localStorage.setItem('pccc-theme', next);
+});
+
+//============== UI state (KHÔNG chứa logic, chỉ giữ input của user) ==============//
+const state = {
+  mode: 'a1',
+  item: null,      // item từ engine.getList(mode)
+  subType: null,
+  inputs: {},
+};
+const MODES_META = QC10Engine.getModes();
+
+//============== Status & system icons (chỉ phục vụ render) ==============//
+const STATUS_MAP = {
+  batbuoc:       { cls: 'status-batbuoc',      label: '✓ Bắt buộc trang bị' },
+  choPhep:       { cls: 'status-choPhep',      label: '⚠ Cho phép độc lập' },
+  khongBatBuoc:  { cls: 'status-khongBatBuoc', label: '○ Không bắt buộc' },
+  khongApDung:   { cls: 'status-khongApDung',  label: '✕ Không áp dụng' },
+};
+const SYSTEM_ICONS = {
+  'Báo cháy tự động':                     { icon: 'red',    em: '🚨' },
+  'Chữa cháy tự động':                    { icon: 'blue',   em: '💧' },
+  'Họng nước chữa cháy trong nhà':        { icon: 'teal',   em: '🚰' },
+  'Cấp nước chữa cháy ngoài nhà':         { icon: 'blue',   em: '🛟' },
+  'Phương tiện chữa cháy cơ giới':        { icon: 'orange', em: '🚒' },
+  'Dụng cụ phá dỡ thô sơ':                { icon: 'gray',   em: '🪓' },
+  'Mặt nạ lọc độc / phòng độc cách ly':   { icon: 'green',  em: '😷' },
+  'Hệ thống loa thông báo':               { icon: 'purple', em: '📢' },
+};
+
+//============== Search ==============//
+const searchEl = document.getElementById('buildingSearch');
+const inputEl = document.getElementById('buildingInput');
+const resultsEl = document.getElementById('searchResults');
+let highlightIdx = -1;
+
+function currentList() { return QC10Engine.getList(state.mode); }
+
+function renderSearchResults(q) {
+  q = (q || '').trim().toLowerCase();
+  const list = currentList();
+  const filtered = q
+    ? list.filter(b =>
+        b.loaiNha.toLowerCase().includes(q) ||
+        (b.shortName || '').toLowerCase().includes(q) ||
+        b.stt.includes(q))
+    : list;
+
+  if (!filtered.length) {
+    resultsEl.innerHTML = '<div style="padding:16px;text-align:center;color:var(--text-tertiary);font-size:13px">Không tìm thấy</div>';
+    return;
+  }
+  resultsEl.innerHTML = filtered.slice(0, 50).map(b => `
+    <div class="result-item" data-stt="${b.stt}">
+      <span class="stt">${b.stt}.</span>${b.shortName || b.loaiNha.slice(0, 50)}
+      ${b.groupName ? `<small style="color:var(--accent)">${b.groupName}</small>` : ''}
+      ${b.loaiNha !== (b.shortName || '') && !b.groupName ? `<small>${b.loaiNha}</small>` : ''}
+    </div>
+  `).join('');
+  resultsEl.querySelectorAll('.result-item').forEach(el => {
+    el.addEventListener('click', () => selectItem(el.dataset.stt));
+  });
+}
+
+inputEl.addEventListener('focus', () => { searchEl.classList.add('open'); renderSearchResults(inputEl.value); });
+inputEl.addEventListener('input', () => { renderSearchResults(inputEl.value); searchEl.classList.add('open'); });
+document.addEventListener('click', (e) => { if (!searchEl.contains(e.target)) searchEl.classList.remove('open'); });
+
+inputEl.addEventListener('keydown', (e) => {
+  const items = resultsEl.querySelectorAll('.result-item');
+  if (e.key === 'ArrowDown') { e.preventDefault(); highlightIdx = Math.min(highlightIdx + 1, items.length - 1); updateHighlight(items); }
+  else if (e.key === 'ArrowUp') { e.preventDefault(); highlightIdx = Math.max(highlightIdx - 1, 0); updateHighlight(items); }
+  else if (e.key === 'Enter' && highlightIdx >= 0) { e.preventDefault(); selectItem(items[highlightIdx].dataset.stt); }
+});
+function updateHighlight(items) {
+  items.forEach((el, i) => el.classList.toggle('highlight', i === highlightIdx));
+  if (items[highlightIdx]) items[highlightIdx].scrollIntoView({ block: 'nearest' });
+}
+
+//============== Mode tabs ==============//
+document.querySelectorAll('.mode-tab').forEach(t => {
+  t.addEventListener('click', () => {
+    const m = t.dataset.mode;
+    if (state.mode === m) return;
+    state.mode = m;
+    document.querySelectorAll('.mode-tab').forEach(x => {
+      const active = x.dataset.mode === m;
+      x.classList.toggle('active', active);
+      x.style.borderBottomColor = active ? 'var(--accent)' : 'transparent';
+      x.style.color = active ? 'var(--accent)' : 'var(--text-secondary)';
+    });
+    const meta = MODES_META.find(mm => mm.key === m);
+    document.getElementById('searchLabel').innerHTML = `${meta.searchLabel} <span class="req">*</span>`;
+    inputEl.placeholder = meta.placeholder;
+    resetForm();
+  });
+});
+
+//============== Select item ==============//
+function selectItem(stt) {
+  const b = QC10Engine.findItem(state.mode, stt);
+  if (!b) return;
+  state.item = b;
+  state.subType = null;
+  inputEl.value = '';
+  searchEl.classList.remove('open');
+
+  // Selected card
+  const box = document.getElementById('selectedBuildingBox');
+  box.style.display = 'block';
+  box.innerHTML = `
+    <div class="selected-building">
+      <div class="stt-badge">${b.stt}</div>
+      <div class="info">
+        <div class="name">${b.loaiNha}</div>
+        ${b.shortName ? `<div class="short">${b.shortName}</div>` : ''}
+      </div>
+    </div>
+  `;
+
+  // Sub-types
+  const subContainer = document.getElementById('subtypeContainer');
+  const subGrid = document.getElementById('subtypeGrid');
+  if (b.subTypes && b.subTypes.length) {
+    subContainer.style.display = 'block';
+    subGrid.innerHTML = b.subTypes.map(s => `
+      <div class="subtype-card" data-substt="${s.subStt}">
+        <span class="subStt">${s.subStt}</span>${s.description}
+      </div>
+    `).join('');
+    subGrid.querySelectorAll('.subtype-card').forEach(el => {
+      el.addEventListener('click', () => {
+        subGrid.querySelectorAll('.subtype-card').forEach(x => x.classList.remove('selected'));
+        el.classList.add('selected');
+        state.subType = b.subTypes.find(s => s.subStt === el.dataset.substt);
+        renderInputFields();
+        document.getElementById('evaluateBtn').disabled = false;
+      });
+    });
+  } else {
+    subContainer.style.display = 'none';
+  }
+
+  renderInputFields();
+  document.getElementById('evaluateBtn').disabled = b.subTypes && b.subTypes.length > 0 && !state.subType;
+}
+
+//============== Dynamic input fields ==============//
+function renderInputFields() {
+  const container = document.getElementById('inputFields');
+  if (!state.item) { container.innerHTML = ''; return; }
+
+  const fields = QC10Engine.getRequiredFields({
+    mode: state.mode, stt: state.item.stt, subStt: state.subType?.subStt,
+  });
+
+  if (!fields.length) {
+    if (state.item.isChuyenNganh) {
+      container.innerHTML = '<div class="empty-state" style="padding:20px"><div class="em">🏭</div><h3>Cơ sở chuyên ngành</h3><p>Không cần nhập thông số. Bấm <b>Tra cứu yêu cầu</b> để xem định mức.</p></div>';
+    } else {
+      container.innerHTML = '<div class="empty-state" style="padding:20px"><div class="em">ℹ️</div><h3>Không cần thông số</h3><p>Loại này có quy định cố định, không phụ thuộc quy mô.</p></div>';
+    }
+    return;
+  }
+
+  let html = '<div style="margin-top:6px"><label style="display:block; font-size:13px; font-weight:600; margin-bottom:8px">Thông số quy mô</label>';
+  for (let i = 0; i < fields.length; i += 2) {
+    const a = fields[i], b = fields[i + 1];
+    html += '<div class="field-row">';
+    html += inputFieldHtml(a);
+    if (b) html += inputFieldHtml(b); else html += '<div></div>';
+    html += '</div>';
+  }
+  html += '</div>';
+  container.innerHTML = html;
+
+  container.querySelectorAll('input[data-key]').forEach(inp => {
+    inp.addEventListener('input', () => { state.inputs[inp.dataset.key] = +inp.value || 0; });
+  });
+  container.querySelectorAll('select[data-key]').forEach(sel => {
+    sel.addEventListener('change', () => { state.inputs[sel.dataset.key] = sel.value; });
+  });
+}
+
+function inputFieldHtml(key) {
+  const def = QC10Engine.getFieldDef(key);
+  if (!def) return '<div></div>';
+  if (def.type === 'select') {
+    const cur = state.inputs[key] ?? '';
+    const opts = def.options.map(o =>
+      `<option value="${o.value}"${cur === o.value ? ' selected' : ''}>${o.label}</option>`
+    ).join('');
+    return `
+      <div class="field">
+        <label>${def.label}${def.unit ? ` <span style="color:var(--text-tertiary);font-weight:400">(${def.unit})</span>` : ''}</label>
+        <select data-key="${key}">${opts}</select>
+        <div class="hint">${def.hint}</div>
+      </div>
+    `;
+  }
+  const step = def.unit === 'm²' ? '1' : (def.unit === 'm' ? '0.1' : '1');
+  return `
+    <div class="field">
+      <label>${def.label} <span style="color:var(--text-tertiary);font-weight:400">(${def.unit})</span></label>
+      <input type="number" step="${step}" min="0" placeholder="0" data-key="${key}" value="${state.inputs[key] || ''}"/>
+      <div class="hint">${def.hint}</div>
+    </div>
+  `;
+}
+
+//============== Evaluate (delegates to engine, then renders) ==============//
+document.getElementById('evaluateBtn').addEventListener('click', () => {
+  if (!state.item) return;
+  const result = QC10Engine.lookup({
+    mode: state.mode,
+    stt: state.item.stt,
+    subStt: state.subType?.subStt,
+    inputs: state.inputs,
+  });
+  renderResults(result);
+});
+
+//============== Render result ==============//
+function renderResults(r) {
+  if (!r || !r.cards || !r.cards.length) {
+    document.getElementById('resultsContent').innerHTML = `
+      <div class="empty-state">
+        <div class="em">ℹ️</div>
+        <h3>Không có kết quả</h3>
+        <p>Đối tượng này chưa có quy định trang bị trong các bảng đã tải.</p>
+      </div>`;
+    return;
+  }
+
+  let html = '<div class="results-grid">';
+  r.cards.forEach(it => html += cardHtml(it));
+  html += '</div>';
+
+  html += `
+    <div class="ref-card">
+      <div class="ref-label">Nguồn dẫn chiếu</div>
+      <b>QCVN 10:2025/BCA, ${r.sourceTable || 'Bảng A.1'}, STT ${r.sttRef}</b> • Hiệu lực từ 30/12/2025
+    </div>
+  `;
+
+  if (r.footnotes && r.footnotes.length) {
+    html += '<div class="footnotes"><b>📌 Chú thích áp dụng</b><ul>';
+    r.footnotes.forEach(f => { html += `<li><b>[${f.key}]</b> ${escapeHtml(f.text)}</li>`; });
+    html += '</ul></div>';
+  }
+
+  document.getElementById('resultsContent').innerHTML = html;
+}
+
+function cardHtml(it) {
+  const s = STATUS_MAP[it.status] || STATUS_MAP.khongBatBuoc;
+  const sys = SYSTEM_ICONS[it.name] || { icon: 'gray', em: '?' };
+
+  let qtyHtml = '';
+  if (it.quantities) {
+    const q = it.quantities;
+    const parts = [];
+    if (q.xeCC)      parts.push(`<b>${q.xeCC}</b> xe chữa cháy`);
+    if (q.tauCC)     parts.push(`<b>${q.tauCC}</b> tàu chữa cháy`);
+    if (q.bomKhieng) parts.push(`<b>${q.bomKhieng}</b> máy bơm khiêng tay`);
+    if (parts.length) qtyHtml = `<div class="threshold" style="border-left-color:var(--brand);margin-top:6px">📦 Số lượng yêu cầu: ${parts.join(' • ')}</div>`;
+  }
+  if (it.quantityDescription) {
+    qtyHtml += `<div class="threshold" style="border-left-color:var(--brand);margin-top:6px">📦 ${escapeHtml(it.quantityDescription)}</div>`;
+  }
+
+  return `
+    <div class="result-card">
+      <div class="head">
+        <span class="ios-icon md ${sys.icon}">${sys.em}</span>
+        <h3>${it.name}</h3>
+      </div>
+      <span class="status-pill ${s.cls}">${s.label}</span>
+      <div class="threshold">${it.threshold || '—'}</div>
+      ${qtyHtml}
+      <div class="explanation">${escapeHtml(it.explanation || '')}</div>
+      ${it.note ? `<div class="note">Lưu ý: ${escapeHtml(it.note)}</div>` : ''}
+    </div>
+  `;
+}
+
+function escapeHtml(s) { return (s || '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+
+//============== Reset ==============//
+document.getElementById('evaluateBtn').disabled = true;
+function resetForm() {
+  state.item = null; state.subType = null; state.inputs = {};
+  document.getElementById('selectedBuildingBox').style.display = 'none';
+  document.getElementById('subtypeContainer').style.display = 'none';
+  document.getElementById('inputFields').innerHTML = '';
+  document.getElementById('evaluateBtn').disabled = true;
+  inputEl.value = '';
+  document.getElementById('resultsContent').innerHTML = `
+    <div class="empty-state">
+      <div class="em">🔍</div>
+      <h3>Chưa có kết quả</h3>
+      <p>Chọn loại công trình và nhập thông số bên trái,<br/>rồi bấm <b>Tra cứu yêu cầu</b>.</p>
+    </div>
+  `;
+}
+window.resetForm = resetForm;
+
+// Initial render
+renderSearchResults('');
+</script>
+</body>
+</html>

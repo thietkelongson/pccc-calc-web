@@ -1,0 +1,867 @@
+window.BANG_A3_DATA = {
+  "metadata": {
+    "source": "QCVN 10:2025/BCA",
+    "table": "Bảng A.3 - Đối với gian phòng",
+    "effectiveDate": "2025-12-30",
+    "description": "Phụ lục A - Trang bị hệ thống báo cháy tự động và chữa cháy tự động cho gian phòng (theo công năng F5 và các gian phòng đặc biệt trong nhà công năng khác)",
+    "notes": [
+      "Mỗi entry có baoChayCriteria và chuaChayCriteria (giống cấu trúc Bảng A.1)",
+      "Dấu '-' (type 'khong') = không bắt buộc trang bị",
+      "Mục 5.4.1, 5.4.2 có pre-condition 'sức chứa + DT sân khấu' đã mô tả trong description"
+    ]
+  },
+  "footnotes": {
+    "1": "Cho phép không lắp đặt hệ thống chữa cháy tự động cho toàn bộ gian phòng khi trong gian phòng này được lắp đặt hệ thống báo cháy tự động và tất cả các thiết bị điện, điện tử (bao gồm cả thiết bị của hệ thống kiểm soát quy trình tự động) được bảo vệ bởi các thiết bị chữa cháy tự động theo TCQG/TCQT/TCNN áp dụng tại Việt Nam.",
+    "2": "Hệ thống chữa cháy tự động được lựa chọn để bảo vệ cho các gian phòng này phải không được gây hư hỏng hoặc trục trặc cho thiết bị trong trường hợp kích hoạt sai.",
+    "3": "Yêu cầu này không áp dụng cho các gian phòng tạm thời được sử dụng cho triển lãm, trưng bày.",
+    "4": "Khi diện tích sân khấu từ 100 m² trở lên thì phải có giải pháp ngăn cháy giữa khu vực sân khấu và khu vực khán giả (bằng màn nước ngăn cháy drencher hoặc màn ngăn cháy có giới hạn chịu lửa tối thiểu EI 60).",
+    "5": "Trung tâm báo cháy của trạm biến áp không người trực phải truyền tín hiệu báo cháy đến trung tâm điều khiển từ xa.",
+    "CHU_THICH": "Các gian phòng sản xuất và các gian phòng kho, kể cả các phòng thí nghiệm và nhà xưởng có diện tích trên 50 m² trong các nhà thuộc nhóm F1, F2, F3 và F4 thì áp dụng quy định của Quy chuẩn này như đối với gian phòng F5."
+  },
+  "groups": [
+    {
+      "groupStt": "1",
+      "groupName": "Gian phòng kho",
+      "rooms": [
+        {
+          "stt": "1.1",
+          "tenGian": "Kho hạng nguy hiểm cháy và cháy nổ A, B",
+          "shortName": "Kho hạng A, B",
+          "baoChayCriteria": {
+            "type": "khongPhuThuocDienTich",
+            "description": "Không phụ thuộc vào diện tích"
+          },
+          "chuaChayCriteria": {
+            "type": "dtsTroLen",
+            "value": 300,
+            "unit": "m²",
+            "description": "Diện tích từ 300 m² trở lên"
+          }
+        },
+        {
+          "stt": "1.2",
+          "tenGian": "Kho lưu trữ cao su, hạt nhựa; diêm, kim loại kiềm, sản phẩm pháo hoa; len, lông thú; chất cháy khác với khối lượng riêng nhỏ (dưới 3 kg/m³)",
+          "shortName": "Kho cao su / nhựa / diêm / KL kiềm / pháo hoa / len-lông thú",
+          "baoChayCriteria": {
+            "type": "khongPhuThuocDienTich",
+            "description": "Không phụ thuộc vào diện tích"
+          },
+          "chuaChayCriteria": {
+            "type": "dtsTroLen",
+            "value": 100,
+            "unit": "m²",
+            "description": "Diện tích từ 100 m² trở lên"
+          }
+        },
+        {
+          "stt": "1.3",
+          "tenGian": "Kho chứa hàng hóa không cháy nhưng bảo quản trong bao bì dễ cháy (tải trọng cháy riêng 1–180 MJ/m²)",
+          "shortName": "Kho hàng không cháy / bao bì dễ cháy",
+          "baoChayCriteria": {
+            "type": "khong",
+            "description": "-"
+          },
+          "chuaChayCriteria": {
+            "type": "dtsTroLen",
+            "value": 300,
+            "unit": "m²",
+            "description": "Diện tích từ 300 m² trở lên"
+          }
+        },
+        {
+          "stt": "1.4",
+          "tenGian": "Kho hạng C1 (không bao gồm 1.2, 1.3 và các kho trong nhà/cơ sở chế biến, lưu trữ nông sản dạng hạt) theo vị trí",
+          "shortName": "Kho hạng C1",
+          "subTypes": [
+            {
+              "subStt": "1.4.1",
+              "description": "Bố trí tại tầng hầm, tầng bán hầm",
+              "baoChayCriteria": {
+                "type": "khongPhuThuocDienTich",
+                "description": "Không phụ thuộc vào diện tích"
+              },
+              "chuaChayCriteria": {
+                "type": "dtsTroLen",
+                "value": 100,
+                "unit": "m²",
+                "description": "Diện tích từ 100 m² trở lên"
+              }
+            },
+            {
+              "subStt": "1.4.2",
+              "description": "Bố trí tại các tầng trên mặt đất",
+              "baoChayCriteria": {
+                "type": "dtsTroLen",
+                "value": 300,
+                "unit": "m²",
+                "description": "Diện tích từ 300 m² trở lên"
+              },
+              "chuaChayCriteria": {
+                "type": "dtsTroLen",
+                "value": 300,
+                "unit": "m²",
+                "description": "Diện tích từ 300 m² trở lên"
+              }
+            }
+          ]
+        },
+        {
+          "stt": "1.5",
+          "tenGian": "Kho hạng C2, C3 (không bao gồm 1.2, 1.3 và các kho trong nhà/cơ sở chế biến, lưu trữ nông sản dạng hạt)",
+          "shortName": "Kho hạng C2, C3",
+          "subTypes": [
+            {
+              "subStt": "1.5.1",
+              "description": "Bố trí tại tầng hầm, tầng bán hầm",
+              "baoChayCriteria": {
+                "type": "dtsTroLen",
+                "value": 300,
+                "unit": "m²",
+                "description": "Diện tích từ 300 m² trở lên"
+              },
+              "chuaChayCriteria": {
+                "type": "dtsTroLen",
+                "value": 300,
+                "unit": "m²",
+                "description": "Diện tích từ 300 m² trở lên"
+              }
+            },
+            {
+              "subStt": "1.5.2",
+              "description": "Bố trí tại tầng trên mặt đất",
+              "baoChayCriteria": {
+                "type": "dtsTroLen",
+                "value": 1000,
+                "unit": "m²",
+                "description": "Diện tích từ 1 000 m² trở lên"
+              },
+              "chuaChayCriteria": {
+                "type": "dtsTroLen",
+                "value": 1000,
+                "unit": "m²",
+                "description": "Diện tích từ 1 000 m² trở lên"
+              }
+            }
+          ]
+        },
+        {
+          "stt": "1.6",
+          "tenGian": "Kho lạnh",
+          "shortName": "Kho lạnh",
+          "baoChayCriteria": {
+            "type": "dtsTroLen",
+            "value": 300,
+            "unit": "m²",
+            "description": "Diện tích từ 300 m² trở lên"
+          },
+          "chuaChayCriteria": {
+            "type": "khong",
+            "description": "-"
+          }
+        }
+      ]
+    },
+    {
+      "groupStt": "2",
+      "groupName": "Gian phòng sản xuất",
+      "rooms": [
+        {
+          "stt": "2.1",
+          "tenGian": "Phòng sản xuất hạng nguy hiểm cháy và cháy nổ A, B",
+          "shortName": "Sản xuất hạng A, B",
+          "baoChayCriteria": {
+            "type": "khongPhuThuocDienTich",
+            "description": "Không phụ thuộc vào diện tích"
+          },
+          "chuaChayCriteria": {
+            "type": "dtsTroLen",
+            "value": 300,
+            "unit": "m²",
+            "description": "Diện tích từ 300 m² trở lên"
+          }
+        },
+        {
+          "stt": "2.2",
+          "tenGian": "Phòng sản xuất hạng C1 (trừ phòng trong nhà/cơ sở chế biến, lưu trữ nông sản dạng hạt)",
+          "shortName": "Sản xuất hạng C1",
+          "subTypes": [
+            {
+              "subStt": "2.2.1",
+              "description": "Bố trí tại tầng hầm, tầng bán hầm",
+              "baoChayCriteria": {
+                "type": "khongPhuThuocDienTich",
+                "description": "Không phụ thuộc vào diện tích"
+              },
+              "chuaChayCriteria": {
+                "type": "khongPhuThuocDienTich",
+                "description": "Không phụ thuộc vào diện tích"
+              }
+            },
+            {
+              "subStt": "2.2.2",
+              "description": "Bố trí tại tầng trên mặt đất",
+              "baoChayCriteria": {
+                "type": "khongPhuThuocDienTich",
+                "description": "Không phụ thuộc vào diện tích"
+              },
+              "chuaChayCriteria": {
+                "type": "dtsTroLen",
+                "value": 300,
+                "unit": "m²",
+                "description": "Diện tích từ 300 m² trở lên"
+              }
+            }
+          ]
+        },
+        {
+          "stt": "2.3",
+          "tenGian": "Phòng sản xuất hạng C2, C3 (trừ phòng trong nhà/cơ sở chế biến, lưu trữ nông sản dạng hạt)",
+          "shortName": "Sản xuất hạng C2, C3",
+          "subTypes": [
+            {
+              "subStt": "2.3.1.1",
+              "description": "Tầng hầm, tầng bán hầm - không có lối ra ngoài trực tiếp",
+              "baoChayCriteria": {
+                "type": "khongPhuThuocDienTich",
+                "description": "Không phụ thuộc vào diện tích"
+              },
+              "chuaChayCriteria": {
+                "type": "dtsTroLen",
+                "value": 300,
+                "unit": "m²",
+                "description": "Diện tích từ 300 m² trở lên"
+              }
+            },
+            {
+              "subStt": "2.3.1.2",
+              "description": "Tầng hầm, tầng bán hầm - có lối ra ngoài trực tiếp",
+              "baoChayCriteria": {
+                "type": "dtsTroLen",
+                "value": 700,
+                "unit": "m²",
+                "description": "Diện tích từ 700 m² trở lên"
+              },
+              "chuaChayCriteria": {
+                "type": "khong",
+                "description": "-"
+              }
+            },
+            {
+              "subStt": "2.3.2",
+              "description": "Bố trí tại tầng trên mặt đất",
+              "baoChayCriteria": {
+                "type": "dtsTroLen",
+                "value": 300,
+                "unit": "m²",
+                "description": "Diện tích từ 300 m² trở lên"
+              },
+              "chuaChayCriteria": {
+                "type": "dtsTroLen",
+                "value": 1000,
+                "unit": "m²",
+                "description": "Diện tích từ 1 000 m² trở lên"
+              }
+            }
+          ]
+        },
+        {
+          "stt": "2.4",
+          "tenGian": "Phòng sản xuất chất lỏng dễ cháy (dung môi, sơn, keo dán, dung dịch ngâm tẩm, cao su tổng hợp); huyền phù bột nhôm, keo cao su; phòng sơn; tổng hợp cao su nhân tạo; máy nén dùng tuabin khí; gia nhiệt dầu mỏ, diesel",
+          "shortName": "Sản xuất chất lỏng dễ cháy / sơn / cao su / gia nhiệt dầu",
+          "baoChayCriteria": {
+            "type": "khongPhuThuocDienTich",
+            "description": "Không phụ thuộc vào diện tích"
+          },
+          "chuaChayCriteria": {
+            "type": "khongPhuThuocDienTich",
+            "description": "Không phụ thuộc vào diện tích"
+          }
+        }
+      ]
+    },
+    {
+      "groupStt": "3",
+      "groupName": "Gian phòng thông tin liên lạc",
+      "rooms": [
+        {
+          "stt": "3.1",
+          "tenGian": "Phòng thiết bị phân tách, phòng phụ trợ (thông gió, máy biến áp) của: đài phát sóng công suất ≥150 kW; trạm thu sóng ≥20 máy; trạm thông tin vệ tinh cố định công suất phát >1 kW; đài truyền hình chuyển tiếp công suất phát 25–50 kW; các nút mạng, tổng đài điện thoại liên tỉnh/thành phố; trạm điện báo; điểm khuếch đại thiết bị đầu cuối; trung tâm liên lạc khu vực",
+          "shortName": "Đài phát sóng / vệ tinh / tổng đài liên tỉnh / trạm điện báo",
+          "baoChayCriteria": {
+            "type": "khongPhuThuocDienTich",
+            "description": "Không phụ thuộc vào diện tích"
+          },
+          "chuaChayCriteria": {
+            "type": "khong",
+            "description": "-"
+          }
+        },
+        {
+          "stt": "3.2",
+          "tenGian": "Xưởng kỹ thuật trạm khuếch đại đầu cuối, trạm chuyển tiếp vô tuyến trung gian, trung tâm truyền/nhận sóng KHÔNG có giám sát hoặc người trực vào buổi tối",
+          "shortName": "Xưởng KT vô tuyến (không giám sát)",
+          "baoChayCriteria": {
+            "type": "khongPhuThuocDienTich",
+            "description": "Không phụ thuộc vào diện tích"
+          },
+          "chuaChayCriteria": {
+            "type": "khongPhuThuocDienTich",
+            "description": "Không phụ thuộc vào diện tích"
+          }
+        },
+        {
+          "stt": "3.3",
+          "tenGian": "Trạm gốc và trạm chuyển tiếp của hệ thống thông tin vô tuyến di động KHÔNG có giám sát",
+          "shortName": "Trạm gốc / chuyển tiếp di động (không giám sát)",
+          "baoChayCriteria": {
+            "type": "khongPhuThuocDienTich",
+            "description": "Không phụ thuộc vào diện tích"
+          },
+          "chuaChayCriteria": {
+            "type": "dtsTroLen",
+            "value": 24,
+            "unit": "m²",
+            "description": "Diện tích từ 24 m² trở lên"
+          }
+        },
+        {
+          "stt": "3.4",
+          "tenGian": "Phòng tổng đài số, trung tâm kiểm soát điện thoại; trung tâm máy tính, điện báo bưu điện tỉnh, thành phố",
+          "shortName": "Tổng đài số / máy tính bưu điện tỉnh",
+          "subTypes": [
+            {
+              "subStt": "3.4.1",
+              "description": "Trong nhà có khối tích dưới 40 000 m³",
+              "baoChayCriteria": {
+                "type": "khongPhuThuocDienTich",
+                "description": "Không phụ thuộc vào diện tích"
+              },
+              "chuaChayCriteria": {
+                "type": "khong",
+                "description": "-"
+              }
+            },
+            {
+              "subStt": "3.4.2",
+              "description": "Trong nhà có khối tích từ 40 000 m³ trở lên",
+              "baoChayCriteria": {
+                "type": "khongPhuThuocDienTich",
+                "description": "Không phụ thuộc vào diện tích"
+              },
+              "chuaChayCriteria": {
+                "type": "dtsTroLen",
+                "value": 24,
+                "unit": "m²",
+                "description": "Diện tích từ 24 m² trở lên"
+              }
+            }
+          ]
+        },
+        {
+          "stt": "3.5",
+          "tenGian": "Phòng tổng đài điện thoại có chuyển mạch điện tử/bán điện tử tổ hợp máy tính; phòng chuyển mạch điện tử, nút, trung tâm truyền thông tài liệu",
+          "shortName": "Tổng đài chuyển mạch điện tử / trung tâm tài liệu",
+          "footnotes": [
+            "1",
+            "2"
+          ],
+          "subTypes": [
+            {
+              "subStt": "3.5.1",
+              "description": "Công suất dưới 10 000 số, kênh hoặc điểm kết nối",
+              "baoChayCriteria": {
+                "type": "khongPhuThuocDienTich",
+                "description": "Không phụ thuộc vào diện tích"
+              },
+              "chuaChayCriteria": {
+                "type": "khong",
+                "description": "-"
+              }
+            },
+            {
+              "subStt": "3.5.2",
+              "description": "Công suất từ 10 000 số, kênh hoặc điểm kết nối trở lên",
+              "baoChayCriteria": {
+                "type": "khongPhuThuocDienTich",
+                "description": "Không phụ thuộc vào diện tích"
+              },
+              "chuaChayCriteria": {
+                "type": "khongPhuThuocDienTich",
+                "description": "Không phụ thuộc vào diện tích"
+              }
+            }
+          ]
+        },
+        {
+          "stt": "3.6",
+          "tenGian": "Phòng đặt thiết bị chia, kết nối có sử dụng máy vi tính để điều khiển tổng đài điện thoại tự động",
+          "shortName": "Phòng chia/kết nối điều khiển tổng đài",
+          "subTypes": [
+            {
+              "subStt": "3.6.1",
+              "description": "Công suất trạm dưới 10 000 kênh liên tỉnh, thành phố",
+              "baoChayCriteria": {
+                "type": "khongPhuThuocDienTich",
+                "description": "Không phụ thuộc vào diện tích"
+              },
+              "chuaChayCriteria": {
+                "type": "khong",
+                "description": "-"
+              }
+            },
+            {
+              "subStt": "3.6.2",
+              "description": "Công suất trạm từ 10 000 kênh liên tỉnh, thành phố trở lên",
+              "baoChayCriteria": {
+                "type": "khongPhuThuocDienTich",
+                "description": "Không phụ thuộc vào diện tích"
+              },
+              "chuaChayCriteria": {
+                "type": "dtsTroLen",
+                "value": 24,
+                "unit": "m²",
+                "description": "Diện tích từ 24 m² trở lên"
+              }
+            }
+          ]
+        },
+        {
+          "stt": "3.7",
+          "tenGian": "Phòng xử lý, phân loại, lưu trữ và chuyển phát bưu kiện, thư từ, điện tín, điện báo, báo chí",
+          "shortName": "Phòng xử lý bưu kiện / báo chí",
+          "baoChayCriteria": {
+            "type": "khongPhuThuocDienTich",
+            "description": "Không phụ thuộc vào diện tích"
+          },
+          "chuaChayCriteria": {
+            "type": "dtsTroLen",
+            "value": 500,
+            "unit": "m²",
+            "description": "Diện tích từ 500 m² trở lên"
+          }
+        }
+      ]
+    },
+    {
+      "groupStt": "4",
+      "groupName": "Gian phòng phụ trợ thuộc lĩnh vực giao thông vận tải",
+      "rooms": [
+        {
+          "stt": "4.1",
+          "tenGian": "Phòng máy điện, thiết bị, sửa chữa và gia công toa tàu, bánh, động cơ… có hạng nguy hiểm cháy và cháy nổ từ hạng C3 trở lên thuộc cơ sở đóng mới, sửa chữa, bảo dưỡng tàu hỏa, tàu điện, tàu thủy",
+          "shortName": "Phòng máy / sửa chữa tàu (hạng ≥C3)",
+          "baoChayCriteria": {
+            "type": "dtsTroLen",
+            "value": 300,
+            "unit": "m²",
+            "description": "Diện tích từ 300 m² trở lên"
+          },
+          "chuaChayCriteria": {
+            "type": "dtsTroLen",
+            "value": 1000,
+            "unit": "m²",
+            "description": "Diện tích từ 1 000 m² trở lên"
+          }
+        },
+        {
+          "stt": "4.2",
+          "tenGian": "Phòng sửa chữa, bảo dưỡng, lưu giữ phương tiện giao thông cơ giới đường bộ (ngoại trừ ô tô)",
+          "shortName": "Phòng sửa chữa phương tiện đường bộ (trừ ô tô)",
+          "baoChayCriteria": {
+            "type": "dtsTroLen",
+            "value": 1000,
+            "unit": "m²",
+            "description": "Diện tích từ 1 000 m² trở lên"
+          },
+          "chuaChayCriteria": {
+            "type": "dtsTroLen",
+            "value": 1000,
+            "unit": "m²",
+            "description": "Diện tích từ 1 000 m² trở lên"
+          }
+        },
+        {
+          "stt": "4.3",
+          "tenGian": "Phòng sửa chữa, bảo dưỡng ô tô",
+          "shortName": "Phòng sửa chữa ô tô",
+          "baoChayCriteria": {
+            "type": "dtsTroLen",
+            "value": 300,
+            "unit": "m²",
+            "description": "Diện tích từ 300 m² trở lên"
+          },
+          "chuaChayCriteria": {
+            "type": "dtsTroLen",
+            "value": 700,
+            "unit": "m²",
+            "description": "Diện tích từ 700 m² trở lên"
+          }
+        },
+        {
+          "stt": "4.4",
+          "tenGian": "Phòng lưu giữ ô tô trong nhà có công năng khác (trừ nhà ở riêng lẻ kết hợp sản xuất, kinh doanh)",
+          "shortName": "Phòng lưu giữ ô tô trong nhà công năng khác",
+          "baoChayCriteria": {
+            "type": "khongPhuThuocDienTich",
+            "description": "Không phụ thuộc vào diện tích"
+          },
+          "chuaChayCriteria": {
+            "type": "oToTroLen",
+            "value": 3,
+            "unit": "xe",
+            "description": "Từ 3 xe ô tô trở lên"
+          }
+        },
+        {
+          "stt": "4.5",
+          "tenGian": "Phòng tháo lắp động cơ máy bay, thiết bị bay, bánh xe máy bay, trực thăng; phòng sản xuất, sửa chữa động cơ máy bay",
+          "shortName": "Phòng tháo lắp / sửa chữa động cơ máy bay",
+          "baoChayCriteria": {
+            "type": "khongPhuThuocDienTich",
+            "description": "Không phụ thuộc vào diện tích"
+          },
+          "chuaChayCriteria": {
+            "type": "khongPhuThuocDienTich",
+            "description": "Không phụ thuộc vào diện tích"
+          }
+        },
+        {
+          "stt": "4.6",
+          "tenGian": "Phòng đặt máy bơm chữa cháy, phòng thông gió, kho vật tư, hàng hóa của hầm giao thông đường bộ",
+          "shortName": "Phòng bơm CC / thông gió / kho hầm giao thông",
+          "baoChayCriteria": {
+            "type": "khongPhuThuocDienTich",
+            "description": "Không phụ thuộc vào diện tích"
+          },
+          "chuaChayCriteria": {
+            "type": "khong",
+            "description": "-"
+          }
+        }
+      ]
+    },
+    {
+      "groupStt": "5",
+      "groupName": "Gian phòng công năng công cộng",
+      "rooms": [
+        {
+          "stt": "5.1",
+          "tenGian": "Phòng lưu trữ thư viện",
+          "shortName": "Phòng lưu trữ thư viện",
+          "subTypes": [
+            {
+              "subStt": "5.1.1",
+              "description": "Có dưới 250 000 đơn vị tài liệu, sách",
+              "baoChayCriteria": {
+                "type": "dtsTroLen",
+                "value": 300,
+                "unit": "m²",
+                "description": "Diện tích từ 300 m² trở lên"
+              },
+              "chuaChayCriteria": {
+                "type": "khong",
+                "description": "-"
+              }
+            },
+            {
+              "subStt": "5.1.2",
+              "description": "Từ 250 000 đơn vị tài liệu, sách trở lên",
+              "baoChayCriteria": {
+                "type": "khongPhuThuocDienTich",
+                "description": "Không phụ thuộc vào diện tích"
+              },
+              "chuaChayCriteria": {
+                "type": "khongPhuThuocDienTich",
+                "description": "Không phụ thuộc vào diện tích"
+              }
+            }
+          ]
+        },
+        {
+          "stt": "5.2",
+          "tenGian": "Phòng trưng bày, triển lãm",
+          "shortName": "Phòng trưng bày / triển lãm",
+          "footnotes": [
+            "3"
+          ],
+          "baoChayCriteria": {
+            "type": "dtsTroLen",
+            "value": 500,
+            "unit": "m²",
+            "description": "Diện tích từ 500 m² trở lên"
+          },
+          "chuaChayCriteria": {
+            "type": "dtsTroLen",
+            "value": 1000,
+            "unit": "m²",
+            "description": "Diện tích từ 1 000 m² trở lên"
+          }
+        },
+        {
+          "stt": "5.3",
+          "tenGian": "Phòng bảo quản và trưng bày tác phẩm, vật phẩm giá trị của viện bảo tàng",
+          "shortName": "Phòng bảo quản vật phẩm bảo tàng",
+          "footnotes": [
+            "3"
+          ],
+          "baoChayCriteria": {
+            "type": "khongPhuThuocDienTich",
+            "description": "Không phụ thuộc vào diện tích"
+          },
+          "chuaChayCriteria": {
+            "type": "khongPhuThuocDienTich",
+            "description": "Không phụ thuộc vào diện tích"
+          }
+        },
+        {
+          "stt": "5.4",
+          "tenGian": "Trong các nhà phục vụ mục đích văn hóa, giải trí có sân khấu và khán phòng (nhà hát, câu lạc bộ, phòng hòa nhạc, chiếu phim và hòa nhạc, nhà đa năng, nhà văn hóa, rạp xiếc,...)",
+          "shortName": "Nhà văn hóa-giải trí có sân khấu",
+          "subTypes": [
+            {
+              "subStt": "5.4.1",
+              "description": "Sức chứa ≥400 chỗ và DT sân khấu ≥100 m²",
+              "footnotes": [
+                "4"
+              ],
+              "baoChayCriteria": {
+                "type": "khongPhuThuocDienTich",
+                "description": "Không phụ thuộc vào diện tích"
+              },
+              "chuaChayCriteria": {
+                "type": "khongPhuThuocDienTich",
+                "description": "Không phụ thuộc vào diện tích"
+              }
+            },
+            {
+              "subStt": "5.4.2",
+              "description": "Sức chứa ≥700 chỗ ngồi",
+              "footnotes": [
+                "4"
+              ],
+              "baoChayCriteria": {
+                "type": "khongPhuThuocDienTich",
+                "description": "Không phụ thuộc vào diện tích"
+              },
+              "chuaChayCriteria": {
+                "type": "khongPhuThuocDienTich",
+                "description": "Không phụ thuộc vào diện tích"
+              }
+            },
+            {
+              "subStt": "5.4.3",
+              "description": "Nhà kho để đồ trang trí, đồ dùng và đạo cụ",
+              "baoChayCriteria": {
+                "type": "dtsTroLen",
+                "value": 100,
+                "unit": "m²",
+                "description": "Diện tích từ 100 m² trở lên"
+              },
+              "chuaChayCriteria": {
+                "type": "dtsTroLen",
+                "value": 300,
+                "unit": "m²",
+                "description": "Diện tích từ 300 m² trở lên"
+              }
+            }
+          ]
+        },
+        {
+          "stt": "5.5",
+          "tenGian": "Trường quay",
+          "shortName": "Trường quay",
+          "baoChayCriteria": {
+            "type": "dtsTroLen",
+            "value": 300,
+            "unit": "m²",
+            "description": "Diện tích từ 300 m² trở lên"
+          },
+          "chuaChayCriteria": {
+            "type": "dtsTroLen",
+            "value": 1000,
+            "unit": "m²",
+            "description": "Diện tích từ 1 000 m² trở lên"
+          }
+        },
+        {
+          "stt": "5.6",
+          "tenGian": "Phòng lưu trữ tiền (kho tiền) trong ngân hàng, kho bạc",
+          "shortName": "Kho tiền ngân hàng / kho bạc",
+          "baoChayCriteria": {
+            "type": "khongPhuThuocDienTich",
+            "description": "Không phụ thuộc vào diện tích"
+          },
+          "chuaChayCriteria": {
+            "type": "dtsTroLen",
+            "value": 30,
+            "unit": "m²",
+            "description": "Diện tích từ 30 m² trở lên"
+          }
+        },
+        {
+          "stt": "5.7",
+          "tenGian": "Phòng bảo quản hành lý, kho chứa vật liệu dễ cháy ở nhà ga hành khách, nhà ga hàng hóa",
+          "shortName": "Phòng hành lý / kho vật liệu dễ cháy nhà ga",
+          "subTypes": [
+            {
+              "subStt": "5.7.1",
+              "description": "Bố trí tại tầng hầm, tầng bán hầm",
+              "baoChayCriteria": {
+                "type": "khongPhuThuocDienTich",
+                "description": "Không phụ thuộc vào diện tích"
+              },
+              "chuaChayCriteria": {
+                "type": "khongPhuThuocDienTich",
+                "description": "Không phụ thuộc vào diện tích"
+              }
+            },
+            {
+              "subStt": "5.7.2",
+              "description": "Bố trí tại các tầng trên mặt đất",
+              "baoChayCriteria": {
+                "type": "dtsTroLen",
+                "value": 300,
+                "unit": "m²",
+                "description": "Diện tích từ 300 m² trở lên"
+              },
+              "chuaChayCriteria": {
+                "type": "dtsTroLen",
+                "value": 300,
+                "unit": "m²",
+                "description": "Diện tích từ 300 m² trở lên"
+              }
+            }
+          ]
+        },
+        {
+          "stt": "5.8",
+          "tenGian": "Phòng bảo quản vật liệu cháy",
+          "shortName": "Phòng bảo quản vật liệu cháy (TT thể thao)",
+          "subTypes": [
+            {
+              "subStt": "5.8.1",
+              "description": "Bố trí trong công trình thể thao có mái che với sức chứa từ 800 chỗ trở lên",
+              "baoChayCriteria": {
+                "type": "dtsTroLen",
+                "value": 100,
+                "unit": "m²",
+                "description": "Diện tích từ 100 m² trở lên"
+              },
+              "chuaChayCriteria": {
+                "type": "dtsTroLen",
+                "value": 100,
+                "unit": "m²",
+                "description": "Diện tích từ 100 m² trở lên"
+              }
+            },
+            {
+              "subStt": "5.8.2",
+              "description": "Bố trí dưới khán đài công trình thể thao có mái che hoặc công trình thể thao ngoài trời có sức chứa trên 3 000 chỗ",
+              "baoChayCriteria": {
+                "type": "dtsTroLen",
+                "value": 100,
+                "unit": "m²",
+                "description": "Diện tích từ 100 m² trở lên"
+              },
+              "chuaChayCriteria": {
+                "type": "dtsTroLen",
+                "value": 100,
+                "unit": "m²",
+                "description": "Diện tích từ 100 m² trở lên"
+              }
+            }
+          ]
+        },
+        {
+          "stt": "5.9",
+          "tenGian": "Phòng máy chủ chuyên dụng",
+          "shortName": "Phòng máy chủ chuyên dụng",
+          "baoChayCriteria": {
+            "type": "dtsTroLen",
+            "value": 24,
+            "unit": "m²",
+            "description": "Diện tích từ 24 m² trở lên"
+          },
+          "chuaChayCriteria": {
+            "type": "dtsTroLen",
+            "value": 24,
+            "unit": "m²",
+            "description": "Diện tích từ 24 m² trở lên"
+          }
+        },
+        {
+          "stt": "5.10",
+          "tenGian": "Gian phòng thương mại trong tòa nhà công năng khác",
+          "shortName": "Gian thương mại trong nhà công năng khác",
+          "subTypes": [
+            {
+              "subStt": "5.10.1",
+              "description": "Bố trí tại tầng hầm, tầng bán hầm",
+              "baoChayCriteria": {
+                "type": "khongPhuThuocDienTich",
+                "description": "Không phụ thuộc vào diện tích"
+              },
+              "chuaChayCriteria": {
+                "type": "dtsTroLen",
+                "value": 200,
+                "unit": "m²",
+                "description": "Diện tích từ 200 m² trở lên"
+              }
+            },
+            {
+              "subStt": "5.10.2",
+              "description": "Bố trí tại các tầng trên mặt đất",
+              "baoChayCriteria": {
+                "type": "dtsTroLen",
+                "value": 500,
+                "unit": "m²",
+                "description": "Diện tích từ 500 m² trở lên"
+              },
+              "chuaChayCriteria": {
+                "type": "dtsTroLen",
+                "value": 500,
+                "unit": "m²",
+                "description": "Diện tích từ 500 m² trở lên"
+              }
+            }
+          ]
+        },
+        {
+          "stt": "5.11",
+          "tenGian": "Gian phòng kinh doanh chất lỏng cháy, dễ cháy (ngoại trừ hàng hóa chứa trong can, bình có thể tích ≤20 lít)",
+          "shortName": "Gian kinh doanh chất lỏng cháy/dễ cháy",
+          "baoChayCriteria": {
+            "type": "khongPhuThuocDienTich",
+            "description": "Không phụ thuộc vào quy mô"
+          },
+          "chuaChayCriteria": {
+            "type": "khongPhuThuocDienTich",
+            "description": "Không phụ thuộc vào quy mô"
+          }
+        }
+      ]
+    },
+    {
+      "groupStt": "6",
+      "groupName": "Gian phòng trạm biến áp",
+      "rooms": [
+        {
+          "stt": "6",
+          "tenGian": "Phòng điều khiển, phòng thiết bị phân phối điện, phòng ắc quy của trạm biến áp không người trực",
+          "shortName": "Phòng điều khiển / ắc quy trạm BA không người trực",
+          "footnotes": [
+            "5"
+          ],
+          "baoChayCriteria": {
+            "type": "khongPhuThuocDienTich",
+            "description": "Không phụ thuộc vào quy mô"
+          },
+          "chuaChayCriteria": {
+            "type": "khong",
+            "description": "-"
+          }
+        }
+      ]
+    }
+  ]
+};
