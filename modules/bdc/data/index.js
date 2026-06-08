@@ -1,31 +1,51 @@
-// =========================================================================
-// BDC (Bảng Đối Chiếu) — Metadata + mapping công trình → hệ thống áp dụng
-// =========================================================================
+// BDC index — auto-generated from mapping.json + parser stats
 window.BDC_INDEX = {
-  // A — Bảng đối chiếu theo loại công trình
   congTrinh: [
-    { id: 'a2_chung_cu',     ma: 'A2',  ten: 'Nhà chung cư, nhà tập thể',     icon: '🏢', file: 'a2_chung_cu.docx' },
-    { id: 'a3_hon_hop',      ma: 'A3',  ten: 'Nhà hỗn hợp',                    icon: '🏬', file: 'a3_hon_hop.docx' },
-    { id: 'a4_van_phong',    ma: 'A4',  ten: 'Nhà văn phòng',                  icon: '🏢', file: 'a4_van_phong.docx' },
-    { id: 'a14_nha_san_xuat',ma: 'A14', ten: 'Nhà sản xuất',                   icon: '🏭', file: 'a14_nha_san_xuat.docx' },
-    { id: 'a15_nha_kho',     ma: 'A15', ten: 'Nhà kho',                        icon: '📦', file: 'a15_nha_kho.docx' }
+    { id: "a1_ha_tang", ma: "A1", ten: "Hạ tầng kỹ thuật", icon: "🏗️", file: "a1_ha_tang.docx" },
+    { id: "a2_chung_cu", ma: "A2", ten: "Nhà chung cư, nhà tập thể", icon: "🏢", file: "a2_chung_cu.docx" },
+    { id: "a3_hon_hop", ma: "A3", ten: "Nhà hỗn hợp", icon: "🏬", file: "a3_hon_hop.docx" },
+    { id: "a4_van_phong", ma: "A4", ten: "Nhà văn phòng", icon: "🏢", file: "a4_van_phong.docx" },
+    { id: "a5_khach_san", ma: "A5", ten: "Khách sạn", icon: "🏨", file: "a5_khach_san.docx" },
+    { id: "a6_mam_non", ma: "A6", ten: "Trường mầm non", icon: "🧒", file: "a6_mam_non.docx" },
+    { id: "a7_truong_hoc", ma: "A7", ten: "Trường tiểu học, THCS, THPT", icon: "🏫", file: "a7_truong_hoc.docx" },
+    { id: "a8_benh_vien", ma: "A8", ten: "Bệnh viện", icon: "🏥", file: "a8_benh_vien.docx" },
+    { id: "a9_cho_tttm", ma: "A9", ten: "Chợ, TTTM, siêu thị", icon: "🛒", file: "a9_cho_tttm.docx" },
+    { id: "a10_the_thao", ma: "A10", ten: "Công trình thể thao", icon: "🏟️", file: "a10_the_thao.docx" },
+    { id: "a11_rap_phim", ma: "A11", ten: "Rạp chiếu phim", icon: "🎬", file: "a11_rap_phim.docx" },
+    { id: "a12_karaoke", ma: "A12", ten: "Karaoke, vũ trường", icon: "🎤", file: "a12_karaoke.docx" },
+    { id: "a13_gara", ma: "A13", ten: "Gara ô tô", icon: "🅿️", file: "a13_gara.docx" },
+    { id: "a14_nha_san_xuat", ma: "A14", ten: "Nhà sản xuất", icon: "🏭", file: "a14_nha_san_xuat.docx" },
+    { id: "a15_nha_kho", ma: "A15", ten: "Nhà kho", icon: "📦", file: "a15_nha_kho.docx" },
+    { id: "a16_xang_dau", ma: "A16", ten: "Cửa hàng xăng dầu", icon: "⛽", file: "a16_xang_dau.docx" },
+    { id: "a17_chiet_khi_dot", ma: "A17", ten: "Trạm chiết khí đốt hóa lỏng", icon: "💨", file: "a17_chiet_khi_dot.docx" },
+    { id: "a18_kho_dau_mo", ma: "A18", ten: "Kho chứa dầu mỏ, sản phẩm dầu mỏ", icon: "🛢️", file: "a18_kho_dau_mo.docx" },
+    { id: "a19_kho_lpg", ma: "A19", ten: "Kho chứa LPG", icon: "🔥", file: "a19_kho_lpg.docx" },
+    { id: "a20_kho_lng", ma: "A20", ten: "Kho LNG", icon: "❄️", file: "a20_kho_lng.docx" },
+    { id: "a21_vlncn", ma: "A21", ten: "Nhà sản xuất, kho chứa VLNCN", icon: "💥", file: "a21_vlncn.docx" },
+    { id: "a22_bien_ap", ma: "A22", ten: "Trạm biến áp", icon: "⚡", file: "a22_bien_ap.docx" },
+    { id: "a23_ham_duong_bo", ma: "A23", ten: "Hầm đường bộ", icon: "🚇", file: "a23_ham_duong_bo.docx" },
+    { id: "a24_tau_bien", ma: "A24", ten: "Phương tiện tàu biển", icon: "🚢", file: "a24_tau_bien.docx" },
+    { id: "a25_thuy_hang_ng", ma: "A25", ten: "Phương tiện thủy nội địa - hàng hóa nguy hiểm", icon: "⚠️", file: "a25_thuy_hang_ng.docx" },
+    { id: "a26_thuy_hanh_khach", ma: "A26", ten: "Phương tiện thủy nội địa - hành khách", icon: "⛴️", file: "a26_thuy_hanh_khach.docx" },
   ],
-  // B — Bảng đối chiếu theo hệ thống PCCC
   heThong: [
-    { id: 'b1_bao_chay_thuong',  ma: 'B1',  ten: 'Hệ thống báo cháy loại thường', icon: '🔔', file: 'b1_bao_chay_thuong.docx' },
-    { id: 'b2_bao_chay_dia_chi', ma: 'B2',  ten: 'Hệ thống báo cháy loại địa chỉ',icon: '📡', file: 'b2_bao_chay_dia_chi.docx' },
-    { id: 'b5_hong_nuoc',        ma: 'B5',  ten: 'Họng nước chữa cháy trong nhà', icon: '🚰', file: 'b5_hong_nuoc.docx' },
-    { id: 'b6_cc_nuoc_bot',      ma: 'B6',  ten: 'Chữa cháy tự động bằng nước, bọt', icon: '💧', file: 'b6_cc_nuoc_bot.docx' },
-    { id: 'b12_pt_ban_dau',      ma: 'B12', ten: 'Phương tiện chữa cháy ban đầu',  icon: '🧯', file: 'b12_pt_ban_dau.docx' }
+    { id: "b1_bao_chay_thuong", ma: "B1", ten: "Hệ thống báo cháy loại thường", icon: "🔔", file: "b1_bao_chay_thuong.docx" },
+    { id: "b2_bao_chay_dia_chi", ma: "B2", ten: "Hệ thống báo cháy loại địa chỉ", icon: "📡", file: "b2_bao_chay_dia_chi.docx" },
+    { id: "b3_tram_bom", ma: "B3", ten: "Trạm bơm cấp nước chữa cháy", icon: "🔧", file: "b3_tram_bom.docx" },
+    { id: "b4_cap_nuoc_ngoai", ma: "B4", ten: "Cấp nước chữa cháy ngoài nhà", icon: "🚰", file: "b4_cap_nuoc_ngoai.docx" },
+    { id: "b5_hong_nuoc", ma: "B5", ten: "Họng nước chữa cháy trong nhà", icon: "🚰", file: "b5_hong_nuoc.docx" },
+    { id: "b6_cc_nuoc_bot", ma: "B6", ten: "Chữa cháy tự động bằng nước, bọt", icon: "💧", file: "b6_cc_nuoc_bot.docx" },
+    { id: "b7_bot_co_dinh", ma: "B7", ten: "Chữa cháy bọt cố định", icon: "🫧", file: "b7_bot_co_dinh.docx" },
+    { id: "b8_khi_hoa_long", ma: "B8", ten: "Chữa cháy khí hóa lỏng", icon: "🧪", file: "b8_khi_hoa_long.docx" },
+    { id: "b9_khi_nen", ma: "B9", ten: "Chữa cháy khí nén", icon: "🌫️", file: "b9_khi_nen.docx" },
+    { id: "b10_co2", ma: "B10", ten: "Chữa cháy tự động bằng khí CO₂", icon: "💨", file: "b10_co2.docx" },
+    { id: "b11_sol_khi", ma: "B11", ten: "Chữa cháy bằng Sol-khí", icon: "🌪️", file: "b11_sol_khi.docx" },
+    { id: "b12_pt_ban_dau", ma: "B12", ten: "Phương tiện chữa cháy ban đầu", icon: "🧯", file: "b12_pt_ban_dau.docx" },
+    { id: "b13_chieu_sang_loa", ma: "B13", ten: "Chiếu sáng sự cố + loa thông báo", icon: "🚨", file: "b13_chieu_sang_loa.docx" },
+    { id: "b14_dien_pccc", ma: "B14", ten: "Hệ thống điện phục vụ PCCC", icon: "⚡", file: "b14_dien_pccc.docx" },
+    { id: "b15_gia_ke", ma: "B15", ten: "Chữa cháy tự động giá kệ hàng", icon: "📚", file: "b15_gia_ke.docx" },
+    { id: "b16_bot", ma: "B16", ten: "Chữa cháy bằng bột", icon: "🧂", file: "b16_bot.docx" },
   ],
-
-  // Mapping công trình → hệ thống cần kèm BDC khi thẩm định
-  // (rút gọn theo QCVN 10:2025/BCA — bản đầy đủ sẽ link sang module Tra cứu QC10)
-  mapping: {
-    a2_chung_cu:      ['b1_bao_chay_thuong', 'b2_bao_chay_dia_chi', 'b5_hong_nuoc', 'b6_cc_nuoc_bot', 'b12_pt_ban_dau'],
-    a3_hon_hop:       ['b2_bao_chay_dia_chi', 'b5_hong_nuoc', 'b6_cc_nuoc_bot', 'b12_pt_ban_dau'],
-    a4_van_phong:     ['b1_bao_chay_thuong', 'b2_bao_chay_dia_chi', 'b5_hong_nuoc', 'b6_cc_nuoc_bot', 'b12_pt_ban_dau'],
-    a14_nha_san_xuat: ['b2_bao_chay_dia_chi', 'b5_hong_nuoc', 'b6_cc_nuoc_bot', 'b12_pt_ban_dau'],
-    a15_nha_kho:      ['b2_bao_chay_dia_chi', 'b5_hong_nuoc', 'b6_cc_nuoc_bot', 'b12_pt_ban_dau']
-  }
+  // mapping công trình -> hệ thống đề xuất kèm BDC (rút gọn, user override được)
+  mapping: {}
 };

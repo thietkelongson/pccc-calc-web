@@ -66,7 +66,8 @@
 **Tra cứu (2):**
 - [x] **Tra cứu QC10** — `qc10-lookup.html` — Port từ phần mềm desktop QCVN10Lookup, 31 loại nhà, đánh giá 4 hệ thống (báo cháy / chữa cháy / họng nước / loa thông báo) theo Bảng A.1/B.1/G.1
 - [x] **Tra cứu TCVN 7336** — `tcvn7336-lookup.html` — Bảng 1 (phòng ≤10 m), Bảng 2 (kho Nhóm 5–7), Bảng 3 (phòng 10–20 m) và Phụ lục A (phân loại nhóm nguy cơ + search). Dữ liệu lấy từ TCVN 7336:2021 và đối chiếu phần mềm VPT_PCCC.
-- [ ] **Tra cứu bảng đối chiếu sprinkler thiết bị** — K-factor, áp lực, diện tích bảo vệ theo nhà sản xuất (Tyco/Viking/RD…)
+- [x] **Bảng đối chiếu thẩm duyệt PCCC** — `bdc-lookup.html` — Hồ sơ thẩm duyệt theo công trình: wizard 4 bước (loại công trình → thông tin dự án → hệ thống áp dụng → xác nhận) → checklist tổng hợp 2 cấp (Phần A tổng quan + Phần B chi tiết từng hệ thống). **Đầy đủ 42 BDC** parse từ `.docx`/`.doc` Bộ Công an (26 công trình A1–A26 + 16 hệ thống B1–B16), tổng **1.850 mục đối chiếu + 65 hình minh hoạ**. Mỗi mục có Quy định + Viện dẫn + Hướng dẫn BCA + textarea điền thiết kế + verdict Đạt/KN/N/A. State lưu localStorage theo hồ sơ. Truy cập BDC đơn lẻ qua hash `#/bdc/<id>`. Script `batch_import.ps1` + `batch_parse.py` để re-import khi BCA cập nhật template. **Export Word** qua `modules/bdc/export.py`: giữ nguyên template gốc + fill preamble (6 mục đầu) + cột "Nội dung thiết kế" + cột "Kết luận" → hồ sơ tổng hợp nhiều BDC ghép vào 1 file Word duy nhất qua `docxcompose`.
+- [ ] **Tra cứu bảng đối chiếu sprinkler thiết bị** — K-factor, áp lực, diện tích bảo vệ theo nhà sản xuất (Tyco/Viking/RD…) — khác BDC thẩm duyệt ở trên
 
 **Tính toán thủy lực (2):**
 - [x] **Thủy lực TCVN 7336** — đã có module Isometric (cần hoàn thiện thêm)

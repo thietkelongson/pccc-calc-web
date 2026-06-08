@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Tra cứu Bảng đối chiếu — PCCC Calc</title>
+<title>Bảng đối chiếu thẩm duyệt PCCC — PCCC Calc</title>
 <style>
   :root[data-theme="light"] {
     --bg: #f5f5f7; --bg-elev: #ffffff; --bg-soft: #fbfbfd; --bg-hover: #f0f0f3;
@@ -15,7 +15,6 @@
     --shadow-sm: 0 1px 2px rgba(0,0,0,.04);
     --shadow-md: 0 4px 16px rgba(0,0,0,.06);
     --shadow-lg: 0 12px 32px rgba(0,0,0,.1);
-    --row-alt: rgba(0,0,0,.025);
     --tag-green: #34c759; --tag-blue: #007aff; --tag-orange: #ff9500;
     --tag-red: #ff453a; --tag-purple: #af52de;
   }
@@ -27,17 +26,16 @@
     --link: #2997ff;
     --nav-bg: rgba(28,28,30,.85);
     --shadow-md: 0 4px 16px rgba(0,0,0,.5);
-    --row-alt: rgba(255,255,255,.03);
     --tag-green: #30d158; --tag-blue: #0a84ff; --tag-orange: #ff9f0a;
     --tag-red: #ff453a; --tag-purple: #bf5af2;
   }
   * { box-sizing: border-box; margin: 0; padding: 0; -webkit-font-smoothing: antialiased; }
   body { font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Helvetica Neue", "Segoe UI", system-ui, sans-serif; background: var(--bg); color: var(--text); font-size: 15px; line-height: 1.47; letter-spacing: -0.022em; min-height: 100vh; }
   a { color: inherit; text-decoration: none; }
+  button { font-family: inherit; }
   .ios-icon { display: inline-flex; align-items: center; justify-content: center; border-radius: 22.37%; color: white; flex-shrink: 0; }
   .ios-icon.sm { width: 28px; height: 28px; font-size: 14px; border-radius: 7px; }
   .ios-icon.lg { width: 64px; height: 64px; font-size: 32px; border-radius: 14px; }
-  .ios-icon.brand { background: linear-gradient(180deg, #e74c3c, #c0392b); }
   .ios-icon.purple { background: linear-gradient(180deg, #c178e3, #af52de); }
 
   .topbar { position: sticky; top: 0; z-index: 50; background: var(--nav-bg); backdrop-filter: saturate(180%) blur(20px); border-bottom: 1px solid var(--border); padding: 10px 24px; display: flex; align-items: center; gap: 16px; }
@@ -51,96 +49,171 @@
 
   .container { max-width: 1400px; margin: 0 auto; padding: 24px; }
 
-  .hero { background: linear-gradient(135deg, #5856d6 0%, #ff2d55 100%); color: white; border-radius: 22px; padding: 28px 32px; margin-bottom: 18px; display: flex; align-items: center; gap: 22px; position: relative; overflow: hidden; }
+  /* Breadcrumb / view header */
+  .view-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 18px; flex-wrap: wrap; }
+  .breadcrumb { display: flex; align-items: center; gap: 6px; font-size: 13px; color: var(--text-secondary); }
+  .breadcrumb a { color: var(--link); cursor: pointer; }
+  .breadcrumb a:hover { text-decoration: underline; }
+  .breadcrumb .sep { color: var(--text-tertiary); }
+  h1.view-title { font-size: 26px; font-weight: 700; }
+  .view-sub { font-size: 14px; color: var(--text-secondary); margin-top: 2px; }
+
+  /* Buttons */
+  .btn { padding: 9px 16px; border-radius: 10px; border: 1px solid var(--border); background: var(--bg-elev); cursor: pointer; font-size: 13px; font-weight: 500; color: var(--text); display: inline-flex; align-items: center; gap: 6px; }
+  .btn:hover { background: var(--bg-hover); }
+  .btn.primary { background: var(--brand); color: white; border-color: var(--brand); }
+  .btn.primary:hover { background: var(--brand-dark); }
+  .btn.big { padding: 12px 22px; font-size: 14px; font-weight: 600; border-radius: 12px; }
+  .btn.ghost { background: transparent; }
+  .btn.danger { color: var(--tag-red); }
+  .btn:disabled { opacity: .4; cursor: not-allowed; }
+
+  /* View transitions */
+  .view { display: none; }
+  .view.active { display: block; }
+
+  /* ============ VIEW 1: List hồ sơ ============ */
+  .hero { background: linear-gradient(135deg, #5856d6 0%, #ff2d55 100%); color: white; border-radius: 22px; padding: 28px 32px; margin-bottom: 22px; display: flex; align-items: center; gap: 22px; position: relative; overflow: hidden; }
   .hero::before { content: ''; position: absolute; right: -80px; top: -80px; width: 280px; height: 280px; border-radius: 50%; background: rgba(255,255,255,.08); }
   .hero > * { position: relative; z-index: 1; }
   .hero h1 { font-size: 26px; font-weight: 700; line-height: 1.15; margin-bottom: 4px; }
   .hero p { font-size: 14px; opacity: .92; max-width: 760px; }
-  .hero .badge { display: inline-flex; align-items: center; gap: 6px; background: rgba(255,255,255,.2); padding: 3px 10px; border-radius: 999px; font-size: 11px; font-weight: 600; margin-top: 8px; }
+  .hero .badge { display: inline-flex; align-items: center; gap: 6px; background: rgba(255,255,255,.2); padding: 4px 12px; border-radius: 999px; font-size: 11px; font-weight: 600; margin-top: 10px; }
 
-  .tabs { display: flex; gap: 4px; background: var(--bg-elev); border: 1px solid var(--border); border-radius: 14px; padding: 6px; margin-bottom: 18px; overflow-x: auto; }
-  .tab { flex: 1; min-width: 200px; padding: 10px 14px; border: none; background: transparent; border-radius: 9px; cursor: pointer; font-size: 13px; font-weight: 600; color: var(--text-secondary); font-family: inherit; white-space: nowrap; transition: all .15s; }
-  .tab:hover { background: var(--bg-hover); color: var(--text); }
-  .tab.active { background: var(--brand); color: white; box-shadow: 0 2px 6px rgba(192,57,43,.25); }
-  .tab small { display: block; font-size: 10px; font-weight: 500; margin-top: 2px; opacity: .85; text-transform: uppercase; letter-spacing: .4px; }
+  .section-head { display: flex; align-items: center; justify-content: space-between; margin: 22px 0 12px; }
+  .section-head h2 { font-size: 18px; font-weight: 700; }
+  .section-head .sub { font-size: 12px; color: var(--text-secondary); margin-left: 8px; font-weight: 400; }
 
-  .pane { display: none; }
-  .pane.active { display: block; }
+  .hoso-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 14px; }
+  .hoso-card { background: var(--bg-elev); border: 1px solid var(--border); border-radius: 14px; padding: 18px 20px; cursor: pointer; transition: all .15s; position: relative; }
+  .hoso-card:hover { box-shadow: var(--shadow-md); border-color: var(--brand); transform: translateY(-1px); }
+  .hoso-card .tag { display: inline-block; background: var(--brand-soft); color: var(--brand); font-size: 10.5px; font-weight: 700; padding: 3px 9px; border-radius: 5px; letter-spacing: .3px; }
+  .hoso-card .name { font-size: 16px; font-weight: 700; margin: 8px 0 4px; line-height: 1.3; }
+  .hoso-card .meta { font-size: 12px; color: var(--text-secondary); margin-bottom: 12px; }
+  .hoso-card .bdcs { font-size: 11.5px; color: var(--text-secondary); display: flex; flex-wrap: wrap; gap: 4px; margin-bottom: 12px; }
+  .hoso-card .bdc-chip { background: var(--bg-soft); padding: 2px 8px; border-radius: 5px; font-weight: 600; color: var(--text); }
+  .hoso-card .progress-bar { height: 6px; background: var(--bg-soft); border-radius: 999px; overflow: hidden; }
+  .hoso-card .progress-bar .fill { height: 100%; background: linear-gradient(90deg, var(--tag-green), var(--tag-blue)); transition: width .3s; }
+  .hoso-card .progress-text { font-size: 11.5px; color: var(--text-secondary); margin-top: 5px; font-weight: 500; }
+  .hoso-card .del { position: absolute; top: 12px; right: 12px; width: 28px; height: 28px; border-radius: 50%; background: var(--bg-hover); border: none; color: var(--text-tertiary); cursor: pointer; font-size: 12px; opacity: 0; transition: opacity .15s; }
+  .hoso-card:hover .del { opacity: 1; }
+  .hoso-card .del:hover { background: var(--tag-red); color: white; }
 
-  /* PHƯƠNG ÁN A — Document viewer */
-  .va-grid { display: grid; grid-template-columns: 320px 1fr; gap: 16px; }
-  @media (max-width: 900px) { .va-grid { grid-template-columns: 1fr; } }
-  .va-sidebar { background: var(--bg-elev); border: 1px solid var(--border); border-radius: 14px; padding: 14px; max-height: 80vh; overflow-y: auto; }
-  .va-sidebar h3 { font-size: 11px; font-weight: 700; color: var(--text-tertiary); text-transform: uppercase; letter-spacing: .5px; margin: 14px 8px 8px; }
-  .va-sidebar h3:first-child { margin-top: 0; }
-  .va-item { display: flex; align-items: center; gap: 10px; padding: 9px 10px; border-radius: 9px; cursor: pointer; font-size: 13px; transition: background .15s; }
-  .va-item:hover { background: var(--bg-hover); }
-  .va-item.active { background: var(--brand-soft); color: var(--brand); font-weight: 600; }
-  .va-item .ma { font-weight: 700; font-size: 11px; background: var(--bg-soft); padding: 2px 7px; border-radius: 5px; min-width: 32px; text-align: center; }
-  .va-item.active .ma { background: var(--brand); color: white; }
-  .va-viewer { background: var(--bg-elev); border: 1px solid var(--border); border-radius: 14px; padding: 20px 28px; min-height: 80vh; }
-  .va-viewer .vw-head { display: flex; align-items: center; justify-content: space-between; padding-bottom: 14px; border-bottom: 1px solid var(--border); margin-bottom: 18px; }
-  .va-viewer .vw-head h2 { font-size: 18px; font-weight: 700; }
-  .va-viewer .vw-actions { display: flex; gap: 6px; }
-  .vw-actions button { padding: 6px 12px; border-radius: 8px; border: 1px solid var(--border); background: var(--bg-soft); cursor: pointer; font-family: inherit; font-size: 12px; color: var(--text); }
-  .vw-actions button:hover { background: var(--bg-hover); }
-  .vw-content { font-size: 13px; line-height: 1.6; }
-  .vw-content table { width: 100%; border-collapse: collapse; margin: 10px 0; font-size: 12px; }
-  .vw-content table td, .vw-content table th { border: 1px solid var(--border); padding: 6px 8px; vertical-align: top; }
-  .vw-content table th { background: var(--bg-soft); font-weight: 600; }
-  .vw-content h1 { font-size: 18px; margin: 16px 0 8px; }
-  .vw-content h2 { font-size: 16px; margin: 14px 0 6px; }
-  .vw-content h3 { font-size: 14px; margin: 12px 0 6px; }
-  .vw-content p { margin-bottom: 8px; }
-  .vw-content ul, .vw-content ol { padding-left: 24px; margin-bottom: 8px; }
-
-  .empty-state { text-align: center; padding: 60px 30px; color: var(--text-secondary); }
+  .empty-state { text-align: center; padding: 50px 30px; color: var(--text-secondary); background: var(--bg-elev); border: 1px dashed var(--border); border-radius: 14px; }
   .empty-state .em { font-size: 50px; margin-bottom: 14px; }
   .empty-state h3 { font-size: 17px; color: var(--text); margin-bottom: 6px; font-weight: 600; }
-  .loading-state { padding: 60px 30px; text-align: center; color: var(--text-secondary); }
-  .spinner { width: 32px; height: 32px; border: 3px solid var(--border); border-top-color: var(--brand); border-radius: 50%; animation: spin 1s linear infinite; margin: 0 auto 12px; }
-  @keyframes spin { to { transform: rotate(360deg); } }
 
-  /* PHƯƠNG ÁN B — Checklist */
-  .vb-panel { background: var(--bg-elev); border: 1px solid var(--border); border-radius: 14px; padding: 22px 26px; }
-  .vb-info { background: rgba(0,102,204,.06); border-left: 3px solid var(--link); padding: 10px 14px; border-radius: 8px; margin-bottom: 18px; font-size: 13px; }
-  .vb-actions { display: flex; gap: 8px; margin-bottom: 16px; flex-wrap: wrap; }
-  .vb-actions button { padding: 8px 14px; border-radius: 9px; border: 1px solid var(--border); background: var(--bg-soft); cursor: pointer; font-family: inherit; font-size: 13px; font-weight: 500; color: var(--text); }
-  .vb-actions button:hover { background: var(--bg-hover); }
-  .vb-actions button.primary { background: var(--brand); color: white; border-color: var(--brand); }
-  .vb-stats { background: var(--bg-soft); border-radius: 10px; padding: 10px 16px; margin-bottom: 14px; display: flex; gap: 24px; font-size: 13px; flex-wrap: wrap; }
-  .vb-stats .stat strong { color: var(--text); }
-  .vb-stats .pass { color: var(--tag-green); }
-  .vb-stats .kn { color: var(--tag-orange); }
-  .vb-stats .pending { color: var(--text-tertiary); }
-  .vb-row { display: grid; grid-template-columns: 36px 1fr 1fr 1fr 100px; gap: 12px; padding: 12px 8px; border-bottom: 1px solid var(--border); font-size: 13px; align-items: start; }
-  .vb-row.header { font-weight: 700; font-size: 11px; text-transform: uppercase; letter-spacing: .4px; color: var(--text-secondary); background: var(--bg-soft); border-radius: 8px; position: sticky; top: 0; }
-  .vb-row.tieu-de { background: var(--brand-soft); font-weight: 600; color: var(--brand); }
-  .vb-row.tieu-de .so-stt { color: var(--brand); }
-  .vb-row .so-stt { font-weight: 600; }
-  .vb-row .nd-thiet-ke textarea { width: 100%; min-height: 60px; padding: 6px 8px; border: 1px solid var(--border); border-radius: 6px; font-family: inherit; font-size: 12px; background: var(--bg-soft); color: var(--text); resize: vertical; }
-  .vb-row .nd-thiet-ke textarea:focus { outline: none; border-color: var(--link); background: var(--bg-elev); }
-  .vb-row .nd-quy-dinh { color: var(--text-secondary); }
-  .vb-row .vien-dan { font-size: 11px; color: var(--link); font-weight: 500; }
-  .vb-row .ket-luan select { width: 100%; padding: 6px; border-radius: 6px; border: 1px solid var(--border); background: var(--bg-soft); font-family: inherit; font-size: 12px; color: var(--text); }
-  .vb-row .ket-luan.pass select { border-color: var(--tag-green); background: rgba(52,199,89,.08); color: var(--tag-green); }
-  .vb-row .ket-luan.kn select { border-color: var(--tag-orange); background: rgba(255,149,0,.08); color: var(--tag-orange); }
+  .quickbdc-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 10px; margin-top: 4px; }
+  .quickbdc-card { display: flex; align-items: center; gap: 10px; padding: 12px 14px; border: 1px solid var(--border); border-radius: 11px; cursor: pointer; background: var(--bg-elev); transition: all .12s; }
+  .quickbdc-card:hover { background: var(--bg-hover); border-color: var(--brand); }
+  .quickbdc-card .ic { font-size: 20px; }
+  .quickbdc-card .ma { font-size: 10.5px; font-weight: 700; color: var(--brand); letter-spacing: .3px; }
+  .quickbdc-card .tn { font-size: 12.5px; font-weight: 500; line-height: 1.3; }
 
-  /* PHƯƠNG ÁN C — Tra cứu theo công trình */
-  .vc-input { background: var(--bg-elev); border: 1px solid var(--border); border-radius: 14px; padding: 22px 26px; margin-bottom: 16px; }
-  .vc-input h2 { font-size: 16px; font-weight: 700; margin-bottom: 4px; }
-  .vc-input .sub { font-size: 12px; color: var(--text-secondary); margin-bottom: 16px; }
-  .vc-input select { width: 100%; max-width: 480px; padding: 11px 14px; background: var(--bg-soft); border: 1px solid transparent; border-radius: 12px; color: var(--text); font-size: 15px; font-family: inherit; }
-  .vc-input select:focus { outline: none; border-color: var(--link); background: var(--bg-elev); }
-  .vc-result { background: var(--bg-elev); border: 1px solid var(--border); border-radius: 14px; padding: 22px 26px; }
-  .vc-result h3 { font-size: 14px; font-weight: 700; margin-bottom: 4px; color: var(--text-secondary); text-transform: uppercase; letter-spacing: .4px; }
-  .vc-list { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 12px; margin-top: 12px; }
-  .vc-card { display: flex; align-items: center; gap: 12px; padding: 14px 16px; border: 1px solid var(--border); border-radius: 12px; cursor: pointer; transition: all .15s; background: var(--bg-soft); }
-  .vc-card:hover { box-shadow: var(--shadow-md); border-color: var(--brand); transform: translateY(-1px); }
-  .vc-card .ic { font-size: 22px; }
-  .vc-card .info { flex: 1; }
-  .vc-card .info .nm { font-size: 11px; font-weight: 700; color: var(--brand); text-transform: uppercase; letter-spacing: .3px; }
-  .vc-card .info .tn { font-size: 13px; font-weight: 600; line-height: 1.35; margin-top: 2px; }
+  /* ============ VIEW 2: Wizard ============ */
+  .wizard { max-width: 880px; margin: 0 auto; }
+  .wizard-steps { display: flex; gap: 8px; margin-bottom: 24px; }
+  .wstep { flex: 1; padding: 12px 14px; background: var(--bg-elev); border: 1px solid var(--border); border-radius: 11px; font-size: 13px; color: var(--text-secondary); display: flex; align-items: center; gap: 10px; }
+  .wstep .n { width: 26px; height: 26px; border-radius: 50%; background: var(--bg-soft); display: inline-flex; align-items: center; justify-content: center; font-weight: 700; font-size: 12px; }
+  .wstep.active { background: var(--brand-soft); border-color: var(--brand); color: var(--brand); font-weight: 600; }
+  .wstep.active .n { background: var(--brand); color: white; }
+  .wstep.done { background: var(--bg-elev); color: var(--tag-green); }
+  .wstep.done .n { background: var(--tag-green); color: white; }
+
+  .wpanel { background: var(--bg-elev); border: 1px solid var(--border); border-radius: 14px; padding: 24px 28px; }
+  .wpanel h3 { font-size: 17px; font-weight: 700; margin-bottom: 6px; }
+  .wpanel .h-sub { font-size: 13px; color: var(--text-secondary); margin-bottom: 18px; }
+  .wpanel label { display: block; font-size: 12px; font-weight: 600; color: var(--text-secondary); text-transform: uppercase; letter-spacing: .3px; margin-bottom: 6px; }
+  .wpanel input[type=text] { width: 100%; padding: 10px 12px; border: 1px solid var(--border); border-radius: 9px; background: var(--bg-soft); color: var(--text); font-family: inherit; font-size: 14px; }
+  .wpanel input[type=text]:focus { outline: none; border-color: var(--link); background: var(--bg-elev); }
+
+  .ct-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 10px; margin-top: 6px; }
+  .ct-card { padding: 16px; border: 2px solid var(--border); border-radius: 12px; cursor: pointer; background: var(--bg-soft); transition: all .12s; display: flex; align-items: center; gap: 12px; }
+  .ct-card:hover { border-color: var(--brand); }
+  .ct-card.selected { border-color: var(--brand); background: var(--brand-soft); }
+  .ct-card .ic { font-size: 28px; }
+  .ct-card .ma { font-size: 11px; font-weight: 700; color: var(--brand); letter-spacing: .4px; }
+  .ct-card .tn { font-size: 13.5px; font-weight: 600; line-height: 1.3; margin-top: 2px; }
+
+  .ht-list { display: flex; flex-direction: column; gap: 8px; margin-top: 6px; }
+  .ht-row { display: flex; align-items: center; gap: 12px; padding: 12px 14px; border: 1px solid var(--border); border-radius: 11px; cursor: pointer; background: var(--bg-soft); transition: all .12s; }
+  .ht-row:hover { background: var(--bg-hover); }
+  .ht-row.checked { background: rgba(52,199,89,.06); border-color: var(--tag-green); }
+  .ht-row input { width: 18px; height: 18px; cursor: pointer; accent-color: var(--brand); flex-shrink: 0; }
+  .ht-row .ic { font-size: 22px; flex-shrink: 0; }
+  .ht-row .info { flex: 1; }
+  .ht-row .info .ma { font-size: 11px; font-weight: 700; color: var(--brand); letter-spacing: .3px; }
+  .ht-row .info .tn { font-size: 14px; font-weight: 600; margin-top: 2px; }
+  .ht-row .info .desc { font-size: 11.5px; color: var(--text-secondary); margin-top: 3px; }
+
+  .wfoot { display: flex; gap: 10px; justify-content: space-between; margin-top: 16px; }
+
+  /* ============ VIEW 3 & 4: Checklist ============ */
+  .cl-info { background: rgba(0,102,204,.06); border-left: 3px solid var(--link); padding: 10px 14px; border-radius: 8px; margin-bottom: 16px; font-size: 13px; }
+
+  .cl-toolbar { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; margin-bottom: 14px; }
+  .cl-toolbar select { padding: 8px 12px; border-radius: 9px; border: 1px solid var(--border); background: var(--bg-elev); font-family: inherit; font-size: 13px; font-weight: 600; color: var(--text); cursor: pointer; }
+  .cl-stats { display: flex; gap: 14px; margin-left: auto; font-size: 13px; }
+  .cl-stats .stat strong { color: var(--text); }
+  .cl-stats .pass { color: var(--tag-green); }
+  .cl-stats .kn { color: var(--tag-orange); }
+  .cl-stats .pending { color: var(--text-tertiary); }
+
+  .cl-grid { display: grid; grid-template-columns: 300px 1fr; gap: 16px; }
+  @media (max-width: 900px) { .cl-grid { grid-template-columns: 1fr; } }
+  .cl-side { background: var(--bg-elev); border: 1px solid var(--border); border-radius: 14px; padding: 12px; max-height: calc(100vh - 100px); overflow-y: auto; position: sticky; top: 64px; }
+  .cl-side h4 { font-size: 11px; font-weight: 700; color: var(--text-tertiary); text-transform: uppercase; letter-spacing: .5px; margin: 14px 6px 6px; }
+  .cl-side h4:first-child { margin-top: 4px; }
+  .sec-item { display: flex; align-items: flex-start; gap: 10px; padding: 10px; border-radius: 10px; cursor: pointer; font-size: 13px; margin-bottom: 4px; transition: background .12s; }
+  .sec-item:hover { background: var(--bg-hover); }
+  .sec-item.active { background: var(--brand-soft); color: var(--brand); font-weight: 600; }
+  .sec-item .num { font-weight: 700; font-size: 12px; background: var(--bg-soft); padding: 4px 9px; border-radius: 6px; min-width: 26px; text-align: center; flex-shrink: 0; }
+  .sec-item.active .num { background: var(--brand); color: white; }
+  .sec-item .progress { font-size: 10.5px; color: var(--text-tertiary); display: block; margin-top: 3px; font-weight: 500; }
+  .sec-item.active .progress { color: var(--brand); opacity: .8; }
+  .cl-side .bdc-chip { font-size: 10px; background: var(--bg-soft); color: var(--text-secondary); padding: 1px 6px; border-radius: 4px; font-weight: 700; margin-left: 4px; }
+  .sec-item.active .bdc-chip { background: rgba(255,255,255,.3); color: white; }
+
+  .cl-main { background: var(--bg-elev); border: 1px solid var(--border); border-radius: 14px; padding: 22px 26px; min-height: 80vh; }
+  .cl-main > h2 { font-size: 19px; font-weight: 700; margin-bottom: 4px; }
+  .cl-main .sub-title { font-size: 12px; color: var(--text-secondary); margin-bottom: 20px; }
+
+  .cl-sub { margin-bottom: 24px; }
+  .cl-sub-head { display: flex; align-items: baseline; gap: 10px; padding-bottom: 8px; border-bottom: 2px solid var(--brand-soft); margin-bottom: 12px; }
+  .cl-sub-head .sub-num { font-weight: 700; color: var(--brand); font-size: 14px; }
+  .cl-sub-head .sub-name { font-weight: 600; font-size: 14px; }
+  .cl-sub-quydinh { background: var(--bg-soft); padding: 10px 14px; border-radius: 9px; font-size: 12.5px; color: var(--text-secondary); margin-bottom: 10px; line-height: 1.55; white-space: pre-wrap; }
+
+  .cl-card { border: 1px solid var(--border); border-radius: 11px; margin-bottom: 10px; background: var(--bg-soft); overflow: hidden; transition: all .15s; }
+  .cl-card.open { background: var(--bg-elev); box-shadow: var(--shadow-sm); }
+  .cl-card.pass { border-color: var(--tag-green); }
+  .cl-card.kn { border-color: var(--tag-orange); }
+  .cl-card.na { border-color: var(--text-tertiary); }
+  .cl-card-head { display: flex; align-items: center; gap: 10px; padding: 11px 14px; cursor: pointer; }
+  .cl-card-head:hover { background: var(--bg-hover); }
+  .cl-card .bullet { color: var(--brand); font-weight: 700; flex-shrink: 0; font-size: 14px; }
+  .cl-card .head-title { flex: 1; font-size: 13.5px; font-weight: 500; line-height: 1.4; }
+  .cl-card .head-status { font-size: 11px; padding: 3px 10px; border-radius: 999px; font-weight: 600; flex-shrink: 0; background: var(--bg-hover); color: var(--text-tertiary); white-space: nowrap; }
+  .cl-card.pass .head-status { background: rgba(52,199,89,.15); color: var(--tag-green); }
+  .cl-card.kn .head-status { background: rgba(255,149,0,.15); color: var(--tag-orange); }
+  .cl-card.na .head-status { background: rgba(110,110,115,.2); color: var(--text-secondary); }
+  .cl-card .caret { color: var(--text-tertiary); transition: transform .2s; font-size: 16px; }
+  .cl-card.open .caret { transform: rotate(90deg); }
+  .cl-card-body { display: none; padding: 4px 14px 14px; border-top: 1px solid var(--border); }
+  .cl-card.open .cl-card-body { display: block; }
+  .group-label { font-size: 10.5px; font-weight: 700; color: var(--text-tertiary); text-transform: uppercase; letter-spacing: .4px; margin: 12px 0 6px; }
+  .quy-dinh-box { background: rgba(0,102,204,.04); padding: 10px 12px; border-left: 3px solid var(--link); border-radius: 6px; font-size: 12.5px; white-space: pre-wrap; line-height: 1.55; }
+  .huong-dan-box { background: rgba(255,149,0,.06); padding: 10px 12px; border-left: 3px solid var(--tag-orange); border-radius: 6px; font-size: 12.5px; white-space: pre-wrap; line-height: 1.55; color: var(--text); margin-bottom: 6px; }
+  .bdc-img { display: block; max-width: 100%; height: auto; margin: 10px auto; border: 1px solid var(--border); border-radius: 8px; background: #fff; padding: 4px; }
+  .vien-dan-box { font-size: 11.5px; color: var(--link); margin-top: 6px; white-space: pre-wrap; font-weight: 500; }
+  .cl-card-body textarea { width: 100%; min-height: 70px; padding: 8px 10px; border: 1px solid var(--border); border-radius: 7px; font-family: inherit; font-size: 12.5px; background: var(--bg-soft); color: var(--text); resize: vertical; }
+  .cl-card-body textarea:focus { outline: none; border-color: var(--link); background: var(--bg-elev); }
+  .verdict-row { display: flex; gap: 8px; margin-top: 6px; }
+  .vbtn { flex: 1; padding: 9px; border-radius: 8px; border: 1px solid var(--border); background: var(--bg-soft); cursor: pointer; font-size: 12px; font-weight: 600; color: var(--text); transition: all .12s; }
+  .vbtn:hover { background: var(--bg-hover); }
+  .vbtn.pass.active { background: var(--tag-green); color: white; border-color: var(--tag-green); }
+  .vbtn.kn.active { background: var(--tag-orange); color: white; border-color: var(--tag-orange); }
+  .vbtn.na.active { background: var(--text-tertiary); color: white; border-color: var(--text-tertiary); }
 </style>
 </head>
 <body>
@@ -149,7 +222,7 @@
   <a href="dashboard.html" class="back-btn">‹ Dashboard</a>
   <div class="page-title">
     <span class="ios-icon sm purple">📋</span>
-    Tra cứu Bảng đối chiếu <span class="sub">— QCVN 10:2025/BCA · TCVN 7336:2021 · QCVN 06:2022</span>
+    Bảng đối chiếu thẩm duyệt PCCC
   </div>
   <div class="topbar-actions">
     <div class="credit-chip">💎 247</div>
@@ -159,274 +232,780 @@
 
 <div class="container">
 
-  <div class="hero">
-    <span class="ios-icon lg" style="background: rgba(255,255,255,.25)">📋</span>
-    <div>
-      <h1>Demo 3 phương án Bảng đối chiếu</h1>
-      <p>Mỗi tab là 1 phương án khác nhau để truy cập bộ 42 Bảng đối chiếu thẩm định PCCC. Demo MVP với 10 BDC thường dùng (5 công trình + 5 hệ thống). Chọn phương án bạn thấy hợp lý nhất → tôi sẽ scale lên 42 BDC đầy đủ.</p>
-      <div class="badge">🧪 Demo Mode — Pick your favorite</div>
+  <!-- ====================== VIEW 1: LIST HỒ SƠ ====================== -->
+  <div class="view" id="view-list">
+    <div class="hero">
+      <span class="ios-icon lg" style="background: rgba(255,255,255,.25)">📋</span>
+      <div>
+        <h1>Hồ sơ thẩm duyệt PCCC</h1>
+        <p>Tạo 1 hồ sơ cho mỗi công trình → chọn loại nhà + các hệ thống PCCC cần trang bị → có ngay checklist tổng hợp để đối chiếu thiết kế, xuất hồ sơ thẩm duyệt.</p>
+        <div class="badge">📋 42 BDC đầy đủ · 1.850 mục đối chiếu · 65 hình minh hoạ</div>
+      </div>
     </div>
+
+    <div class="section-head">
+      <div><h2>Hồ sơ của bạn <span class="sub" id="hosoCount"></span></h2></div>
+      <button class="btn primary big" onclick="location.hash = '#/new'">+ Tạo hồ sơ mới</button>
+    </div>
+    <div id="hosoListContainer"></div>
+
+    <div class="section-head" style="margin-top:32px">
+      <div><h2>🔍 Tra cứu nhanh BDC đơn lẻ <span class="sub">— xem 1 BDC riêng để học/tham khảo</span></h2></div>
+    </div>
+    <div class="quickbdc-grid" id="quickBdcGrid"></div>
   </div>
 
-  <div class="tabs">
-    <button class="tab active" data-tab="va">PA-A — Document Viewer<small>Xem nguyên bản .docx</small></button>
-    <button class="tab" data-tab="vb">PA-B — Checklist tương tác<small>Điền + xuất hồ sơ</small></button>
-    <button class="tab" data-tab="vc">PA-C — Tra cứu theo công trình<small>Pick → ra danh mục BDC</small></button>
-  </div>
+  <!-- ====================== VIEW 2: WIZARD ====================== -->
+  <div class="view" id="view-wizard">
+    <div class="breadcrumb" style="margin-bottom:14px">
+      <a onclick="location.hash='#/'">Hồ sơ</a><span class="sep">›</span><span>Tạo hồ sơ mới</span>
+    </div>
+    <div class="wizard">
+      <div class="wizard-steps">
+        <div class="wstep active" data-step="1"><span class="n">1</span> Loại công trình</div>
+        <div class="wstep" data-step="2"><span class="n">2</span> Thông tin dự án</div>
+        <div class="wstep" data-step="3"><span class="n">3</span> Hệ thống áp dụng</div>
+        <div class="wstep" data-step="4"><span class="n">4</span> Xác nhận</div>
+      </div>
 
-  <!-- PA-A: Document Viewer -->
-  <div class="pane active" id="pane-va">
-    <div class="va-grid">
-      <div class="va-sidebar" id="vaSidebar"></div>
-      <div class="va-viewer">
-        <div id="vaContent">
-          <div class="empty-state">
-            <div class="em">📄</div>
-            <h3>Chọn 1 Bảng đối chiếu</h3>
-            <p>Sidebar bên trái — click vào bất kỳ BDC để xem nội dung được render từ file .docx gốc.</p>
+      <div class="wpanel" id="wstep1">
+        <h3>Tên hồ sơ + Loại công trình</h3>
+        <p class="h-sub">Đặt tên hồ sơ + chọn loại công trình. Tên có thể đổi sau.</p>
+        <label>Tên hồ sơ</label>
+        <input type="text" id="wName" placeholder="VD: Tòa nhà Sun Plaza, Nhà máy XYZ..." />
+        <label style="margin-top:18px">Loại công trình</label>
+        <div class="ct-grid" id="wCtGrid"></div>
+        <div class="wfoot">
+          <button class="btn" onclick="location.hash='#/'">Hủy</button>
+          <button class="btn primary" id="wNext1">Tiếp tục →</button>
+        </div>
+      </div>
+
+      <div class="wpanel" id="wstep2" style="display:none">
+        <h3>Thông tin dự án</h3>
+        <p class="h-sub">6 mục đầu của bảng đối chiếu — sẽ in vào phần đầu file Word khi xuất hồ sơ. Có thể bỏ qua + điền sau ở mục "Sửa hồ sơ".</p>
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:14px">
+          <div style="grid-column: span 2">
+            <label>1. Tên công trình</label>
+            <input type="text" id="wTtTen" placeholder="VD: Tòa nhà văn phòng Sun Plaza" />
           </div>
+          <div style="grid-column: span 2">
+            <label>2. Địa điểm xây dựng</label>
+            <input type="text" id="wTtDia" placeholder="VD: Lô A12, Khu đô thị Mỹ Đình, Hà Nội" />
+          </div>
+          <div>
+            <label>3. Chủ đầu tư</label>
+            <input type="text" id="wTtCdt" placeholder="Tên đầy đủ công ty CĐT" />
+          </div>
+          <div>
+            <label>4. Địa chỉ đại diện nhà đầu tư</label>
+            <input type="text" id="wTtDc" placeholder="Địa chỉ liên hệ" />
+          </div>
+          <div>
+            <label>5. Đơn vị tư vấn thiết kế</label>
+            <input type="text" id="wTtDvtv" placeholder="Tên công ty TVTK" />
+          </div>
+          <div>
+            <label>6. Cán bộ thẩm định</label>
+            <input type="text" id="wTtCb" placeholder="(Có thể để trống)" />
+          </div>
+        </div>
+        <div class="wfoot">
+          <button class="btn" id="wBack2">← Quay lại</button>
+          <button class="btn primary" id="wNext2">Tiếp tục →</button>
+        </div>
+      </div>
+
+      <div class="wpanel" id="wstep3" style="display:none">
+        <h3>Hệ thống PCCC áp dụng</h3>
+        <p class="h-sub">Tick các hệ thống cần kèm BDC khi nộp hồ sơ thẩm duyệt. Có thể chỉnh sau.</p>
+        <div class="ht-list" id="wHtList"></div>
+        <div class="wfoot">
+          <button class="btn" id="wBack3">← Quay lại</button>
+          <button class="btn primary" id="wNext3">Tiếp tục →</button>
+        </div>
+      </div>
+
+      <div class="wpanel" id="wstep4" style="display:none">
+        <h3>Xác nhận và tạo hồ sơ</h3>
+        <p class="h-sub">Kiểm tra lại — đúng thì bấm "Tạo hồ sơ" để mở checklist tổng hợp.</p>
+        <div id="wSummary"></div>
+        <div class="wfoot">
+          <button class="btn" id="wBack4">← Quay lại</button>
+          <button class="btn primary" id="wCreate">✓ Tạo hồ sơ</button>
         </div>
       </div>
     </div>
   </div>
 
-  <!-- PA-B: Checklist tương tác -->
-  <div class="pane" id="pane-vb">
-    <div class="vb-panel">
-      <div class="vb-info">
-        🧪 <b>Demo Phương án B</b> — Hiển thị 12 mục đầu của BDC A4 (Nhà văn phòng) đã được parse. Bản đầy đủ sẽ có ~80–100 mục, đầu tư parse nhiều ngày cho cả 42 BDC.<br>
-        <b>Tính năng demo:</b> điền cột "Nội dung thiết kế", chọn kết luận Đạt/KN/Chưa rõ → bên dưới tự đếm tỷ lệ đạt. Bấm "Xuất Word" để demo export.
+  <!-- ====================== VIEW 3: HỒ SƠ CHECKLIST (TỔNG HỢP) ====================== -->
+  <div class="view" id="view-hoso">
+    <div class="breadcrumb">
+      <a onclick="location.hash='#/'">Hồ sơ</a><span class="sep">›</span><span id="hosoBreadName">…</span>
+    </div>
+    <div class="view-head">
+      <div>
+        <h1 class="view-title" id="hosoTitle">…</h1>
+        <div class="view-sub" id="hosoSubtitle"></div>
       </div>
-      <h2 id="vbTitle" style="font-size:17px;font-weight:700;margin-bottom:4px"></h2>
-      <div class="source" id="vbSubtitle" style="font-size:12px;color:var(--text-secondary);margin-bottom:14px"></div>
-      <div class="vb-actions">
-        <button class="primary">📥 Xuất Word hồ sơ thẩm định (demo)</button>
-        <button>📥 Xuất PDF</button>
-        <button>💾 Lưu nháp</button>
-        <button>🧹 Xóa tất cả</button>
+      <div style="display:flex;gap:8px;flex-wrap:wrap">
+        <button class="btn" id="hosoEditBtn">⚙️ Sửa hồ sơ</button>
+        <button class="btn primary" id="hosoExportBtn">📥 Xuất Word</button>
+        <button class="btn danger" id="hosoDelBtn">🗑️ Xóa</button>
       </div>
-      <div class="vb-stats" id="vbStats"></div>
-      <div class="vb-row header">
-        <div>TT</div>
-        <div>Nội dung đối chiếu</div>
-        <div>Nội dung thiết kế</div>
-        <div>Quy định tiêu chuẩn</div>
-        <div>Kết luận</div>
-      </div>
-      <div id="vbList"></div>
+    </div>
+    <div class="cl-toolbar">
+      <div class="cl-stats" id="hosoStats" style="margin-left:0"></div>
+    </div>
+    <div class="cl-grid">
+      <div class="cl-side" id="hosoSide"></div>
+      <div class="cl-main" id="hosoMain"></div>
     </div>
   </div>
 
-  <!-- PA-C: Tra cứu theo công trình -->
-  <div class="pane" id="pane-vc">
-    <div class="vc-input">
-      <h2>🎯 Chọn loại công trình</h2>
-      <p class="sub">Hệ thống tự liệt kê các Bảng đối chiếu cần kèm theo hồ sơ thẩm định.</p>
-      <select id="vcSelect">
-        <option value="">— Chọn loại công trình —</option>
-      </select>
+  <!-- ====================== VIEW 4: BDC ĐƠN LẺ (TRA CỨU) ====================== -->
+  <div class="view" id="view-bdc">
+    <div class="breadcrumb">
+      <a onclick="location.hash='#/'">Hồ sơ</a><span class="sep">›</span><span>Tra cứu BDC đơn lẻ</span>
     </div>
-    <div class="vc-result" id="vcResult">
-      <div class="empty-state">
-        <div class="em">🎯</div>
-        <h3>Chọn công trình ở trên</h3>
-        <p>Vd: chọn "Nhà văn phòng" → trả về BDC A4 + B1 + B5 + B6 + B12.</p>
+    <div class="view-head">
+      <div>
+        <h1 class="view-title" id="bdcTitle">…</h1>
+        <div class="view-sub" id="bdcSubtitle"></div>
       </div>
+    </div>
+    <div class="cl-info">
+      💡 Chế độ <b>tra cứu/học</b> — xem 1 BDC riêng, có thể điền thử để test. Dữ liệu lưu cục bộ theo từng BDC, không gắn với hồ sơ nào.
+    </div>
+    <div class="cl-toolbar">
+      <select id="bdcSelect"></select>
+      <button class="btn" id="bdcResetBtn">🧹 Xóa dữ liệu BDC này</button>
+      <div class="cl-stats" id="bdcStats"></div>
+    </div>
+    <div class="cl-grid">
+      <div class="cl-side" id="bdcSide"></div>
+      <div class="cl-main" id="bdcMain"></div>
     </div>
   </div>
 
 </div>
 
-<!-- mammoth.js for .docx → HTML rendering -->
-<script src="https://cdn.jsdelivr.net/npm/mammoth@1.6.0/mammoth.browser.min.js"></script>
-<script src="modules/bdc/data/index.js"></script>
-<script src="modules/bdc/data/checklist_a4_demo.js"></script>
+<script src="modules/bdc/data/index.js?v=45"></script>
+<script src="modules/bdc/data/checklist_a1_ha_tang.js?v=45"></script>
+<script src="modules/bdc/data/checklist_a2_chung_cu.js?v=45"></script>
+<script src="modules/bdc/data/checklist_a3_hon_hop.js?v=45"></script>
+<script src="modules/bdc/data/checklist_a4_van_phong.js?v=45"></script>
+<script src="modules/bdc/data/checklist_a5_khach_san.js?v=45"></script>
+<script src="modules/bdc/data/checklist_a6_mam_non.js?v=45"></script>
+<script src="modules/bdc/data/checklist_a7_truong_hoc.js?v=45"></script>
+<script src="modules/bdc/data/checklist_a8_benh_vien.js?v=45"></script>
+<script src="modules/bdc/data/checklist_a9_cho_tttm.js?v=45"></script>
+<script src="modules/bdc/data/checklist_a10_the_thao.js?v=45"></script>
+<script src="modules/bdc/data/checklist_a11_rap_phim.js?v=45"></script>
+<script src="modules/bdc/data/checklist_a12_karaoke.js?v=45"></script>
+<script src="modules/bdc/data/checklist_a13_gara.js?v=45"></script>
+<script src="modules/bdc/data/checklist_a14_nha_san_xuat.js?v=45"></script>
+<script src="modules/bdc/data/checklist_a15_nha_kho.js?v=45"></script>
+<script src="modules/bdc/data/checklist_a16_xang_dau.js?v=45"></script>
+<script src="modules/bdc/data/checklist_a17_chiet_khi_dot.js?v=45"></script>
+<script src="modules/bdc/data/checklist_a18_kho_dau_mo.js?v=45"></script>
+<script src="modules/bdc/data/checklist_a19_kho_lpg.js?v=45"></script>
+<script src="modules/bdc/data/checklist_a20_kho_lng.js?v=45"></script>
+<script src="modules/bdc/data/checklist_a21_vlncn.js?v=45"></script>
+<script src="modules/bdc/data/checklist_a22_bien_ap.js?v=45"></script>
+<script src="modules/bdc/data/checklist_a23_ham_duong_bo.js?v=45"></script>
+<script src="modules/bdc/data/checklist_a24_tau_bien.js?v=45"></script>
+<script src="modules/bdc/data/checklist_a25_thuy_hang_ng.js?v=45"></script>
+<script src="modules/bdc/data/checklist_a26_thuy_hanh_khach.js?v=45"></script>
+<script src="modules/bdc/data/checklist_b1_bao_chay_thuong.js?v=45"></script>
+<script src="modules/bdc/data/checklist_b2_bao_chay_dia_chi.js?v=45"></script>
+<script src="modules/bdc/data/checklist_b3_tram_bom.js?v=45"></script>
+<script src="modules/bdc/data/checklist_b4_cap_nuoc_ngoai.js?v=45"></script>
+<script src="modules/bdc/data/checklist_b5_hong_nuoc.js?v=45"></script>
+<script src="modules/bdc/data/checklist_b6_cc_nuoc_bot.js?v=45"></script>
+<script src="modules/bdc/data/checklist_b7_bot_co_dinh.js?v=45"></script>
+<script src="modules/bdc/data/checklist_b8_khi_hoa_long.js?v=45"></script>
+<script src="modules/bdc/data/checklist_b9_khi_nen.js?v=45"></script>
+<script src="modules/bdc/data/checklist_b10_co2.js?v=45"></script>
+<script src="modules/bdc/data/checklist_b11_sol_khi.js?v=45"></script>
+<script src="modules/bdc/data/checklist_b12_pt_ban_dau.js?v=45"></script>
+<script src="modules/bdc/data/checklist_b13_chieu_sang_loa.js?v=45"></script>
+<script src="modules/bdc/data/checklist_b14_dien_pccc.js?v=45"></script>
+<script src="modules/bdc/data/checklist_b15_gia_ke.js?v=45"></script>
+<script src="modules/bdc/data/checklist_b16_bot.js?v=45"></script>
 <script>
-// Theme toggle
+// ============== Theme ==============
 const root = document.documentElement;
-const saved = localStorage.getItem('pccc-theme') || 'light';
-root.setAttribute('data-theme', saved);
-document.getElementById('themeIcon').textContent = saved === 'dark' ? '☀️' : '🌙';
+root.setAttribute('data-theme', localStorage.getItem('pccc-theme') || 'light');
+document.getElementById('themeIcon').textContent = root.getAttribute('data-theme') === 'dark' ? '☀️' : '🌙';
 document.getElementById('themeToggle').addEventListener('click', () => {
-  const cur = root.getAttribute('data-theme');
-  const next = cur === 'dark' ? 'light' : 'dark';
+  const next = root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
   root.setAttribute('data-theme', next);
   localStorage.setItem('pccc-theme', next);
   document.getElementById('themeIcon').textContent = next === 'dark' ? '☀️' : '🌙';
 });
 
-// Tabs
-document.querySelectorAll('.tab').forEach(btn => {
-  btn.addEventListener('click', () => {
-    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-    document.querySelectorAll('.pane').forEach(p => p.classList.remove('active'));
-    btn.classList.add('active');
-    document.getElementById('pane-' + btn.dataset.tab).classList.add('active');
-  });
+// ============== BDC data ==============
+const BDC = window.BDC_INDEX;
+const BDC_LOADED = {};
+BDC.congTrinh.concat(BDC.heThong).forEach(it => {
+  const v = window['BDC_CHECKLIST_' + it.id.toUpperCase()];
+  if (v) BDC_LOADED[it.id] = { data: v, ma: it.ma, ten: it.ten, icon: it.icon, file: it.file };
 });
 
-const BDC = window.BDC_INDEX;
+// ============== Hồ sơ storage ==============
+const HOSO_LIST_KEY = 'bdc-hoso-list';
+function loadHosoList() { return JSON.parse(localStorage.getItem(HOSO_LIST_KEY) || '[]'); }
+function saveHosoList(arr) { localStorage.setItem(HOSO_LIST_KEY, JSON.stringify(arr)); }
+function getHoso(id) { return loadHosoList().find(h => h.id === id); }
+function upsertHoso(h) {
+  const arr = loadHosoList();
+  const i = arr.findIndex(x => x.id === h.id);
+  if (i >= 0) arr[i] = h; else arr.unshift(h);
+  saveHosoList(arr);
+}
+function deleteHoso(id) {
+  saveHosoList(loadHosoList().filter(h => h.id !== id));
+  localStorage.removeItem('hoso-' + id + '-verdict');
+  localStorage.removeItem('hoso-' + id + '-thietke');
+}
+function genHosoId() { return 'h' + Math.random().toString(36).slice(2, 9) + Date.now().toString(36).slice(-4); }
 
-// =================== PHƯƠNG ÁN A — Document viewer ===================
-function renderVaSidebar() {
-  const sb = document.getElementById('vaSidebar');
-  const renderGroup = (title, items) => `
-    <h3>${title}</h3>
-    ${items.map(it => `
-      <div class="va-item" data-id="${it.id}">
-        <span class="ma">${it.ma}</span>
-        <span>${it.icon} ${it.ten}</span>
+// ============== Generic helpers ==============
+function escHtml(s) { return (s == null ? '' : String(s)).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+function escWithImg(s, bdcId) {
+  return escHtml(s).replace(/\[\[IMG:([a-zA-Z0-9_.\-]+)\]\]/g, (_, fn) =>
+    `<img class="bdc-img" src="modules/bdc/data/img/${bdcId}/${fn}" alt="Hình minh họa" loading="lazy" onerror="this.style.opacity=.3">`);
+}
+function countLeafs(sec) { return sec.subs.reduce((n, s) => n + s.items.length, 0); }
+
+// ============== Universal Checklist renderer ==============
+// scope: { stateKey, groups: [{label, bdcId, ma, sections}], sideEl, mainEl, statsEl, onChange? }
+function buildChecklist(scope) {
+  // flatten: every section becomes a sidebar entry
+  const flat = [];
+  scope.groups.forEach((g, gi) => {
+    g.sections.forEach((sec, si) => flat.push({ gi, si, group: g, sec }));
+  });
+
+  // state
+  const verdictKey = scope.stateKey + '-verdict';
+  const thietKeKey = scope.stateKey + '-thietke';
+  const state = {
+    current: 0,
+    open: new Set(),
+    verdict: JSON.parse(localStorage.getItem(verdictKey) || '{}'),
+    thietKe: JSON.parse(localStorage.getItem(thietKeKey) || '{}'),
+  };
+  function save() {
+    localStorage.setItem(verdictKey, JSON.stringify(state.verdict));
+    localStorage.setItem(thietKeKey, JSON.stringify(state.thietKe));
+    if (scope.onChange) scope.onChange();
+  }
+  function itemKey(bdcId, si, subi, ii) { return bdcId + '|' + si + '|' + subi + '|' + ii; }
+
+  function renderSide() {
+    let html = '';
+    let lastGi = -1;
+    flat.forEach((f, idx) => {
+      if (f.gi !== lastGi) {
+        const g = scope.groups[f.gi];
+        html += `<h4>${escHtml(g.label)}</h4>`;
+        lastGi = f.gi;
+      }
+      const leafs = countLeafs(f.sec);
+      let done = 0;
+      f.sec.subs.forEach((sub, subi) => sub.items.forEach((_, ii) => {
+        if (state.verdict[itemKey(f.group.bdcId, f.si, subi, ii)]) done++;
+      }));
+      const bdcChip = scope.groups.length > 1 ? `<span class="bdc-chip">${f.group.ma}</span>` : '';
+      html += `<div class="sec-item ${idx === state.current ? 'active' : ''}" data-idx="${idx}">
+        <span class="num">${escHtml(f.sec.tt)}</span>
+        <div style="flex:1; min-width:0">
+          <div style="line-height:1.35">${escHtml(f.sec.ten)}${bdcChip}</div>
+          <span class="progress">${done}/${leafs} đã đối chiếu</span>
+        </div>
+      </div>`;
+    });
+    scope.sideEl.innerHTML = html;
+    scope.sideEl.querySelectorAll('.sec-item').forEach(el => {
+      el.addEventListener('click', () => {
+        state.current = +el.dataset.idx;
+        state.open.clear();
+        renderSide(); renderMain();
+      });
+    });
+  }
+
+  function renderMain() {
+    const f = flat[state.current];
+    if (!f) { scope.mainEl.innerHTML = '<div class="empty-state">Không có dữ liệu.</div>'; return; }
+    const { group, sec, si } = f;
+    const bdcId = group.bdcId;
+    let html = `<h2>${escHtml(sec.tt)}. ${escHtml(sec.ten)}</h2>
+      <div class="sub-title">${escHtml(group.label)} · BDC ${group.ma} · ${countLeafs(sec)} mục cần đối chiếu</div>`;
+    sec.subs.forEach((sub, subi) => {
+      html += `<div class="cl-sub">`;
+      if (!sub.implicit && (sub.tt || sub.ten)) {
+        html += `<div class="cl-sub-head"><span class="sub-num">${escHtml(sub.tt)}</span><span class="sub-name">${escHtml(sub.ten)}</span></div>`;
+      }
+      if (sub.huong_dan) html += `<div class="huong-dan-box">💡 ${escWithImg(sub.huong_dan, bdcId)}</div>`;
+      if (sub.quy_dinh) {
+        html += `<div class="cl-sub-quydinh">${escWithImg(sub.quy_dinh, bdcId)}</div>`;
+        if (sub.vien_dan) html += `<div class="vien-dan-box" style="margin:-6px 0 10px">📘 ${escHtml(sub.vien_dan)}</div>`;
+      }
+      sub.items.forEach((it, ii) => {
+        const k = itemKey(bdcId, si, subi, ii);
+        const v = state.verdict[k] || '';
+        const cls = (state.open.has(k) ? 'open ' : '') + v;
+        const label = v === 'pass' ? '✅ Đạt' : v === 'kn' ? '⚠️ Kiến nghị' : v === 'na' ? 'N/A' : 'Chưa đối chiếu';
+        html += `<div class="cl-card ${cls}" data-k="${k}">
+          <div class="cl-card-head">
+            <span class="bullet">${escHtml(it.bullet)}</span>
+            <span class="head-title">${escHtml(it.ten)}</span>
+            <span class="head-status">${label}</span>
+            <span class="caret">›</span>
+          </div>
+          <div class="cl-card-body">
+            ${it.huong_dan ? `<div class="group-label">Hướng dẫn / Lưu ý (Bộ Công an)</div><div class="huong-dan-box">💡 ${escWithImg(it.huong_dan, bdcId)}</div>` : ''}
+            ${it.quy_dinh ? `<div class="group-label">Quy định tiêu chuẩn</div><div class="quy-dinh-box">${escWithImg(it.quy_dinh, bdcId)}</div>` : ''}
+            ${it.vien_dan ? `<div class="vien-dan-box">📘 ${escHtml(it.vien_dan)}</div>` : ''}
+            <div class="group-label">Nội dung thiết kế (điền theo hồ sơ)</div>
+            <textarea data-k="${k}" placeholder="Mô tả thiết kế thực tế...">${escHtml(state.thietKe[k] || '')}</textarea>
+            <div class="group-label">Kết luận</div>
+            <div class="verdict-row">
+              <button class="vbtn pass ${v==='pass'?'active':''}" data-k="${k}" data-v="pass">✅ Đạt</button>
+              <button class="vbtn kn ${v==='kn'?'active':''}" data-k="${k}" data-v="kn">⚠️ Kiến nghị</button>
+              <button class="vbtn na ${v==='na'?'active':''}" data-k="${k}" data-v="na">N/A</button>
+            </div>
+          </div>
+        </div>`;
+      });
+      html += `</div>`;
+    });
+    scope.mainEl.innerHTML = html;
+    attach();
+  }
+
+  function attach() {
+    scope.mainEl.querySelectorAll('.cl-card-head').forEach(h => {
+      h.addEventListener('click', () => {
+        const card = h.parentElement;
+        const k = card.dataset.k;
+        if (state.open.has(k)) state.open.delete(k); else state.open.add(k);
+        card.classList.toggle('open');
+      });
+    });
+    scope.mainEl.querySelectorAll('textarea').forEach(t => {
+      t.addEventListener('input', e => { state.thietKe[e.target.dataset.k] = e.target.value; save(); });
+      t.addEventListener('click', e => e.stopPropagation());
+    });
+    scope.mainEl.querySelectorAll('.vbtn').forEach(b => {
+      b.addEventListener('click', e => {
+        e.stopPropagation();
+        const k = b.dataset.k, vNew = b.dataset.v;
+        state.verdict[k] = state.verdict[k] === vNew ? '' : vNew;
+        save();
+        const card = scope.mainEl.querySelector(`.cl-card[data-k="${k}"]`);
+        const v = state.verdict[k] || '';
+        card.classList.remove('pass','kn','na');
+        if (v) card.classList.add(v);
+        card.querySelectorAll('.vbtn').forEach(btn => btn.classList.toggle('active', state.verdict[k] === btn.dataset.v));
+        card.querySelector('.head-status').textContent = v === 'pass' ? '✅ Đạt' : v === 'kn' ? '⚠️ Kiến nghị' : v === 'na' ? 'N/A' : 'Chưa đối chiếu';
+        renderSide();
+        renderStats();
+      });
+    });
+  }
+
+  function getTotals() {
+    let total = 0, pass = 0, kn = 0, na = 0, done = 0;
+    flat.forEach(f => f.sec.subs.forEach((sub, subi) => sub.items.forEach((_, ii) => {
+      total++;
+      const v = state.verdict[itemKey(f.group.bdcId, f.si, subi, ii)];
+      if (v) done++;
+      if (v === 'pass') pass++; else if (v === 'kn') kn++; else if (v === 'na') na++;
+    })));
+    return { total, pass, kn, na, done };
+  }
+  function renderStats() {
+    if (!scope.statsEl) return;
+    const t = getTotals();
+    scope.statsEl.innerHTML = `<span class="stat">Tổng: <strong>${t.total}</strong></span>
+      <span class="stat pass">✅ ${t.pass}</span>
+      <span class="stat kn">⚠️ ${t.kn}</span>
+      <span class="stat pending">⏳ ${t.total - t.done}</span>`;
+  }
+
+  state.current = 0;
+  renderSide(); renderMain(); renderStats();
+  return {
+    getTotals,
+    reset() {
+      state.verdict = {}; state.thietKe = {}; state.open.clear();
+      save();
+      renderSide(); renderMain(); renderStats();
+    }
+  };
+}
+
+// ============== VIEW 1: List ==============
+function renderListView() {
+  const list = loadHosoList();
+  document.getElementById('hosoCount').textContent = list.length ? `(${list.length})` : '';
+  const cont = document.getElementById('hosoListContainer');
+  if (!list.length) {
+    cont.innerHTML = `<div class="empty-state">
+      <div class="em">📂</div>
+      <h3>Chưa có hồ sơ nào</h3>
+      <p>Bấm "Tạo hồ sơ mới" để bắt đầu với 1 công trình cụ thể.</p>
+    </div>`;
+  } else {
+    cont.innerHTML = '<div class="hoso-grid">' + list.map(h => {
+      const ct = BDC.congTrinh.find(c => c.id === h.maCongTrinhFull);
+      const bdcChips = h.heThongIds.map(id => {
+        const b = BDC.heThong.find(x => x.id === id); return b ? `<span class="bdc-chip">${b.ma}</span>` : '';
+      }).join('');
+      const stat = hosoProgress(h);
+      const pct = stat.total ? Math.round(stat.done / stat.total * 100) : 0;
+      return `<div class="hoso-card" data-id="${h.id}">
+        <button class="del" data-del="${h.id}">✕</button>
+        <span class="tag">${ct ? ct.ma : '?'} · ${(h.heThongIds || []).length} hệ thống</span>
+        <div class="name">${escHtml(h.ten)}</div>
+        <div class="meta">${ct ? ct.icon + ' ' + escHtml(ct.ten) : ''}</div>
+        <div class="bdcs"><span class="bdc-chip">${ct ? ct.ma : '?'}</span> ${bdcChips}</div>
+        <div class="progress-bar"><div class="fill" style="width:${pct}%"></div></div>
+        <div class="progress-text">${stat.done}/${stat.total} đã đối chiếu · ${pct}%</div>
+      </div>`;
+    }).join('') + '</div>';
+    cont.querySelectorAll('.hoso-card').forEach(card => {
+      card.addEventListener('click', () => { location.hash = '#/ho-so/' + card.dataset.id; });
+    });
+    cont.querySelectorAll('[data-del]').forEach(btn => {
+      btn.addEventListener('click', e => {
+        e.stopPropagation();
+        const id = btn.dataset.del;
+        const h = getHoso(id);
+        if (!h) return;
+        if (confirm('Xóa hồ sơ "' + h.ten + '"? Hành động không khôi phục được.')) {
+          deleteHoso(id);
+          renderListView();
+        }
+      });
+    });
+  }
+  // Quick BDC grid
+  const qb = document.getElementById('quickBdcGrid');
+  qb.innerHTML = BDC.congTrinh.concat(BDC.heThong).map(it => `
+    <div class="quickbdc-card" data-bdc="${it.id}">
+      <span class="ic">${it.icon}</span>
+      <div style="flex:1; min-width:0">
+        <div class="ma">${it.ma}</div>
+        <div class="tn">${escHtml(it.ten)}</div>
       </div>
-    `).join('')}
-  `;
-  sb.innerHTML = renderGroup('Theo công trình', BDC.congTrinh) + renderGroup('Theo hệ thống', BDC.heThong);
-  sb.querySelectorAll('.va-item').forEach(el => {
+    </div>`).join('');
+  qb.querySelectorAll('[data-bdc]').forEach(el => {
+    el.addEventListener('click', () => { location.hash = '#/bdc/' + el.dataset.bdc; });
+  });
+}
+
+function hosoProgress(h) {
+  const verdict = JSON.parse(localStorage.getItem('hoso-' + h.id + '-verdict') || '{}');
+  let total = 0, done = 0;
+  const bdcIds = [h.maCongTrinhFull, ...(h.heThongIds || [])];
+  bdcIds.forEach(bid => {
+    const data = BDC_LOADED[bid] && BDC_LOADED[bid].data;
+    if (!data) return;
+    data.forEach((sec, si) => sec.subs.forEach((sub, subi) => sub.items.forEach((_, ii) => {
+      total++;
+      if (verdict[bid + '|' + si + '|' + subi + '|' + ii]) done++;
+    })));
+  });
+  return { total, done };
+}
+
+// ============== VIEW 2: Wizard ==============
+const TT_FIELDS = [
+  ['wTtTen', 'tenCongTrinh'],
+  ['wTtDia', 'diaDiem'],
+  ['wTtCdt', 'chuDauTu'],
+  ['wTtDc', 'diaChiDaiDien'],
+  ['wTtDvtv', 'donViTuVan'],
+  ['wTtCb', 'canBoThamDinh']
+];
+const wizState = { ten: '', maCongTrinh: '', heThongIds: [], thongTinDuAn: {}, _editId: null };
+
+function renderWizard() {
+  // step 1 - ct grid
+  const ctGrid = document.getElementById('wCtGrid');
+  ctGrid.innerHTML = BDC.congTrinh.map(c => `
+    <div class="ct-card ${wizState.maCongTrinh === c.id ? 'selected' : ''}" data-id="${c.id}">
+      <span class="ic">${c.icon}</span>
+      <div><div class="ma">${c.ma}</div><div class="tn">${escHtml(c.ten)}</div></div>
+    </div>`).join('');
+  ctGrid.querySelectorAll('.ct-card').forEach(el => {
     el.addEventListener('click', () => {
-      sb.querySelectorAll('.va-item').forEach(x => x.classList.remove('active'));
-      el.classList.add('active');
-      loadDocx(el.dataset.id);
+      wizState.maCongTrinh = el.dataset.id;
+      ctGrid.querySelectorAll('.ct-card').forEach(x => x.classList.toggle('selected', x.dataset.id === wizState.maCongTrinh));
+    });
+  });
+  document.getElementById('wName').value = wizState.ten;
+  document.getElementById('wName').oninput = e => wizState.ten = e.target.value;
+
+  // step 2 - thong tin du an
+  TT_FIELDS.forEach(([elId, key]) => {
+    const el = document.getElementById(elId);
+    el.value = wizState.thongTinDuAn[key] || '';
+    el.oninput = e => { wizState.thongTinDuAn[key] = e.target.value; };
+  });
+
+  // step 3 - ht list
+  const ht = document.getElementById('wHtList');
+  ht.innerHTML = BDC.heThong.map(b => `
+    <label class="ht-row ${wizState.heThongIds.includes(b.id) ? 'checked' : ''}" data-id="${b.id}">
+      <input type="checkbox" ${wizState.heThongIds.includes(b.id) ? 'checked' : ''}/>
+      <span class="ic">${b.icon}</span>
+      <div class="info">
+        <div class="ma">${b.ma}</div>
+        <div class="tn">${escHtml(b.ten)}</div>
+      </div>
+    </label>`).join('');
+  ht.querySelectorAll('input').forEach((inp, i) => {
+    inp.addEventListener('change', () => {
+      const id = ht.querySelectorAll('.ht-row')[i].dataset.id;
+      if (inp.checked) { if (!wizState.heThongIds.includes(id)) wizState.heThongIds.push(id); }
+      else wizState.heThongIds = wizState.heThongIds.filter(x => x !== id);
+      ht.querySelectorAll('.ht-row')[i].classList.toggle('checked', inp.checked);
     });
   });
 }
+function gotoStep(n) {
+  [1, 2, 3, 4].forEach(i => {
+    document.getElementById('wstep' + i).style.display = i === n ? 'block' : 'none';
+    document.querySelector(`.wstep[data-step="${i}"]`).classList.toggle('active', i === n);
+    document.querySelector(`.wstep[data-step="${i}"]`).classList.toggle('done', i < n);
+  });
+  if (n === 4) renderWizSummary();
+}
+function renderWizSummary() {
+  const ct = BDC.congTrinh.find(c => c.id === wizState.maCongTrinh);
+  const hts = wizState.heThongIds.map(id => BDC.heThong.find(b => b.id === id)).filter(Boolean);
+  let totalItems = 0;
+  if (ct && BDC_LOADED[ct.id]) BDC_LOADED[ct.id].data.forEach(s => totalItems += countLeafs(s));
+  hts.forEach(b => { if (BDC_LOADED[b.id]) BDC_LOADED[b.id].data.forEach(s => totalItems += countLeafs(s)); });
+  const tt = wizState.thongTinDuAn || {};
+  const ttFilled = TT_FIELDS.filter(([_, k]) => (tt[k] || '').trim()).length;
+  document.getElementById('wSummary').innerHTML = `
+    <div style="display:grid;gap:14px;padding:6px 0">
+      <div><div class="group-label" style="margin-top:0">Tên hồ sơ</div><div style="font-size:16px;font-weight:600">${escHtml(wizState.ten || '(chưa đặt tên)')}</div></div>
+      <div><div class="group-label">Loại công trình</div><div style="font-size:14px">${ct ? ct.icon + ' <b>' + ct.ma + '</b> — ' + escHtml(ct.ten) : '<i style="color:var(--tag-red)">Chưa chọn</i>'}</div></div>
+      <div><div class="group-label">Thông tin dự án</div><div style="font-size:13px">${ttFilled}/6 mục đã điền${tt.tenCongTrinh ? ' · ' + escHtml(tt.tenCongTrinh) : ''}</div></div>
+      <div><div class="group-label">Hệ thống áp dụng (${hts.length})</div><div style="font-size:13px;display:flex;flex-wrap:wrap;gap:6px">
+        ${hts.length ? hts.map(b => `<span style="background:var(--bg-soft);padding:4px 10px;border-radius:6px"><b>${b.ma}</b> ${b.icon} ${escHtml(b.ten)}</span>`).join('') : '<i style="color:var(--text-tertiary)">Không có hệ thống nào</i>'}</div></div>
+      <div style="background:var(--brand-soft);padding:12px 16px;border-radius:10px;color:var(--brand);font-weight:600">📊 Tổng số mục cần đối chiếu: ${totalItems}</div>
+    </div>`;
+}
+document.getElementById('wNext1').addEventListener('click', () => {
+  if (!wizState.ten.trim()) { alert('Đặt tên hồ sơ trước nhé.'); return; }
+  if (!wizState.maCongTrinh) { alert('Chọn loại công trình.'); return; }
+  gotoStep(2);
+});
+document.getElementById('wBack2').addEventListener('click', () => gotoStep(1));
+document.getElementById('wNext2').addEventListener('click', () => gotoStep(3));
+document.getElementById('wBack3').addEventListener('click', () => gotoStep(2));
+document.getElementById('wNext3').addEventListener('click', () => gotoStep(4));
+document.getElementById('wBack4').addEventListener('click', () => gotoStep(3));
 
-function findItemById(id) {
-  return BDC.congTrinh.concat(BDC.heThong).find(x => x.id === id);
+// ============== VIEW 3: Hồ sơ checklist ==============
+let currentHosoChecklist = null;
+function renderHosoView(id) {
+  const h = getHoso(id);
+  if (!h) { location.hash = '#/'; return; }
+  const ct = BDC.congTrinh.find(c => c.id === h.maCongTrinhFull);
+  document.getElementById('hosoBreadName').textContent = h.ten;
+  document.getElementById('hosoTitle').textContent = h.ten;
+  document.getElementById('hosoSubtitle').textContent = `${ct ? ct.icon + ' ' + ct.ma + ' — ' + ct.ten : ''} · ${h.heThongIds.length} hệ thống áp dụng`;
+
+  // build groups: PHẦN A (công trình) + PHẦN B (mỗi hệ thống là 1 group? hay gộp 1 group?)
+  // Theo design: 2 group lớn — A tổng quan, B chi tiết (sub-divided by BDC trong sidebar qua h4)
+  const groups = [];
+  if (BDC_LOADED[h.maCongTrinhFull]) {
+    groups.push({
+      label: `📋 PHẦN A — Tổng quan công trình (${ct.ma})`,
+      bdcId: h.maCongTrinhFull,
+      ma: ct.ma,
+      sections: BDC_LOADED[h.maCongTrinhFull].data
+    });
+  }
+  h.heThongIds.forEach(htId => {
+    const b = BDC.heThong.find(x => x.id === htId);
+    if (b && BDC_LOADED[htId]) {
+      groups.push({
+        label: `⚙️ PHẦN B — ${b.ma} ${b.ten}`,
+        bdcId: htId,
+        ma: b.ma,
+        sections: BDC_LOADED[htId].data
+      });
+    }
+  });
+
+  currentHosoChecklist = buildChecklist({
+    stateKey: 'hoso-' + id,
+    groups,
+    sideEl: document.getElementById('hosoSide'),
+    mainEl: document.getElementById('hosoMain'),
+    statsEl: document.getElementById('hosoStats')
+  });
+
+  document.getElementById('hosoEditBtn').onclick = () => {
+    wizState.ten = h.ten;
+    wizState.maCongTrinh = h.maCongTrinhFull;
+    wizState.heThongIds = h.heThongIds.slice();
+    wizState.thongTinDuAn = Object.assign({}, h.thongTinDuAn || {});
+    sessionStorage.setItem('edit-hoso-id', h.id);
+    location.hash = '#/new';
+  };
+  document.getElementById('hosoDelBtn').onclick = () => {
+    if (!confirm('Xóa hồ sơ "' + h.ten + '"? Hành động không khôi phục được.')) return;
+    deleteHoso(h.id);
+    location.hash = '#/';
+  };
+  document.getElementById('hosoExportBtn').onclick = () => exportHoso(h);
 }
 
-async function loadDocx(id) {
-  const item = findItemById(id);
-  const cont = document.getElementById('vaContent');
-  cont.innerHTML = `
-    <div class="vw-head">
-      <h2>${item.ma} — ${item.ten}</h2>
-      <div class="vw-actions">
-        <button onclick="window.open('modules/bdc/source/${item.file}', '_blank')">⬇️ Tải .docx</button>
-        <button onclick="window.print()">🖨️ In</button>
-      </div>
-    </div>
-    <div class="loading-state"><div class="spinner"></div>Đang render từ file .docx...</div>
-  `;
-  try {
-    const resp = await fetch('modules/bdc/source/' + item.file);
-    if (!resp.ok) throw new Error('Không tải được file ' + item.file);
-    const buf = await resp.arrayBuffer();
-    const res = await mammoth.convertToHtml({ arrayBuffer: buf });
-    cont.querySelector('.loading-state').outerHTML = `<div class="vw-content">${res.value}</div>`;
-  } catch (err) {
-    cont.querySelector('.loading-state').innerHTML = `
-      <div style="color:var(--tag-red)">⚠️ Lỗi: ${err.message}</div>
-      <p style="margin-top:8px;font-size:12px">Nếu mở bằng file:// có thể bị chặn CORS. Cần chạy qua web server hoặc deploy lên GitHub Pages để dùng.</p>
-    `;
+function exportHoso(h) {
+  // Build payload for export.py
+  const verdict = JSON.parse(localStorage.getItem('hoso-' + h.id + '-verdict') || '{}');
+  const thietKe = JSON.parse(localStorage.getItem('hoso-' + h.id + '-thietke') || '{}');
+  const payload = {
+    id: h.id, ten: h.ten,
+    maCongTrinhFull: h.maCongTrinhFull,
+    heThongIds: h.heThongIds || [],
+    thongTinDuAn: h.thongTinDuAn || {},
+    verdict, thietKe
+  };
+  // Download as JSON
+  const blob = new Blob([JSON.stringify(payload, null, 2)], { type: 'application/json' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `hoso_${h.id}.json`;
+  a.click();
+  URL.revokeObjectURL(url);
+  // Show instructions
+  const msg = [
+    '✅ Đã tải xuống: hoso_' + h.id + '.json',
+    '',
+    'Chạy lệnh sau trong thư mục modules/bdc:',
+    '  python export.py <đường dẫn tới hoso_' + h.id + '.json>',
+    '',
+    'File output sẽ là: hoso_' + h.id + '.docx (giữ nguyên template Bộ Công an + điền nội dung thiết kế + kết luận).',
+    '',
+    '(Bản backend sẽ tự động tạo file khi triển khai Phase 2.)'
+  ].join('\n');
+  alert(msg);
+}
+
+// ============== VIEW 4: BDC đơn lẻ ==============
+const bdcSelect = document.getElementById('bdcSelect');
+[['congTrinh','📋 Công trình (A)'], ['heThong','⚙️ Hệ thống PCCC (B)']].forEach(([gKey, gLabel]) => {
+  const items = BDC[gKey];
+  if (!items.length) return;
+  const og = document.createElement('optgroup'); og.label = gLabel;
+  items.forEach(it => {
+    if (!BDC_LOADED[it.id]) return;
+    const opt = document.createElement('option');
+    opt.value = it.id; opt.textContent = `${it.ma} — ${it.icon} ${it.ten}`;
+    og.appendChild(opt);
+  });
+  bdcSelect.appendChild(og);
+});
+bdcSelect.addEventListener('change', () => { location.hash = '#/bdc/' + bdcSelect.value; });
+
+let currentBdcChecklist = null;
+function renderBdcView(bdcId) {
+  if (!BDC_LOADED[bdcId]) { location.hash = '#/'; return; }
+  const meta = BDC_LOADED[bdcId];
+  bdcSelect.value = bdcId;
+  document.getElementById('bdcTitle').textContent = `${meta.ma} — ${meta.ten}`;
+  document.getElementById('bdcSubtitle').textContent = `BDC đơn lẻ · ${meta.data.reduce((n, s) => n + countLeafs(s), 0)} mục`;
+
+  currentBdcChecklist = buildChecklist({
+    stateKey: 'bdc-' + bdcId,
+    groups: [{ label: 'Mục lục', bdcId, ma: meta.ma, sections: meta.data }],
+    sideEl: document.getElementById('bdcSide'),
+    mainEl: document.getElementById('bdcMain'),
+    statsEl: document.getElementById('bdcStats')
+  });
+
+  document.getElementById('bdcResetBtn').onclick = () => {
+    if (!confirm('Xóa toàn bộ verdict + nội dung thiết kế của BDC này?')) return;
+    currentBdcChecklist.reset();
+  };
+}
+
+// ============== Router ==============
+function route() {
+  const hash = location.hash || '#/';
+  document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+  window.scrollTo(0, 0);
+
+  if (hash === '#/' || hash === '') {
+    document.getElementById('view-list').classList.add('active');
+    renderListView();
+  } else if (hash === '#/new') {
+    document.getElementById('view-wizard').classList.add('active');
+    const editId = sessionStorage.getItem('edit-hoso-id');
+    if (editId) {
+      sessionStorage.removeItem('edit-hoso-id');
+      wizState._editId = editId;
+    } else if (!wizState._editId) {
+      // fresh create — only reset if not already prefilled
+      if (!wizState.ten && !wizState.maCongTrinh) resetWiz();
+    }
+    gotoStep(1);
+    renderWizard();
+  } else if (hash.startsWith('#/ho-so/')) {
+    document.getElementById('view-hoso').classList.add('active');
+    renderHosoView(hash.slice('#/ho-so/'.length));
+  } else if (hash.startsWith('#/bdc/')) {
+    document.getElementById('view-bdc').classList.add('active');
+    renderBdcView(hash.slice('#/bdc/'.length));
+  } else {
+    location.hash = '#/';
   }
 }
 
-renderVaSidebar();
-
-// =================== PHƯƠNG ÁN B — Checklist tương tác ===================
-const stateB = { ketLuan: {}, thietKe: {} };
-
-function renderVB() {
-  const data = window.BDC_CHECKLIST_A4;
-  document.getElementById('vbTitle').textContent = data.ten;
-  document.getElementById('vbSubtitle').textContent = `Công trình: ${data.congTrinh} · ${data.muc.filter(m => !m.la_tieu_de).length} mục kiểm tra (rút gọn để demo)`;
-  const list = document.getElementById('vbList');
-  list.innerHTML = data.muc.map(m => {
-    if (m.la_tieu_de) {
-      return `<div class="vb-row tieu-de">
-        <div class="so-stt">${m.so}</div>
-        <div style="grid-column: span 4">${m.ten}</div>
-      </div>`;
-    }
-    return `<div class="vb-row" data-stt="${m.so}">
-      <div class="so-stt">${m.so}</div>
-      <div>${m.noi_dung_doi_chieu || ''}</div>
-      <div class="nd-thiet-ke">
-        <textarea data-stt="${m.so}" placeholder="Nhập nội dung thiết kế...">${stateB.thietKe[m.so] || ''}</textarea>
-      </div>
-      <div>
-        <div class="nd-quy-dinh">${m.quy_dinh || ''}</div>
-        ${m.vien_dan ? `<div class="vien-dan" style="margin-top:4px">📘 ${m.vien_dan}</div>` : ''}
-      </div>
-      <div class="ket-luan" data-stt="${m.so}">
-        <select data-stt="${m.so}">
-          <option value="">— Chưa rõ —</option>
-          <option value="pass" ${stateB.ketLuan[m.so]==='pass'?'selected':''}>+ Đạt</option>
-          <option value="kn" ${stateB.ketLuan[m.so]==='kn'?'selected':''}>KN Kiến nghị</option>
-        </select>
-      </div>
-    </div>`;
-  }).join('');
-  list.querySelectorAll('select[data-stt]').forEach(s => {
-    s.addEventListener('change', e => { stateB.ketLuan[e.target.dataset.stt] = e.target.value; updateClass(); updateStats(); });
-  });
-  list.querySelectorAll('textarea[data-stt]').forEach(t => {
-    t.addEventListener('input', e => { stateB.thietKe[e.target.dataset.stt] = e.target.value; });
-  });
-  updateClass();
-  updateStats();
+// Create or update hồ sơ
+function resetWiz() {
+  wizState.ten = ''; wizState.maCongTrinh = ''; wizState.heThongIds = [];
+  wizState.thongTinDuAn = {}; wizState._editId = null;
 }
-function updateClass() {
-  document.querySelectorAll('.ket-luan[data-stt]').forEach(el => {
-    el.classList.remove('pass', 'kn');
-    const v = stateB.ketLuan[el.dataset.stt];
-    if (v === 'pass') el.classList.add('pass');
-    else if (v === 'kn') el.classList.add('kn');
-  });
-}
-function updateStats() {
-  const data = window.BDC_CHECKLIST_A4;
-  const total = data.muc.filter(m => !m.la_tieu_de).length;
-  let pass = 0, kn = 0;
-  Object.values(stateB.ketLuan).forEach(v => {
-    if (v === 'pass') pass++; else if (v === 'kn') kn++;
-  });
-  const pending = total - pass - kn;
-  document.getElementById('vbStats').innerHTML = `
-    <div class="stat">Tổng mục: <strong>${total}</strong></div>
-    <div class="stat pass">✅ Đạt: <strong>${pass}</strong> (${Math.round(pass/total*100)}%)</div>
-    <div class="stat kn">⚠️ Kiến nghị: <strong>${kn}</strong></div>
-    <div class="stat pending">⏳ Chưa rõ: <strong>${pending}</strong></div>
-  `;
-}
-renderVB();
-
-// =================== PHƯƠNG ÁN C — Tra cứu theo công trình ===================
-const sel = document.getElementById('vcSelect');
-BDC.congTrinh.forEach(c => {
-  const opt = document.createElement('option');
-  opt.value = c.id;
-  opt.textContent = `${c.ma} — ${c.icon} ${c.ten}`;
-  sel.appendChild(opt);
+document.getElementById('wCreate').addEventListener('click', () => {
+  if (!wizState.ten.trim() || !wizState.maCongTrinh) { alert('Thiếu thông tin.'); return; }
+  const ct = BDC.congTrinh.find(c => c.id === wizState.maCongTrinh);
+  const payload = {
+    ten: wizState.ten.trim(),
+    maCongTrinh: ct.ma.toLowerCase(),
+    maCongTrinhFull: ct.id,
+    heThongIds: wizState.heThongIds.slice(),
+    thongTinDuAn: Object.assign({}, wizState.thongTinDuAn)
+  };
+  let id;
+  if (wizState._editId) {
+    const h = getHoso(wizState._editId);
+    if (h) { Object.assign(h, payload); upsertHoso(h); id = h.id; }
+  }
+  if (!id) {
+    id = genHosoId();
+    upsertHoso(Object.assign({ id, created: Date.now() }, payload));
+  }
+  resetWiz();
+  location.hash = '#/ho-so/' + id;
 });
-sel.addEventListener('change', () => {
-  const id = sel.value;
-  const result = document.getElementById('vcResult');
-  if (!id) { result.innerHTML = `<div class="empty-state"><div class="em">🎯</div><h3>Chọn công trình ở trên</h3></div>`; return; }
-  const item = findItemById(id);
-  const heThongIds = BDC.mapping[id] || [];
-  const heThongs = heThongIds.map(hId => BDC.heThong.find(h => h.id === hId)).filter(Boolean);
 
-  const linkBdc = (bdcItem) => `
-    <div class="vc-card" onclick="document.querySelector('[data-tab=va]').click(); setTimeout(() => document.querySelector('.va-item[data-id=${bdcItem.id}]')?.click(), 100);">
-      <div class="ic">${bdcItem.icon}</div>
-      <div class="info">
-        <div class="nm">${bdcItem.ma}</div>
-        <div class="tn">${bdcItem.ten}</div>
-      </div>
-    </div>
-  `;
-
-  result.innerHTML = `
-    <h3>📋 Bảng đối chiếu công trình</h3>
-    <div class="vc-list">${linkBdc(item)}</div>
-    <h3 style="margin-top:20px">⚙️ Bảng đối chiếu hệ thống PCCC cần kèm (${heThongs.length})</h3>
-    <div class="vc-list">${heThongs.map(linkBdc).join('')}</div>
-    <div style="margin-top:18px;padding:12px 14px;background:rgba(0,102,204,.06);border-left:3px solid var(--link);border-radius:8px;font-size:12px;color:var(--text-secondary)">
-      💡 <b>Mẹo:</b> Click vào card bất kỳ để mở BDC đó trong tab Document Viewer.
-      Mapping này dùng quy tắc rút gọn — bản đầy đủ sẽ link sang module Tra cứu QC10 để xác định chính xác hệ thống bắt buộc theo quy mô (chiều cao, diện tích...).
-    </div>
-  `;
-});
+window.addEventListener('hashchange', route);
+route();
 </script>
 
 </body>
