@@ -7,3 +7,4 @@ desktop.ini
 modules/bdc/__pycache__/
 modules/bdc/_script_tags.txt
 node_modules/
+.tmp.driveupload/

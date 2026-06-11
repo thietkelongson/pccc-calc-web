@@ -12,7 +12,25 @@ hoso.json gồm:
 """
 import json, sys, os, argparse, tempfile
 from docx import Document
+from docx.shared import RGBColor
+from docx.oxml.ns import qn, nsmap
+from docx.oxml import OxmlElement
 from docxcompose.composer import Composer
+
+RED   = RGBColor(0xC0, 0x00, 0x00)
+GREEN_FILL  = '92D050'
+YELLOW_FILL = 'FFFF00'
+
+
+def shade_cell(cell, hex_fill):
+    tcPr = cell._tc.get_or_add_tcPr()
+    for old in tcPr.findall(qn('w:shd')):
+        tcPr.remove(old)
+    shd = OxmlElement('w:shd')
+    shd.set(qn('w:val'), 'clear')
+    shd.set(qn('w:color'), 'auto')
+    shd.set(qn('w:fill'), hex_fill)
+    tcPr.append(shd)
 
 ROOT = os.path.dirname(os.path.abspath(__file__))
 SRC = os.path.join(ROOT, 'source')
@@ -27,7 +45,8 @@ PREAMBLE_LABELS = [
     ('canBoThamDinh', '6. Cán bộ thẩm định:'),
 ]
 
-VERDICT_SYMBOL = {'pass': '+', 'kn': 'KN', 'na': 'N/A'}
+VERDICT_TEXT = {'pass': 'Đạt', 'kn': 'Không đạt', 'na': 'N/A'}
+VERDICT_FILL = {'pass': GREEN_FILL, 'kn': YELLOW_FILL}
 
 
 def load_parsed(bdc_id):
@@ -37,24 +56,26 @@ def load_parsed(bdc_id):
     return json.loads(txt.split('=', 1)[1].rstrip(';\n '))
 
 
-def set_cell_text(cell, text):
+def set_cell_text(cell, text, color=None):
     """Ghi text vào cell, giữ định dạng của run đầu tiên, xóa runs/paras khác."""
     if not text:
         return
-    # First paragraph
     if cell.paragraphs:
         p = cell.paragraphs[0]
         if p.runs:
             for r in p.runs[1:]:
                 r.text = ''
             p.runs[0].text = text
+            run = p.runs[0]
         else:
-            p.add_run(text)
-        # Remove extra paragraphs
+            run = p.add_run(text)
         for extra_p in cell.paragraphs[1:]:
             extra_p._element.getparent().remove(extra_p._element)
     else:
         p = cell.add_paragraph(text)
+        run = p.runs[0]
+    if color is not None:
+        run.font.color.rgb = color
 
 
 def fill_preamble(doc, thong_tin):
@@ -103,11 +124,14 @@ def fill_main_table(doc, parsed, bdc_id, verdict, thietKe):
                 row = main.rows[row_idx]
                 cells = row.cells
                 if tk and len(cells) > 2:
-                    set_cell_text(cells[2], tk)
+                    set_cell_text(cells[2], tk, color=RED)
                 if v and len(cells) > 5:
-                    sym = VERDICT_SYMBOL.get(v, '')
-                    if sym:
-                        set_cell_text(cells[5], sym)
+                    txt = VERDICT_TEXT.get(v, '')
+                    if txt:
+                        set_cell_text(cells[5], txt)
+                    fill = VERDICT_FILL.get(v)
+                    if fill:
+                        shade_cell(cells[5], fill)
                 n_filled += 1
     return n_filled
 
@@ -123,7 +147,20 @@ def fill_one(bdc_id, hoso, out_path):
     return n
 
 
-def export(hoso_path, out_path=None):
+def docx_to_pdf(docx_path, pdf_path):
+    """Dùng Word COM trên Windows để convert .docx → .pdf (wdFormatPDF = 17)."""
+    import win32com.client
+    word = win32com.client.Dispatch('Word.Application')
+    word.Visible = False
+    try:
+        doc = word.Documents.Open(os.path.abspath(docx_path), ReadOnly=True)
+        doc.SaveAs2(os.path.abspath(pdf_path), FileFormat=17)
+        doc.Close(False)
+    finally:
+        word.Quit()
+
+
+def export(hoso_path, out_path=None, pdf=False):
     with open(hoso_path, encoding='utf-8') as f:
         hoso = json.load(f)
     if not out_path:
@@ -160,6 +197,13 @@ def export(hoso_path, out_path=None):
     print(f'\nOK: {out_path}')
     print(f'  Tổng số mục đã điền: {total_filled}')
     print(f'  Tổng số BDC: {len(bdc_ids)}')
+
+    if pdf:
+        pdf_path = os.path.splitext(out_path)[0] + '.pdf'
+        print(f'\nĐang convert sang PDF...')
+        docx_to_pdf(out_path, pdf_path)
+        print(f'OK: {pdf_path}')
+        return out_path, pdf_path
     return out_path
 
 
@@ -167,5 +211,6 @@ if __name__ == '__main__':
     ap = argparse.ArgumentParser()
     ap.add_argument('hoso_json')
     ap.add_argument('--out', default=None)
+    ap.add_argument('--pdf', action='store_true', help='Convert thêm sang PDF (cần MS Word trên Windows)')
     args = ap.parse_args()
-    export(args.hoso_json, args.out)
+    export(args.hoso_json, args.out, pdf=args.pdf)

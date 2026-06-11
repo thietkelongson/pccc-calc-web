@@ -433,6 +433,7 @@
 <script src="modules/bdc/data/checklist_b14_dien_pccc.js?v=45"></script>
 <script src="modules/bdc/data/checklist_b15_gia_ke.js?v=45"></script>
 <script src="modules/bdc/data/checklist_b16_bot.js?v=45"></script>
+<script src="modules/bdc/engine.js?v=46"></script>
 <script>
 // ============== Theme ==============
 const root = document.documentElement;
@@ -445,31 +446,9 @@ document.getElementById('themeToggle').addEventListener('click', () => {
   document.getElementById('themeIcon').textContent = next === 'dark' ? '☀️' : '🌙';
 });
 
-// ============== BDC data ==============
-const BDC = window.BDC_INDEX;
-const BDC_LOADED = {};
-BDC.congTrinh.concat(BDC.heThong).forEach(it => {
-  const v = window['BDC_CHECKLIST_' + it.id.toUpperCase()];
-  if (v) BDC_LOADED[it.id] = { data: v, ma: it.ma, ten: it.ten, icon: it.icon, file: it.file };
-});
-
-// ============== Hồ sơ storage ==============
-const HOSO_LIST_KEY = 'bdc-hoso-list';
-function loadHosoList() { return JSON.parse(localStorage.getItem(HOSO_LIST_KEY) || '[]'); }
-function saveHosoList(arr) { localStorage.setItem(HOSO_LIST_KEY, JSON.stringify(arr)); }
-function getHoso(id) { return loadHosoList().find(h => h.id === id); }
-function upsertHoso(h) {
-  const arr = loadHosoList();
-  const i = arr.findIndex(x => x.id === h.id);
-  if (i >= 0) arr[i] = h; else arr.unshift(h);
-  saveHosoList(arr);
-}
-function deleteHoso(id) {
-  saveHosoList(loadHosoList().filter(h => h.id !== id));
-  localStorage.removeItem('hoso-' + id + '-verdict');
-  localStorage.removeItem('hoso-' + id + '-thietke');
-}
-function genHosoId() { return 'h' + Math.random().toString(36).slice(2, 9) + Date.now().toString(36).slice(-4); }
+// ============== BDC data (qua engine) ==============
+const BDC = BDCEngine.getCatalog();
+const { loadHosoList, saveHosoList, getHoso, upsertHoso, deleteHoso, genHosoId, countLeafs, itemKey: bdcItemKey } = BDCEngine;
 
 // ============== Generic helpers ==============
 function escHtml(s) { return (s == null ? '' : String(s)).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
@@ -477,7 +456,6 @@ function escWithImg(s, bdcId) {
   return escHtml(s).replace(/\[\[IMG:([a-zA-Z0-9_.\-]+)\]\]/g, (_, fn) =>
     `<img class="bdc-img" src="modules/bdc/data/img/${bdcId}/${fn}" alt="Hình minh họa" loading="lazy" onerror="this.style.opacity=.3">`);
 }
-function countLeafs(sec) { return sec.subs.reduce((n, s) => n + s.items.length, 0); }
 
 // ============== Universal Checklist renderer ==============
 // scope: { stateKey, groups: [{label, bdcId, ma, sections}], sideEl, mainEl, statsEl, onChange? }
@@ -709,20 +687,7 @@ function renderListView() {
   });
 }
 
-function hosoProgress(h) {
-  const verdict = JSON.parse(localStorage.getItem('hoso-' + h.id + '-verdict') || '{}');
-  let total = 0, done = 0;
-  const bdcIds = [h.maCongTrinhFull, ...(h.heThongIds || [])];
-  bdcIds.forEach(bid => {
-    const data = BDC_LOADED[bid] && BDC_LOADED[bid].data;
-    if (!data) return;
-    data.forEach((sec, si) => sec.subs.forEach((sub, subi) => sub.items.forEach((_, ii) => {
-      total++;
-      if (verdict[bid + '|' + si + '|' + subi + '|' + ii]) done++;
-    })));
-  });
-  return { total, done };
-}
+const hosoProgress = BDCEngine.hosoProgress;
 
 // ============== VIEW 2: Wizard ==============
 const TT_FIELDS = [
@@ -791,8 +756,8 @@ function renderWizSummary() {
   const ct = BDC.congTrinh.find(c => c.id === wizState.maCongTrinh);
   const hts = wizState.heThongIds.map(id => BDC.heThong.find(b => b.id === id)).filter(Boolean);
   let totalItems = 0;
-  if (ct && BDC_LOADED[ct.id]) BDC_LOADED[ct.id].data.forEach(s => totalItems += countLeafs(s));
-  hts.forEach(b => { if (BDC_LOADED[b.id]) BDC_LOADED[b.id].data.forEach(s => totalItems += countLeafs(s)); });
+  totalItems += ct ? BDCEngine.countAllLeafs(ct.id) : 0;
+  hts.forEach(b => { totalItems += BDCEngine.countAllLeafs(b.id); });
   const tt = wizState.thongTinDuAn || {};
   const ttFilled = TT_FIELDS.filter(([_, k]) => (tt[k] || '').trim()).length;
   document.getElementById('wSummary').innerHTML = `
@@ -826,28 +791,7 @@ function renderHosoView(id) {
   document.getElementById('hosoTitle').textContent = h.ten;
   document.getElementById('hosoSubtitle').textContent = `${ct ? ct.icon + ' ' + ct.ma + ' — ' + ct.ten : ''} · ${h.heThongIds.length} hệ thống áp dụng`;
 
-  // build groups: PHẦN A (công trình) + PHẦN B (mỗi hệ thống là 1 group? hay gộp 1 group?)
-  // Theo design: 2 group lớn — A tổng quan, B chi tiết (sub-divided by BDC trong sidebar qua h4)
-  const groups = [];
-  if (BDC_LOADED[h.maCongTrinhFull]) {
-    groups.push({
-      label: `📋 PHẦN A — Tổng quan công trình (${ct.ma})`,
-      bdcId: h.maCongTrinhFull,
-      ma: ct.ma,
-      sections: BDC_LOADED[h.maCongTrinhFull].data
-    });
-  }
-  h.heThongIds.forEach(htId => {
-    const b = BDC.heThong.find(x => x.id === htId);
-    if (b && BDC_LOADED[htId]) {
-      groups.push({
-        label: `⚙️ PHẦN B — ${b.ma} ${b.ten}`,
-        bdcId: htId,
-        ma: b.ma,
-        sections: BDC_LOADED[htId].data
-      });
-    }
-  });
+  const groups = BDCEngine.buildHosoGroups(h);
 
   currentHosoChecklist = buildChecklist({
     stateKey: 'hoso-' + id,
@@ -874,16 +818,7 @@ function renderHosoView(id) {
 }
 
 function exportHoso(h) {
-  // Build payload for export.py
-  const verdict = JSON.parse(localStorage.getItem('hoso-' + h.id + '-verdict') || '{}');
-  const thietKe = JSON.parse(localStorage.getItem('hoso-' + h.id + '-thietke') || '{}');
-  const payload = {
-    id: h.id, ten: h.ten,
-    maCongTrinhFull: h.maCongTrinhFull,
-    heThongIds: h.heThongIds || [],
-    thongTinDuAn: h.thongTinDuAn || {},
-    verdict, thietKe
-  };
+  const payload = BDCEngine.buildExportPayload(h);
   // Download as JSON
   const blob = new Blob([JSON.stringify(payload, null, 2)], { type: 'application/json' });
   const url = URL.createObjectURL(blob);
@@ -913,7 +848,7 @@ const bdcSelect = document.getElementById('bdcSelect');
   if (!items.length) return;
   const og = document.createElement('optgroup'); og.label = gLabel;
   items.forEach(it => {
-    if (!BDC_LOADED[it.id]) return;
+    if (!BDCEngine.isLoaded(it.id)) return;
     const opt = document.createElement('option');
     opt.value = it.id; opt.textContent = `${it.ma} — ${it.icon} ${it.ten}`;
     og.appendChild(opt);
@@ -924,15 +859,16 @@ bdcSelect.addEventListener('change', () => { location.hash = '#/bdc/' + bdcSelec
 
 let currentBdcChecklist = null;
 function renderBdcView(bdcId) {
-  if (!BDC_LOADED[bdcId]) { location.hash = '#/'; return; }
-  const meta = BDC_LOADED[bdcId];
+  if (!BDCEngine.isLoaded(bdcId)) { location.hash = '#/'; return; }
+  const meta = BDCEngine.findItem(bdcId);
+  const data = BDCEngine.getChecklist(bdcId);
   bdcSelect.value = bdcId;
   document.getElementById('bdcTitle').textContent = `${meta.ma} — ${meta.ten}`;
-  document.getElementById('bdcSubtitle').textContent = `BDC đơn lẻ · ${meta.data.reduce((n, s) => n + countLeafs(s), 0)} mục`;
+  document.getElementById('bdcSubtitle').textContent = `BDC đơn lẻ · ${BDCEngine.countAllLeafs(bdcId)} mục`;
 
   currentBdcChecklist = buildChecklist({
     stateKey: 'bdc-' + bdcId,
-    groups: [{ label: 'Mục lục', bdcId, ma: meta.ma, sections: meta.data }],
+    groups: [{ label: 'Mục lục', bdcId, ma: meta.ma, sections: data }],
     sideEl: document.getElementById('bdcSide'),
     mainEl: document.getElementById('bdcMain'),
     statsEl: document.getElementById('bdcStats')

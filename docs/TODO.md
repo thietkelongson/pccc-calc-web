@@ -30,7 +30,7 @@ Thứ tự ưu tiên theo WORKFLOW.md:
 4. **Wetting agent** (phụ gia thẩm thấu)
 5. **Hút khói & bù khí** (QCVN 06)
 6. **Thủy lực giá hàng cao >5.5m** (ESFR)
-7. **Hoàn thiện Sprinkler Isometric**: lưu JSON, Hardy-Cross loop, preview PDF, thư viện phụ kiện
+7. **Hoàn thiện Sprinkler Isometric** — xem [docs/modules/sprinkler-network.md](modules/sprinkler-network.md) (Core 5 ngày + Phase 1.5 vay PipeNet + Phase 2 export)
 8. **Bảng đối chiếu sprinkler thiết bị** (K-factor theo NSX) — KHÁC BDC thẩm duyệt
 
 ## Frontend chung — Phase 1 còn dở
